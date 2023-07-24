@@ -89,8 +89,6 @@ $routes->post('api/service_provided_by_provider', 'Provider::serviceProvidedByPr
 $routes->post('api/update_package_by_provider', 'Package::updatePackageByProvider');
 $routes->post('api/update_activitie_by_provider', 'Package::updateActivitiesByProvider');
 
-
-
 // for user
 $routes->post('api/package_list_for_user', 'UserRegistration::packageListForUser');//done
 $routes->post('api/get_package_detail_for_user', 'UserRegistration::getPackageDetailForUser');//done
@@ -103,7 +101,6 @@ $routes->post('api/list_of_booking_history', 'ListFilter::listOfBookingHistory')
 $routes->post('api/booked_package_detail_by_id', 'User::bookingPackageDetailById');
 $routes->post('api/user_regt_login', 'UserRegistration::userRegtLogin');
 $routes->post('api/otp_verification', 'UserRegistration::otpVerification');
-
 
 // master data
 $routes->post('api/master_data_for_all', 'Dashboard::masterDataForAll');
@@ -124,22 +121,14 @@ $routes->post('api/pax_master', 'Dashboard::paxMaster');
 $routes->post('api/service_master', 'Dashboard::serviceMaster');
 $routes->post('api/get_all_provider', 'Meals::getAllProvider');//done
 
-
-
-
 // guide
 $routes->post('api/guide_registration', 'UserRegistration::guideRegistration');
-
-
-
-
 
 // user Home
 $routes->post('api/arabCity', 'Dashboard::arabCity');
 $routes->get('getVourchar', 'Vourchar::getVourchar');
 $routes->post('api/successPayment', 'Payment::successPayment');
 $routes->post('api/payment_stripe_checkout', 'Payment::paymentStripeCheckout');
-
 
 /**
  * --------------------------------------------------------------------
