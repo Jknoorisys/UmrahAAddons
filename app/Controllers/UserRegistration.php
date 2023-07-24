@@ -719,8 +719,8 @@ class UserRegistration extends ResourceController
             $subject      = 'Login OTP';
             $to_email     =  $email_id;
 
-            $abc =  MailSender::sendMail($to_email, $subject, $msg_template , '', '', "umarhaaddons", '');
-
+            $filename = "";
+            $send     = sendEmail($to_email, $subject, $msg_template,$filename);
             // PUSH NOTIFICATION
             helper('notifications');
             $userinfo = $UserModels->where("email", $email_id)->first();
@@ -930,8 +930,8 @@ class UserRegistration extends ResourceController
                 $subject      = 'Login OTP';
                 $to_email     =  $email;
     
-                $abc =  MailSender::sendMail($to_email, $subject, $msg_template , '', '', "umarhaaddons", '');
-
+                $filename = "";
+                $send     = sendEmail($to_email, $subject, $msg_template,$filename);
                 return $service->success([
                     'message'       =>  Lang('Language.otp_send_success'),
                     'data'          =>  ""

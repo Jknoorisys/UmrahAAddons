@@ -250,8 +250,8 @@ class Auth extends ResourceController
 				$msg_template = view('emmail_templates/forgotpassword.php', $data);
 				$subject      = 'Forgot Password';
 				$to_email     =  $this->request->getPost("email"); // provider email
-				$abc =  MailSender::sendMail($to_email, $subject, $msg_template , '', '', "umarhaaddons", '');
-				
+				$filename = "";
+				$send     = sendEmail($to_email, $subject, $msg_template,$filename);
 				$response = [
 					'status' => 'success',
 					'messages' => lang('Language.Password send to registered email')

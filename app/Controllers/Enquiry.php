@@ -582,16 +582,16 @@ class Enquiry extends ResourceController
                             $msg_template = view('emmail_templates/meals_enquiry.php', $data);
                             $subject      = 'Package Inquiry';
                             $to_email     =  $info->email; // provider email
-                            $abc =  MailSender::sendMail($to_email, $subject, $msg_template , '', '', "umarhaaddons", '');
-                        }
+                            $filename = "";
+                            $send     = sendEmail($to_email, $subject, $msg_template,$filename);                        }
 
                         if($service_type=='guide'){
                             $data = array('status' => $status, 'user_name' => $isExist['name']);
                             $msg_template = view('emmail_templates/guide_enquiry.php', $data);
                             $subject      = 'Guide Inquiry';
                             $to_email     =  $info->email; // provider email
-                            $abc =  MailSender::sendMail($to_email, $subject, $msg_template , '', '', "umarhaaddons", '');
-                        }
+                            $filename = "";
+                            $send     = sendEmail($to_email, $subject, $msg_template,$filename);                        }
                         // EnD
 
                          // PUSH NOTIFICATION
@@ -802,24 +802,24 @@ class Enquiry extends ResourceController
                             $msg_template = view('emmail_templates/meals_enquiry.php', $data);
                             $subject      = 'Package Booking';
                             $to_email     =  $info->email; // provider email
-                            $abc =  MailSender::sendMail($to_email, $subject, $msg_template , '', '', "umarhaaddons", '');
-                        }
+                            $filename = "";
+                            $send     = sendEmail($to_email, $subject, $msg_template,$filename);                        }
 
                         if($service_type=='sabeel'){
                             $data = array('status' => $status, 'user_name' => $isExist['full_name']);
                             $msg_template = view('emmail_templates/meals_enquiry.php', $data);
                             $subject      = 'Sabeel Booking';
                             $to_email     =  $info->email; // provider email
-                            $abc =  MailSender::sendMail($to_email, $subject, $msg_template , '', '', "umarhaaddons", '');
-                        }
+                            $filename = "";
+                            $send     = sendEmail($to_email, $subject, $msg_template,$filename);                        }
 
                         if($service_type=='meals'){
                             $data = array('status' => $status, 'user_name' => $isExist['full_name']);
                             $msg_template = view('emmail_templates/meals_enquiry.php', $data);
                             $subject      = 'Meals Booking';
                             $to_email     =  $info->email; // provider email
-                            $abc =  MailSender::sendMail($to_email, $subject, $msg_template , '', '', "umarhaaddons", '');
-                        }
+                            $filename = "";
+                            $send     = sendEmail($to_email, $subject, $msg_template,$filename);                        }
                         // EnD
 
                         // PUSH NOTIFICATION
