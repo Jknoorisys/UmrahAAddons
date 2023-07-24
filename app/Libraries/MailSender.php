@@ -20,7 +20,7 @@ class MailSender
         $mail->SMTPAuth     = true;        // Enable SMTP authentication
         $mail->Username     = USERNAME;    // SMTP username
         $mail->Password     = PASSWORD;    // SMTP password
-        $mail->Port         = 587;         // TCP port to connect to
+        $mail->Port         = 465;         // TCP port to connect to
         $mail->SMTPSecure   = 'tls';
         $mail->From         = FROM_EMAIL;
         $mail->FromName     = FROM_NAME;

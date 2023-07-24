@@ -129,7 +129,8 @@ class UserRegistration extends ResourceController
                 $msg = view('emmail_templates/forgotpassword.php', $data);
                 $mail->setSubject('Register Users');
                 $mail->setMessage($msg);
-                $abc = $mail->send();
+                // $abc = $mail->send();
+                MailSender::sendMail($usermail, 'Register Users', $msg , '', '', "Umrahaddons", '');
                 $response = [
                     'status' => "success",
                     'status_code' => 200,
