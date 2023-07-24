@@ -91,7 +91,7 @@ defined("STRIPE_SECRET") || define('STRIPE_SECRET', "sk_test_51LV7hmSDWgD43vfLeN
 // defined("FROM_EMAIL") || define('FROM_EMAIL', "info@nooridev.in");
 // defined("FROM_NAME") || define('FROM_NAME', "Umrahaaddons");
 
-defined("HOST") || define('HOST', "smtp.googlemail.com");
+defined("HOST") || define('HOST', "smtp.gmail.com");
 defined("USERNAME") || define('USERNAME', "Noorisys Technologies Pvt Ltd");
 defined("PASSWORD") || define('PASSWORD', "mkjdrlljyojaqkeg");
 defined("FROM_EMAIL") || define('FROM_EMAIL', "noori.developer@gmail.com");
