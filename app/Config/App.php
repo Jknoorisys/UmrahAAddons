@@ -22,7 +22,7 @@ class App extends BaseConfig
 	|
 	*/
 	
-	public $baseURL = 'http://localhost/umrahaddons/';
+	public $baseURL = 'https://umrahaddons.com/backend';
 
 	/*
 	|--------------------------------------------------------------------------
