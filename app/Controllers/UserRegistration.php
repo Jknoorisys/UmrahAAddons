@@ -124,7 +124,7 @@ class UserRegistration extends ResourceController
                 $firstname =  $data['firstname'];
 
                 $mail->setTo($usermail);
-                $mail->setFrom('majukacchi@gmail.com', 'Umrahaddons');
+                $mail->setFrom('noori.developer@gmail.com', 'Umrahaddons');
                 $data = array('email' => $usermail, 'password' => $password, 'username' => $firstname);
                 $msg = view('emmail_templates/forgotpassword.php', $data);
                 $mail->setSubject('Register Users');
