@@ -238,7 +238,7 @@ class Auth extends ResourceController
 			}
 			if ($res) {
 				// Send Email
-				// $mail->setFrom('majukacchi@gmail.com', 'Umrahaddons');
+				// $mail->setFrom('noori.developer@gmail.com', 'Umrahaddons');
 				// $mail->setTo($this->request->getPost("email"));
 				// $data = array('email' => $userdata['email'], 'password' => $password, 'username' => $userdata['firstname']);
 				// $msg = view('emmail_templates/forgotpassword.php', $data);
