@@ -691,7 +691,9 @@ class UserRegistration extends ResourceController
             $subject      = 'Login OTP';
             $to_email     =  $email_id;
 
-            $abc =  MailSender::sendMail($to_email, $subject, $msg_template , '', '', "umarhaaddons", '');
+            // $abc =  MailSender::sendMail($to_email, $subject, $msg_template , '', '', "umarhaaddons", '');
+            $filename = "";
+            $send     = sendEmail($to_email, $subject, $msg_template,$filename);
             $response = [
                 'status' => 'success',
                 'status_code' => 200,
