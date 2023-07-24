@@ -92,7 +92,7 @@ class Meals extends ResourceController
 
         $checkToken = ($user_role!='user')?$service->getAccessForSignedUser($token, $user_role):true;
         
-        if($checkToken==false)
+        if($checkToken)
         {
             // try{
                 if($user_role == 'provider'){

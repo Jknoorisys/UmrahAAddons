@@ -119,9 +119,6 @@ class Provider extends ResourceController
         return $token;
     }
 
-
-
-
     // update provider by Provider
     public function updateProviderByProvider()
     {
@@ -166,7 +163,6 @@ class Provider extends ResourceController
         }
         return $this->respondCreated($response);
     }
-
 
     // active inactive package by provider
     public function activeInactivePackageByProvider()
@@ -448,7 +444,6 @@ class Provider extends ResourceController
 
         return $this->respondCreated($response);
     }
-
 
     // get activities detail for provider
     public function getActivitiesDetailForProvider()
