@@ -60,3 +60,28 @@ if(!function_exists('check_staff_members_privilege'))
 	}
 }
 
+if (!function_exists('sendEmail')) {
+    function sendEmail($to_email, $subject, $message,$filename)
+    {
+        $email = \Config\Services::email();
+        $email->setFrom('noori.developer@gmail.com','Umrahaaddons', $subject);
+        $email->setTo($to_email);
+        $email->setSubject($subject);
+        $email->setMessage($message); //your message here
+
+        // $email->setCC('another@emailHere');//CC
+        // $email->setBCC('thirdEmail@emialHere');// and BCC
+        // $filename = '/img/yourPhoto.jpg'; //you can use the App patch 
+        if(!empty($filename)){
+
+            $email->attach($filename);
+        }
+
+        if ($email->send()) {
+            $email->printDebugger(['headers']);
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
