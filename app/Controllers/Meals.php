@@ -140,7 +140,7 @@ class Meals extends ResourceController
 
                 elseif($user_role == 'ota'){ $whereCondition .= "m.ota_id = ".$logged_user_id." AND m.status = 'active'"; }
 
-                elseif($user_role == 'user'){ $whereCondition .= "m.user_id = ".$logged_user_id." AND m.status = 'active'"; }
+                elseif($user_role == 'user'){ $whereCondition .= "m.status = 'active'"; }
 
                 // By Query Builder
                 $db = db_connect();
