@@ -1475,15 +1475,15 @@ class Meals extends ResourceController
                             $msg_template = view('emmail_templates/package_booking.php', $data);
                             $subject      = 'Package Booked';
                             $to_email     =  $Providerdata['email']; // provider email
-                            $abc =  MailSender::sendMail($to_email, $subject, $msg_template , '', '', "umarhaaddons", '');
-        
+                            $filename = "";
+                            $send     = sendEmail($to_email, $subject, $msg_template,$filename);        
                             // SEND EAMIL TO USER on PAckage Booking
                             $data = array('user_role' => 'user','user_name' => $guest_fullname, 'provider_name' => $providerFullname, 'package_name'=>$mealsData['title']);
                             $msg_template = view('emmail_templates/package_booking.php', $data);
                             $subject      = 'Package Booked';
                             $to_email     =  $guest_email; // user email
-                            $abc =  MailSender::sendMail($to_email, $subject, $msg_template , '', '', "umarhaaddons", '');
-                            // EnD
+                            $filename = "";
+                            $send     = sendEmail($to_email, $subject, $msg_template,$filename);                            // EnD
         
                             // for  provider 
                             $providerAccount = $OtaProviderAccountModel->where('user_role', 'provider')->where('user_id', $mealsData['provider_id'])->first();
@@ -1896,15 +1896,15 @@ class Meals extends ResourceController
                     $msg_template = view('emmail_templates/package_booking.php', $data);
                     $subject      = 'Meals Booked';
                     $to_email     =  $Providerdata['email']; // provider email
-                    $abc =  MailSender::sendMail($to_email, $subject, $msg_template , '', '', "umarhaaddons", '');
-
+                    $filename = "";
+                    $send     = sendEmail($to_email, $subject, $msg_template,$filename);
                     // SEND EAMIL TO USER on PAckage Booking
                     $data = array('user_role' => 'user','user_name' => $full_name, 'provider_name' => $providerFullname, 'package_name'=>$mealsData['title']);
                     $msg_template = view('emmail_templates/package_booking.php', $data);
                     $subject      = 'Meals Booked';
                     $to_email     =  $email; // user email
-                    $abc =  MailSender::sendMail($to_email, $subject, $msg_template , '', '', "umarhaaddons", '');
-                    // EnD
+                    $filename = "";
+                    $send     = sendEmail($to_email, $subject, $msg_template,$filename);                    // EnD
 
                     // PUSH NOTIFICATION
                     helper('notifications');

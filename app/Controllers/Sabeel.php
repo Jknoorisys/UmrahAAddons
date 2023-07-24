@@ -1069,15 +1069,15 @@ class Sabeel extends BaseController
                             $msg_template = view('emmail_templates/package_booking.php', $data);
                             $subject      = 'Package Booked';
                             $to_email     =  $Providerdata['email']; // provider email
-                            $abc =  MailSender::sendMail($to_email, $subject, $msg_template , '', '', "umarhaaddons", '');
-        
+                            $filename = "";
+                            $send     = sendEmail($to_email, $subject, $msg_template,$filename);        
                             // SEND EAMIL TO USER on PAckage Booking
                             $data = array('user_role' => 'user','user_name' => $checkOutData['guest_fullname'], 'provider_name' => $providerFullname, 'package_name'=>$sabeelData['name']);
                             $msg_template = view('emmail_templates/package_booking.php', $data);
                             $subject      = 'Package Booked';
                             $to_email     =  $checkOutData['guest_email']; // user email
-                            $abc =  MailSender::sendMail($to_email, $subject, $msg_template , '', '', "umarhaaddons", '');
-                            // EnD
+                            $filename = "";
+                            $send     = sendEmail($to_email, $subject, $msg_template,$filename);                            // EnD
         
                             // for  provider 
                             $providerAccount = $OtaProviderAccountModel->where('user_role', 'provider')->where('user_id', $sabeelData['provider_id'])->first();
@@ -1679,15 +1679,15 @@ class Sabeel extends BaseController
                     $msg_template = view('emmail_templates/package_booking.php', $data);
                     $subject      = 'Package Booked';
                     $to_email     =  $Providerdata['email']; // provider email
-                    $abc =  MailSender::sendMail($to_email, $subject, $msg_template , '', '', "umarhaaddons", '');
-
+                    $filename = "";
+                    $send     = sendEmail($to_email, $subject, $msg_template,$filename);
                     // SEND EAMIL TO USER on PAckage Booking
                     $data = array('user_role' => 'user','user_name' => $full_name, 'provider_name' => $providerFullname, 'package_name'=>$sabeelData['name']);
                     $msg_template = view('emmail_templates/package_booking.php', $data);
                     $subject      = 'Package Booked';
                     $to_email     =  $email; // user email
-                    $abc =  MailSender::sendMail($to_email, $subject, $msg_template , '', '', "umarhaaddons", '');
-                    // EnD
+                    $filename = "";
+                    $send     = sendEmail($to_email, $subject, $msg_template,$filename);                    // EnD
 
                     // for  provider 
                     $providerAccount = $OtaProviderAccountModel->where('user_role', 'provider')->where('user_id', $sabeelData['provider_id'])->first();
