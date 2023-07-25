@@ -418,9 +418,6 @@ class ListFilter extends ResourceController
 		return $this->respondCreated($response);
 	}
 
-
-
-
 	// List of booking package by provider 
 	public function listOfBookingPackageByProvider()
 	{
@@ -508,7 +505,6 @@ class ListFilter extends ResourceController
 		$ProviderModel = new ProviderModel();
 		$ActivitieModel = new ActivitieModel();
 
-
 		$user_role = $this->request->getPost('logged_user_role');
 		$provider_id = $this->request->getPost('logged_user_id');
 		// $user_role = $this->request->getPost('user_role');
@@ -586,7 +582,6 @@ class ListFilter extends ResourceController
 
 		return $this->respondCreated($response);
 	}
-
 
 	// List of booking package by user 
 	public function listOfBookingHistory()
@@ -683,14 +678,12 @@ class ListFilter extends ResourceController
 		$status = $this->request->getPost("status");
 		$reason = $this->request->getPost("reason");
 
-
 		// check Guide
 		$Guidedata = $GuideModel->where("id", $guide_id)->first();
 		if (empty($Guidedata)) {
 			echo json_encode(['status' => 'failed', 'messages' => lang('Language.Guide Not Found')]);
 			die();
 		}
-
 
 		if ($logged_user_role == 'admin') {
 			if ($status == "yes") {

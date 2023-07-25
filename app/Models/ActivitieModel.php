@@ -22,27 +22,33 @@ class ActivitieModel extends Model
 		$criterial = '';
 		// echo json_encode($trnx_filters);die(); 
 		if (isset($trnx_filters['activitie_title']) && $trnx_filters['activitie_title'] != "") {
-			$criterial .= " AND l.activitie_title = '" . $trnx_filters['activitie_title'] . "'";
+			$criterial .= " AND l.activitie_title LIKE '%" . $trnx_filters['activitie_title'] . "%'";
 		}
+
 		if (isset($trnx_filters['city_loaction']) && $trnx_filters['city_loaction'] != "") {
-			$criterial .= " AND l.city_loaction = '" . $trnx_filters['city_loaction'] . "'";
+			$criterial .= " AND l.city_loaction LIKE '%" . $trnx_filters['city_loaction'] . "%'";
 		}
 
 		if (isset($trnx_filters['included']) && $trnx_filters['included'] != "") {
-			$criterial .= " AND l.included = '" . $trnx_filters['included'] . "'";
+			$criterial .= " AND l.included LIKE '%" . $trnx_filters['included'] . "%'";
 		}
+
 		if (isset($trnx_filters['pickup_loaction']) && $trnx_filters['pickup_loaction'] != "") {
-			$criterial .= " AND l.pickup_loaction = '" . $trnx_filters['pickup_loaction'] . "'";
+			$criterial .= " AND l.pickup_loaction LIKE '%" . $trnx_filters['pickup_loaction'] . "%'";
 		}
 
 		if (isset($trnx_filters['drop_loaction']) && $trnx_filters['drop_loaction'] != "") {
-			$criterial .= " AND l.drop_loaction = '" . $trnx_filters['drop_loaction'] . "'";
+			$criterial .= " AND l.drop_loaction LIKE '%" . $trnx_filters['drop_loaction'] . "%'";
 		}
+
 		if (isset($trnx_filters['accommodations']) && $trnx_filters['accommodations'] != "") {
-			$criterial .= " AND l.accommodations = '" . $trnx_filters['accommodations'] . "'";
-		}if (isset($trnx_filters['type_of_activitie']) && $trnx_filters['type_of_activitie'] != "") {
-			$criterial .= " AND l.type_of_activitie = '" . $trnx_filters['type_of_activitie'] . "'";
+			$criterial .= " AND l.accommodations LIKE '%" . $trnx_filters['accommodations'] . "%'";
 		}
+
+		if (isset($trnx_filters['type_of_activitie']) && $trnx_filters['type_of_activitie'] != "") {
+			$criterial .= " AND l.type_of_activitie LIKE '%" . $trnx_filters['type_of_activitie'] . "%'";
+		}
+		
 		$query = "SELECT l.*,CONCAT (p.firstname,' ',p.lastname) as provider_name FROM tbl_activities AS l 
 		   JOIN tbl_provider AS p ON p.id = $provider_id  WHERE l.provider_id = $provider_id";
 

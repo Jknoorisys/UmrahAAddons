@@ -19,14 +19,15 @@ class PackageModels extends Model
 		$criterial = '';
 		// echo json_encode($trnx_filters);die(); 
 		if (isset($trnx_filters['package_title']) && $trnx_filters['package_title'] != "") {
-			$criterial .= " AND l.package_title = '" . $trnx_filters['package_title'] . "'";
+			$criterial .= " AND l.package_title LIKE '%" . $trnx_filters['package_title'] . "%'";
 		}
 
 		if (isset($trnx_filters['city_loaction']) && $trnx_filters['city_loaction'] != "") {
-			$criterial .= " AND l.city_loaction = '" . $trnx_filters['city_loaction'] . "'";
+			$criterial .= " AND l.city_loaction LIKE '%" . $trnx_filters['city_loaction'] . "%'";
 		}
+		
 		if (isset($trnx_filters['pickup_loaction']) && $trnx_filters['pickup_loaction'] != "") {
-			$criterial .= " AND l.pickup_loaction = '" . $trnx_filters['pickup_loaction'] . "'";
+			$criterial .= " AND l.pickup_loaction LIKE '%" . $trnx_filters['pickup_loaction'] . "%'";
 		}
 
 		$query = "SELECT l.*,CONCAT (p.firstname,' ',p.lastname) as provider_name FROM tbl_package AS l
@@ -56,14 +57,15 @@ class PackageModels extends Model
 		$criterial = '';
 		// echo json_encode($trnx_filters);die(); 
 		if (isset($trnx_filters['package_title']) && $trnx_filters['package_title'] != "") {
-			$criterial .= " AND l.package_title = '" . $trnx_filters['package_title'] . "'";
+			$criterial .= " AND l.package_title LIKE '%" . $trnx_filters['package_title'] . "%'";
 		}
 
 		if (isset($trnx_filters['city_loaction']) && $trnx_filters['city_loaction'] != "") {
-			$criterial .= " AND l.city_loaction = '" . $trnx_filters['city_loaction'] . "'";
+			$criterial .= " AND l.city_loaction LIKE '%" . $trnx_filters['city_loaction'] . "%'";
 		}
+		
 		if (isset($trnx_filters['pickup_loaction']) && $trnx_filters['pickup_loaction'] != "") {
-			$criterial .= " AND l.pickup_loaction = '" . $trnx_filters['pickup_loaction'] . "'";
+			$criterial .= " AND l.pickup_loaction LIKE '%" . $trnx_filters['pickup_loaction'] . "%'";
 		}
 
 		$query = "SELECT l.*,CONCAT (p.firstname,' ',p.lastname) as provider_name FROM tbl_package AS l 
