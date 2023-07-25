@@ -889,7 +889,7 @@ class Admin extends ResourceController
 
 		// Add BY RIZ
 		$bookings = $db->table('meals_booking as b')
-              ->select('b.*, m.title as meal_name, CONCAT(u.firstname," ",u.lastname) as user_name, CONCAT(pro.firstname," ",pro.lastname) as provider_name, CONCAT(o.firstname," ",o.lastname) as ota_name')
+              ->select('b.*, m.title as package_name, CONCAT(u.firstname," ",u.lastname) as user_name, CONCAT(pro.firstname," ",pro.lastname) as provider_name, CONCAT(o.firstname," ",o.lastname) as ota_name')
               ->join('tbl_meals as m','m.id = b.meals_id')
               ->join('tbl_user as u','u.id = b.user_id')
               ->join('tbl_provider as pro','pro.id = b.provider_id')
