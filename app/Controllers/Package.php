@@ -874,6 +874,9 @@ class Package extends ResourceController
         $ProviderModel     = new ProviderModel();
         $service->cors();
         $package_id       =  $this->request->getVar('package_id');
+        $logged_user_id       =  $this->request->getVar('logged_user_id');
+        $logged_user_role       =  $this->request->getVar('logged_user_role');
+        $token       =  $this->request->getVar('token');
 
         $rules = [
             'language' => [
@@ -889,7 +892,7 @@ class Package extends ResourceController
                     'required'      =>  Lang('Language.required'),
                 ]
             ],
-            'user_role' => [
+            'logged_user_role' => [
                 'rules'         =>  'required',
                 'errors'        => [
                     'required'      =>  Lang('Language.required'),
@@ -914,7 +917,7 @@ class Package extends ResourceController
             );
         }
 
-        $checkToken = $service->getAccessForSignedUser($token, $user_role);
+        $checkToken = $service->getAccessForSignedUser($token, $logged_user_role);
 
         if($checkToken)
         {
