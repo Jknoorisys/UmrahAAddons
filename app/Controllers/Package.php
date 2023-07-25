@@ -876,7 +876,7 @@ class Package extends ResourceController
         $package_id       =  $this->request->getVar('package_id');
         $logged_user_id       =  $this->request->getVar('logged_user_id');
         $logged_user_role       =  $this->request->getVar('logged_user_role');
-        $token       =  $this->request->getVar('token');
+        $token       =  $this->request->getVar('authorization');
 
         $rules = [
             'language' => [
