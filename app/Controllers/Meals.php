@@ -140,9 +140,9 @@ class Meals extends ResourceController
 
                 if($user_role == 'admin'){ $whereCondition .= "m.status = 'active'"; } 
 
-                elseif($user_role == 'provider'){ $whereCondition .= "m.status = 'active' "; }
+                elseif($user_role == 'provider'){ $whereCondition .= "m.provider_id = ".$logged_user_id." AND m.status = 'active'"; }
 
-                elseif($user_role == 'ota'){ $whereCondition .= "m.status = 'active'"; }
+                elseif($user_role == 'ota'){ $whereCondition .= "m.ota_id = ".$logged_user_id." AND m.status = 'active'"; }
 
                 elseif($user_role == 'user'){ $whereCondition .= "m.status = 'active'"; }
 
