@@ -21,15 +21,14 @@ class GuideModel extends Model
 		$criterial = '';
 		// echo json_encode($trnx_filters);die(); 
 		if (isset($trnx_filters['guide_name']) && $trnx_filters['guide_name'] != "") {
-			$criterial .= " AND l.firstname = '" . $trnx_filters['guide_name'] . "'";
+			$criterial .= " AND l.firstname LIKE '%" . $trnx_filters['guide_name'] . "%'";
 		}
 
 		if (isset($trnx_filters['guide_email']) && $trnx_filters['guide_email'] != "") {
-			$criterial .= " AND l.email = '" . $trnx_filters['guide_email'] . "'";
+			$criterial .= " AND l.email LIKE '%" . $trnx_filters['guide_email'] . "%'";
 		}
 
 		$query = "SELECT l.* FROM tbl_guide AS l ";
-
 
 		$query .= "WHERE 1";
 		$query .= $criterial;
@@ -40,6 +39,7 @@ class GuideModel extends Model
 			$query .= " LIMIT " . $page_no . "," . $per_page;
 			return $this->db->query($query)->getResult();
 		}
+		
 		// echo json_encode($total_record);die();
 		return false;
 	}

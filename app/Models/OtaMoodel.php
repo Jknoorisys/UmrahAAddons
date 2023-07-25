@@ -18,19 +18,19 @@ class OtaMoodel extends Model
 		$criterial = '';
 		// echo json_encode($trnx_filters);die(); 
 		if (isset($trnx_filters['firstname']) && $trnx_filters['firstname'] != "") {
-			$criterial .= " AND l.firstname = '" . $trnx_filters['firstname'] . "'";
+			$criterial .= " AND l.firstname LIKE '%" . $trnx_filters['firstname'] . "%'";
 		}
 
 		if (isset($trnx_filters['lastname']) && $trnx_filters['lastname'] != "") {
-			$criterial .= " AND l.lastname = '" . $trnx_filters['lastname'] . "'";
+			$criterial .= " AND l.lastname LIKE '%" . $trnx_filters['lastname'] . "%'";
 		}
+
 		if (isset($trnx_filters['email']) && $trnx_filters['email'] != "") {
-			$criterial .= " AND l.email = '" . $trnx_filters['email'] . "'";
+			$criterial .= " AND l.email LIKE '%" . $trnx_filters['email'] . "%'";
 		}
 
 		$query = "SELECT l.*,c.name AS country_name,s.name AS state_name,ci.name AS city_name FROM tbl_ota AS l
        LEFT JOIN countries AS c ON c.id = l.country LEFT JOIN states AS s ON s.id = l.state LEFT JOIN cities AS ci ON ci.id = l.city ";
-
 
 		$query .= "WHERE 1";
 		$query .= $criterial;
