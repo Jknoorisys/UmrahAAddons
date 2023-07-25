@@ -64,7 +64,7 @@ class BookingModel extends Model
 		$criterial = '';
 		// if (isset($trnx_filters['package_title']) && $trnx_filters['package_title'] != "") {
 		// 	$criterial .= " AND l.package_title LIKE '%" . $trnx_filters['package_title'] . "%'";
-		}
+		// }
 
 		if (isset($trnx_filters['action']) && $trnx_filters['action'] != "") {
 			$criterial .= " AND l.action = '" . $trnx_filters['action'] . "'";
