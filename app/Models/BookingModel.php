@@ -21,19 +21,19 @@ class BookingModel extends Model
 		$criterial = '';
 		// echo json_encode($trnx_filters);die(); 
 		if (isset($trnx_filters['action']) && $trnx_filters['action'] != "") {
-			$criterial .= " AND l.action LIKE '%" . $trnx_filters['action'] . "%'";
+			$criterial .= " AND l.action = '" . $trnx_filters['action'] . "'";
 		}
 
 		if (isset($trnx_filters['rate']) && $trnx_filters['rate'] != "") {
-			$criterial .= " AND l.rate LIKE '%" . $trnx_filters['rate'] . "%'";
+			$criterial .= " AND l.rate = '" . $trnx_filters['rate'] . "'";
 		}
 
 		if (isset($trnx_filters['booked_date']) && $trnx_filters['booked_date'] != "") {
-			$criterial .= " AND l.booked_date LIKE '%" . $trnx_filters['booked_date'] . "%'";
+			$criterial .= " AND l.booked_date = '" . $trnx_filters['booked_date'] . "'";
 		}
-
+		
 		if (isset($trnx_filters['payment_status']) && $trnx_filters['payment_status'] != "") {
-			$criterial .= " AND l.payment_status LIKE '%" . $trnx_filters['payment_status'] . "%'";
+			$criterial .= " AND l.payment_status = '" . $trnx_filters['payment_status'] . "'";
 		}
 
 		$query = "SELECT l.*,CONCAT (p.firstname,' ',p.lastname) as provider_name,CONCAT (c.firstname,' ',c.lastname) as user_name, pa.package_title as package_name ,pax.name as pax_name ,vec.name as vec_name FROM tbl_booking AS l 
@@ -64,11 +64,11 @@ class BookingModel extends Model
 		$criterial = '';
 		// if (isset($trnx_filters['package_title']) && $trnx_filters['package_title'] != "") {
 		// 	$criterial .= " AND l.package_title LIKE '%" . $trnx_filters['package_title'] . "%'";
-		// }
+		}
 
 		if (isset($trnx_filters['action']) && $trnx_filters['action'] != "") {
-			$criterial .= " AND l.action LIKE '%" . $trnx_filters['action'] . "%'";
-		}	
+			$criterial .= " AND l.action = '" . $trnx_filters['action'] . "'";
+		}
 
 		if($add_filter == 0)
 		{

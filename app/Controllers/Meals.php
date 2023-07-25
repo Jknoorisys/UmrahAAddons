@@ -53,7 +53,7 @@ class Meals extends ResourceController
         $search           =  $this->request->getVar('search');
         $meals_service    =  $this->request->getVar('meals_service');
         $cuisine_id       =  $this->request->getVar('cuisine_id');
-
+        $provider_id      =  $this->request->getVar('provider_id');
 
         $rules = [
             'pageNo' => [
@@ -132,6 +132,10 @@ class Meals extends ResourceController
                 if(isset($search) && $search!=''){
                     // $whereCondition .= "m.title LIKE'%" . $search . "%' OR m.cities LIKE'%" . $search . "%' AND ";
                     $whereCondition .= "m.cities LIKE'%" . $search . "%' AND ";
+                }
+
+                if(isset($provider_id) && $provider_id!=''){
+                    $whereCondition .= "m.provider_id = '" . $provider_id . "%' AND ";
                 }
 
                 if($user_role == 'admin'){ $whereCondition .= "m.status = 'active'"; } 
