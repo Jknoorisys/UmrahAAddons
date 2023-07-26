@@ -82,8 +82,12 @@ defined('FPDF_VERSION')     || define('FPDF_VERSION', '1.81');
 defined('UPLOAD_PATH')      || define('UPLOAD_PATH', 'C:/xampp/htdocs/umrah/'); 
 // defined("STRIPE_KEY") || define('STRIPE_KEY',getenv('STRIPE_KEY','') );
 // defined("STRIPE_SECRET") || define('STRIPE_SECRET',getenv('STRIPE_SECRET','') );
-defined("STRIPE_KEY") || define('STRIPE_KEY', "pk_test_51LV7hmSDWgD43vfLdVU50kl2d0ZBqsafnh084EbZx5IOQ0oZhKxwQMerl73zqImgs6GWKevV9Nmv9FwZAW9PQix400wj8xeIvU");
-defined("STRIPE_SECRET") || define('STRIPE_SECRET', "sk_test_51LV7hmSDWgD43vfLeNXrFRtKPwXhfv8XWRZVC2CK8HqIR11AmFsa3e3jGJ7VSoLdTYUuu3s7k8gCbhuSnNRu61NF00r30TJSFH");
+
+defined("STRIPE_KEY") || define('STRIPE_KEY', "pk_test_51NY56dJcWpwScJc8jEj6Gl5BvglsvwgO9cTyWazLhbB6WqrEnigauFcjUf5zQQ8LCkHijEch9Z9L6tsmgB99LJXo00qfCWqmOI");
+defined("STRIPE_SECRET") || define('STRIPE_SECRET', "sk_test_51NY56dJcWpwScJc8xc3cJdxVepr7qWvyBynKfHmz1sght4Kb6nyznFAlAQMG8ekbrkaVLlLS7b288CccoIDWfaY6005ZssfGnd");
+
+// defined("STRIPE_KEY") || define('STRIPE_KEY', "pk_test_51LV7hmSDWgD43vfLdVU50kl2d0ZBqsafnh084EbZx5IOQ0oZhKxwQMerl73zqImgs6GWKevV9Nmv9FwZAW9PQix400wj8xeIvU");
+// defined("STRIPE_SECRET") || define('STRIPE_SECRET', "sk_test_51LV7hmSDWgD43vfLeNXrFRtKPwXhfv8XWRZVC2CK8HqIR11AmFsa3e3jGJ7VSoLdTYUuu3s7k8gCbhuSnNRu61NF00r30TJSFH");
 // php mail
 // defined("HOST") || define('HOST', "mail.nooridev.in");
 // defined("USERNAME") || define('USERNAME', "info@nooridev.in");
