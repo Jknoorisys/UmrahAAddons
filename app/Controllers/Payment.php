@@ -273,6 +273,7 @@ class Payment extends ResourceController
 		// echo json_encode($provider_id);die();
 
 		$car_data = $VehicleModels->where("id", $pax_id)->where("package_id", $service_id)->where("status", $active)->first();
+
 		$rate = $car_data['rate'];
 		$no_of_pox = $car_data['no_of_pox_id'];
 		$cars = $car_data['vehicle_id'];
@@ -294,8 +295,6 @@ class Payment extends ResourceController
 
 		// admin remain apmount
 		$remaining_admin_comm_amount = $admin_amount - $ota_ammount;
-
-
 
 
 		if ($status == 'success') {
@@ -356,8 +355,7 @@ class Payment extends ResourceController
 				// $updatecheckout = $CheckoutModel->update($checkoutid, $confirmPayment);
 				
 				// $confirm_payment_status = $confirmPayment['payment_status'];
-				
-				if ($check_box_data['payment_status'] == 'succeeded') {    
+				if ($stripe_session_data['payment_status'] == 'paid') {    
 				    
 					$confirm_booking = [
 						'booking_status_user' => 'confirm',
