@@ -688,7 +688,7 @@ class Meals extends ResourceController
                 } else 
                 {
                     // $old_menu = $isExist['menu_url'];
-                    // $menu  =  $this->request->getFile('menu_image');
+                    $menu  =  $this->request->getFile('menu_image');
 
                     // if(!empty($_FILES["menu_image"]["tmp_name"]))
                     // {
