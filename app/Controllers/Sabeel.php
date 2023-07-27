@@ -978,6 +978,7 @@ class Sabeel extends BaseController
                 }
 
                 $sabeelData = $sabeel->where('id', $sabeel_id)->first();
+
                 if (empty($sabeelData)) 
                 {
                     return $service->fail(
@@ -1052,7 +1053,7 @@ class Sabeel extends BaseController
 
                         $lastbooking_id = $bookingModel->insertID;
                         
-                        if ($checkOutData['payment_status'] == 'succeeded') {    
+                        if ($stripe_session_data['payment_status'] == 'paid') {    
                             
                             $confirm_booking = [
                                 'booking_status_user' => 'confirm',
