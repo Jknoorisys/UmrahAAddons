@@ -301,7 +301,7 @@ class Guide extends ResourceController
 
       $checkToken = $service->getAccessForSignedUser($token, $user_role);
 
-      if($checkToken==false){
+      if($checkToken ){
           try {
                 $document  =  $this->request->getFile('document');
                 $validated = $this->validate([
@@ -428,7 +428,7 @@ class Guide extends ResourceController
 
       $checkToken = $service->getAccessForSignedUser($token, $user_role);
 
-      if($checkToken==false){
+      if($checkToken ){
           try {
                 $avatar  =  $this->request->getFile('avatar');
                 $validated = $this->validate([
@@ -1086,7 +1086,7 @@ class Guide extends ResourceController
 
         $checkToken = $service->getAccessForSignedUser($token, $user_role);
 
-        if($checkToken==false)
+        if($checkToken )
         {
             try 
             {
