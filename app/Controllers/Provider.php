@@ -57,7 +57,7 @@ class Provider extends ResourceController
 
         $db = \Config\Database::connect();
         // Check Authentication
-        $this->token = $token = $_POST['authorization'];
+        $this->token = $token = $_POST['authorization'] ? $_POST['authorization'] : $_POST['token'];
         $this->user_id = $user_id = $_POST['logged_user_id'];
         $this->user_role = $user_role = $_POST['logged_user_role'];
 
