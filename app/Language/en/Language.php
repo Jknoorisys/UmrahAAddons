@@ -122,7 +122,7 @@ return [
 	'otp_send_success' => 'Otp Send Successfully',
 	'Transaction Failed' => 'Transaction Failed',
 	'details_fetch_failed' => 'Details Fetch Failed',
-	'some_things_error' => 'Some things Error',
+	'some_things_error' => 'Something went wrong, please try again...',
 	'New application version is available, please update to continue.' => 'New application version is available, please update to continue',
 	'Guide Created Successfully' => 'Guide Created Successfully',
 	'Transaction  Failed' => 'Transaction Failed',
