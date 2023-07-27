@@ -130,8 +130,9 @@ class Meals extends ResourceController
                 }
 
                 if(isset($search) && $search!=''){
-                    // $whereCondition .= "m.title LIKE'%" . $search . "%' OR m.cities LIKE'%" . $search . "%' AND ";
-                    $whereCondition .= "m.cities LIKE'%" . $search . "%' AND ";
+                    $whereCondition .= "m.title LIKE'%" . $search . "%' OR m.cities LIKE'%" . $search . "%' AND ";
+                    // $whereCondition .= "m.cities LIKE'%" . $search . "%' AND ";
+                    // $whereCondition .= "m.title LIKE'%" . $search . "%' AND ";
                 }
 
                 if(isset($provider_id) && $provider_id!=''){
