@@ -796,6 +796,8 @@ class Enquiry extends ResourceController
                             ->where('id',$user_id)
                             ->get()->getRow();
                         
+                            helper('auth_helper');
+
                         // SEND EMIAL ON ACCEPT/REJECT Request
                         if($service_type=='package'){
                             $data = array('status' => $status, 'user_name' => $isExist['guest_fullname']);
