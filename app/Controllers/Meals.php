@@ -1252,6 +1252,7 @@ class Meals extends ResourceController
         $bookingModel = new MealsBookingModel();
         $CheckoutModel = new CheckoutModel();
         $meals     = new MealsModel();
+        $ProviderModel  = new ProviderModel();
         $AccountModel = new AccountModel();
         $Admin_transaction_Model = new Admin_transaction_Model();
 		$User_transaction_Model = new User_transaction_Model();
@@ -1381,6 +1382,7 @@ class Meals extends ResourceController
             try{
 
                 $checkOutData = $CheckoutModel->where('session_id', $session_id)->first();
+               
                 if (empty($checkOutData)) 
                 {
                     return $service->fail(
@@ -1439,7 +1441,6 @@ class Meals extends ResourceController
                 );
 
                 if(!empty($stripe_session_data)){
-
                     $inprocessbooking = [
                         'provider_id' => $mealsData['provider_id'],
                         'meals_id' => $meals_id,
@@ -1478,36 +1479,38 @@ class Meals extends ResourceController
 
                         $lastbooking_id = $bookingModel->insertID;
                         
-                        // if ($checkOutData['payment_status'] == 'succeeded') {    
-                        if (1) {    
+                        if ($stripe_session_data['payment_status'] == 'paid') {    
+                        // if (1) {    
                             
                             $confirm_booking = [
                                 'booking_status_user' => 'confirm',
                                 'booking_status_stripe' => $stripe_session_data->status,
                                 'payment_status' => 'completed'
                             ];
+
                             $update_Booking = $bookingModel->update($lastbooking_id, $confirm_booking);
         
                             // SEND EAMIL TO PROVIDER on PAckage Booking
                             $Providerdata = $ProviderModel->where("id", $provider_id)->first();
                             $providerFullname = $Providerdata['firstname'].' '.$Providerdata['lastname'];
         
-                            $data = array('user_role' => 'provider','user_name' => $guest_fullname, 'provider_name' => $providerFullname, 'package_name'=>$mealsData['title']);
+                            $data = array('user_role' => 'provider','user_name' => $checkOutData['guest_fullname'], 'provider_name' => $providerFullname, 'package_name'=>$mealsData['title']);
                             $msg_template = view('emmail_templates/package_booking.php', $data);
                             $subject      = 'Package Booked';
                             $to_email     =  $Providerdata['email']; // provider email
                             $filename = "";
                             $send     = sendEmail($to_email, $subject, $msg_template,$filename);        
                             // SEND EAMIL TO USER on PAckage Booking
-                            $data = array('user_role' => 'user','user_name' => $guest_fullname, 'provider_name' => $providerFullname, 'package_name'=>$mealsData['title']);
+                            $data = array('user_role' => 'user','user_name' => $checkOutData['guest_fullname'], 'provider_name' => $providerFullname, 'package_name'=>$mealsData['title']);
                             $msg_template = view('emmail_templates/package_booking.php', $data);
                             $subject      = 'Package Booked';
-                            $to_email     =  $guest_email; // user email
+                            $to_email     =  $checkOutData['guest_email']; // user email
                             $filename = "";
                             $send     = sendEmail($to_email, $subject, $msg_template,$filename);                            // EnD
         
                             // for  provider 
                             $providerAccount = $OtaProviderAccountModel->where('user_role', 'provider')->where('user_id', $mealsData['provider_id'])->first();
+
                             if (empty($providerAccount)) {
                                 $provider_account = [
                                     'user_role' => 'provider',
@@ -1531,6 +1534,7 @@ class Meals extends ResourceController
         
                             // for ota 
                             $ota_data = $OtaProviderAccountModel->where('user_role', 'ota')->where('user_id', $ota_id)->first();
+
                             if (empty($ota_data)) {
                                 $ota_account = [
                                     'user_role' => 'ota',
@@ -1607,10 +1611,11 @@ class Meals extends ResourceController
                             $userinfo = $db->table('tbl_user')
                                 ->select('*')
                                 ->where('id', $_POST['logged_user_id'])
-                                ->get()->getRow();
+                                ->get()->getRowArray();
 
                             $title = "Meals Booking";
                             $message = "Your booking has been confirmed. Thank you.";
+
                             $fmc_ids = array($userinfo['device_token']);
                             
                             $notification = array(
@@ -1619,6 +1624,8 @@ class Meals extends ResourceController
                                 'click_action' => 'FLUTTER_NOTIFICATION_CLICK', // DO NOT CHANGE THE VALUE
                                 'date' => date('Y-m-d H:i'),
                             );
+                            // echo json_encode($notification);exit;
+
                             if($userinfo['device_type']!='web'){ sendFCMMessage($notification, $fmc_ids); }
 
                             // PROVIDER NOTIFICATION
