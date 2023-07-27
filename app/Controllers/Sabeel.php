@@ -839,7 +839,7 @@ class Sabeel extends BaseController
                     if ($CheckoutModel->insert($data)) {
                         return $service->success([
                             'message'       =>  Lang('Language.Session CheckOut Given'),
-                            'data'          =>  $paymentIntent
+                            'data'          =>  $session
                             ],
                             ResponseInterface::HTTP_CREATED,
                             $this->response
