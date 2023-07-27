@@ -1146,6 +1146,23 @@ class Meals extends ResourceController
             try {
                     $stripe =  Stripe\Stripe::setApiKey(STRIPE_SECRET);
 
+                    // $session = \Stripe\Checkout\Session::create([
+                    //     'line_items' => [[
+                    //         'price_data' => [
+                    //             'currency' => 'SAR',
+                    //             'product_data' => [
+                    //                 'name' => $meals_name,
+                    //             ],
+                    //             'unit_amount' => $price * 100,
+                    //         ],
+                    //         'quantity' => 1,
+                    //     ]],
+            
+                    //     'mode' => 'payment',
+                    //     'success_url' => 'https://umrahaddons.com/"'.$ota_name.'"/meals/success',
+                    //     'cancel_url' => 'https://umrahaddons.com/"'.$ota_name.'"/meals/failure',
+                    // ]);
+
                     $session = \Stripe\Checkout\Session::create([
                         'line_items' => [[
                             'price_data' => [
@@ -1159,8 +1176,8 @@ class Meals extends ResourceController
                         ]],
             
                         'mode' => 'payment',
-                        'success_url' => 'https://umrahaddons.com/"'.$ota_name.'"/meals/success',
-                        'cancel_url' => 'https://umrahaddons.com/"'.$ota_name.'"/meals/failure',
+                        'success_url' => 'https://umrahaddons.com/meals/success',
+                        'cancel_url' => 'https://umrahaddons.com/meals/failure',
                     ]);
 
                     $data = [
