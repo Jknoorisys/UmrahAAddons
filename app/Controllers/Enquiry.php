@@ -730,7 +730,7 @@ class Enquiry extends ResourceController
         
         $checkToken = $service->getAccessForSignedUser($token, $user_role);
         
-        if($checkToken==false){
+        if($checkToken){
             try{
 
                 if($service_type=='package') {

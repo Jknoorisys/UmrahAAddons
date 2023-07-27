@@ -1604,7 +1604,7 @@ class Sabeel extends BaseController
 
         $checkToken = $service->getAccessForSignedUser($token, $user_role);
 
-        if($checkToken==false) {
+        if($checkToken ) {
 
             try{
 
