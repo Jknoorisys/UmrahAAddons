@@ -579,6 +579,8 @@ class Meals extends ResourceController
         $meals_service     =  $this->request->getVar('meals_service');
         $pickup_address    =  $this->request->getVar('pickup_address');
         $cities            =  $this->request->getVar('cities');
+        $provider_lat      =  $this->request->getVar('lat');
+        $provider_long     =  $this->request->getVar('long');
 
         $rules = [
             'language' => [
@@ -730,6 +732,8 @@ class Meals extends ResourceController
                         'pickup_address' => (isset($pickup_address))?$pickup_address:'',
                         'cities'         => (isset($cities))?$cities:'',
                         'provider_id'    => $logged_user_id,
+                        'provider_lat'   => $provider_lat ? $provider_lat : '',   
+                        'provider_long'  => $provider_long ? $provider_long : '',   
                         'updated_date'   => date('Y-m-d H:i:s')
                     );
 
