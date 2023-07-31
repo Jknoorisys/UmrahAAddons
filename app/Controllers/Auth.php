@@ -17,6 +17,7 @@ use Exception;
 use App\Libraries\MailSender;
 
 use Config\Services;
+use Firebase\JWT\JWT;
 
 // headers
 header("Access-Control-Allow-Origin: *");
@@ -27,7 +28,7 @@ class Auth extends ResourceController
 {
 
 	use ResponseTrait;
-	// private $service = null;
+	private $service;
 
 	public function __construct()
 	{
@@ -175,7 +176,7 @@ class Auth extends ResourceController
 			$decoded = JWT::decode($token, $key, array("HS256"));
 			if ($decoded) {
 				$id = $decoded->id;
-				$userdata = $model->where("token", $token)->where("id", $userid)->first();
+				$userdata = $AdminModel->where("token", $token)->where("id", $userid)->first();
 				if (!empty($userdata)) {
 					return true;
 				} else {
