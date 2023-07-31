@@ -1036,6 +1036,7 @@ class Sabeel extends BaseController
                         'quantity' => $quantity,
                         'booking_status_user' => 'in-progress',
                         'booking_status_stripe' => 'open',
+                        'booking_status' => 'pending',
                         'payment_status' => 'pending',
                         'ota_commision' => $ota_commision,
                         'provider_commision' => $admin_commision_per,
@@ -1653,6 +1654,7 @@ class Sabeel extends BaseController
                     'mobile' => $contact_no,
                     'total_price' => $total_cost,
                     'quantity' => $quantity,
+                    'booking_status' => 'pending',
                     'booking_status_user' => 'confirm',
                     'booking_status_stripe' => 'complete',
                     'payment_status' => 'completed',
@@ -1756,7 +1758,7 @@ class Sabeel extends BaseController
                         'transaction_date' => date("Y-m-d"),
                         'payment_method' => 'STRIPE',
                         'booking_id'  => $lastbooking_id,
-                        'payment_session_id' => $session_id
+                        // 'payment_session_id' => $session_id
                     ];
                     $transaction_id = $admin_transaction['transaction_id'];
                     $Admin_transaction_Model->insert($admin_transaction);

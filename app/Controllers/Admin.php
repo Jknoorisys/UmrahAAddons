@@ -44,6 +44,7 @@ class Admin extends ResourceController
 	private $user_id = null;
 	private $user_role = null;
 	private $token = null;
+	private $service;
 
 	public function __construct()
 	{
@@ -178,6 +179,7 @@ class Admin extends ResourceController
 		$AdminModel = new AdminModel();
 		$user_id = $this->request->getPost("logged_user_id");
 		$user_role = $this->request->getPost("logged_user_role");
+		$info = $AdminModel->where('id', $user_id)->first();
 
 		if (isset($_FILES) && !empty($_FILES)) {
 			$file = $this->request->getFile('profile_pic');
@@ -187,7 +189,7 @@ class Admin extends ResourceController
 				$file->move($path, $newName);
 				$pic = $path . $newName;
 			} else {
-				$info = $AdminModel->where('id', $user_id)->first();
+				// $info = $AdminModel->where('id', $user_id)->first();
 				$pic = $info['profile_pic'];
 			}
 		} else {
@@ -232,12 +234,13 @@ class Admin extends ResourceController
 	public function passwordCheck()
 	{
 		$AdminModel = new AdminModel();
-		$InternalAdminModel = new InternalAdminModel();
+		// $InternalAdminModel = new InternalAdminModel();
 		if ($this->user_role == 1) {
 			$userdata = $AdminModel->where("token", $this->token)->where("id", $this->user_id)->where('status', 'active')->first();
-		} else {
-			$userdata = $InternalAdminModel->where("token", $this->token)->where("id", $this->user_id)->where("user_role", $this->user_role)->where('status', 'active')->first();
-		}
+		} 
+		// else {
+			// $userdata = $InternalAdminModel->where("token", $this->token)->where("id", $this->user_id)->where("user_role", $this->user_role)->where('status', 'active')->first();
+		// }
 		if (password_verify($this->request->getPost("password"), $userdata['password'])) {
 			$response = [
 				'status' => 'success',
@@ -255,8 +258,8 @@ class Admin extends ResourceController
 
 	public function resetPassword()
 	{
-		$emp = new Employee();
-		$wp = new workingpartner();
+		$emp = new UserModels();
+		$wp = new ProviderModel();
 		$user_role = $this->request->getPost('user_role');
 		$user_id = $this->request->getPost('user_id');
 		$newPassword = $this->request->getPost("new_password");
