@@ -22,6 +22,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use Exception;
 
 use Config\Services;
+use RuntimeException;
 
 // headers
 header("Access-Control-Allow-Origin: *");
@@ -34,6 +35,7 @@ class Package extends ResourceController
     private $user_id = null;
     private $user_role = null;
     private $token = null;
+    private $service;
 
     public function __construct()
     {
