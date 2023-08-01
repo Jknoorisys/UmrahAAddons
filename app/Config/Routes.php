@@ -121,6 +121,18 @@ $routes->post('api/pax_master', 'Dashboard::paxMaster');
 $routes->post('api/service_master', 'Dashboard::serviceMaster');
 $routes->post('api/get_all_provider', 'Meals::getAllProvider');//done
 
+// Admin as Provider 
+$routes->post('api/admin_add_package', 'AdminAsProvider::addPackage');
+$routes->post('api/admin_delete_package', 'AdminAsProvider::packageDelete');
+
+$routes->post('api/admin_add_sabeel', 'AdminAsProvider::addSabeel');
+$routes->post('api/admin_update_sabeel', 'AdminAsProvider::updateSabeel');
+$routes->post('api/admin_delete_sabeel', 'AdminAsProvider::deleteSabeel');
+
+$routes->post('api/admin_add_meal', 'AdminAsProvider::addMeal');
+$routes->post('api/admin_update_meal', 'AdminAsProvider::updateMeal');
+$routes->post('api/admin_delete_meal', 'AdminAsProvider::deleteMeal');
+
 // guide
 $routes->post('api/guide_registration', 'UserRegistration::guideRegistration');
 
