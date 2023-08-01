@@ -836,7 +836,7 @@ class AdminAsProvider extends BaseController
         $cities            =  $this->request->getVar('cities');
 
         $lat               =  $this->request->getVar('lat');
-        $long              =  $this->request->getVar('lng');
+        $long              =  $this->request->getVar('long');
 
         $rules = [
             'language' => [
@@ -985,10 +985,14 @@ class AdminAsProvider extends BaseController
                         'provider_lat'   => $lat,
                         'provider_long'   => $long,
                     );
-                    if($meals->insert($data)) 
+
+                    $meals_id = $meals->insert($data);
+                    
+                    if($meals_id) 
                     {
                         // SAVE MULTIPLE IMAGE
-                        $meals_id = $meals->insertID();
+                        // $meals_id = $meals->insertID();
+
                         foreach ($this->request->getFileMultiple('menu_image') as $file) 
                         {
                             $file_path = 'public/assets/uploads/meals/menus/';
@@ -1043,7 +1047,7 @@ class AdminAsProvider extends BaseController
                         'errors'    =>  "",
                         'message'   =>  Lang('Language.add_failed'),
                     ],
-                    ResponseInterface::HTTP_BAD_REQUEST,
+                    ResponseInterface::HTTP_INTERNAL_SERVER_ERROR,
                     $this->response
                 );
             }
