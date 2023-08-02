@@ -100,7 +100,7 @@ return [
 	'required' => 'This filed is required',
 	'invalid_inputs' => 'Invalid inputs',
 	'access_denied' => 'Access Denied - Invalid Token',
-	'auth_failure' => 'Not authorized. please logout and login again...',
+	'auth_failure' => 'Not authorized',
 	'fetch_list' => 'List Fetching Failed',
 	'list_success' => 'List Fetched Successfully',
 	'add_failed' => 'Failed to add',

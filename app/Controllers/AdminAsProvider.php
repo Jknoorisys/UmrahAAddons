@@ -823,7 +823,6 @@ class AdminAsProvider extends BaseController
         $token             =  $this->request->getVar('authorization');
         $pageNo            =  $this->request->getVar('pageNo');
         $provider_id       =  $this->request->getVar('provider_id');
-        $logged_user_id    =  $this->request->getVar('logged_user_id');
         $user_role         =  $this->request->getVar('logged_user_role');
         $cuisine_id        =  $this->request->getVar('cuisine_id');
         $title             =  $this->request->getVar('title');
@@ -980,7 +979,7 @@ class AdminAsProvider extends BaseController
                         'img_url_2'      => $img2,
                         'img_url_3'      => $img3,
                         'thumbnail_url'  => $thumb_url,
-                        'provider_id'    => $logged_user_id,
+                        'provider_id'    => $provider_id,
                         'created_date'   => date('Y-m-d H:i:s'),
                         'provider_lat'   => $lat,
                         'provider_long'   => $long,
