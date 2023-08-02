@@ -865,7 +865,7 @@ class Meals extends ResourceController
                  $isExist = $meals->where(['id'=> $meals_id])->first();
                  if(!empty($isExist))
                  {
-                    $update = $meals->update($meals_id, ['status' => 'inactive']);
+                    $update = $meals->update($meals_id, ['status' => 'deleted']);
                     return $service->success([
                         'message'       =>  Lang('Language.delete_success'),
                         'data'          =>  ''

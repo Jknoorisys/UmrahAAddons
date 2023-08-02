@@ -69,7 +69,7 @@ class TblMeals extends Migration
 			],
 			'status' => [
 				'type' => 'ENUM',
-				'constraint' => ['active','inactive'],
+				'constraint' => ['active','inactive','deleted'],
 				'default' => 'active',
 				'null' => false,
 			],
