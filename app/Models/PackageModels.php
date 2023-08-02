@@ -31,12 +31,13 @@ class PackageModels extends Model
 		}
 
 		$query = "SELECT l.*,CONCAT (p.firstname,' ',p.lastname) as provider_name FROM tbl_package AS l
-		  LEFT JOIN tbl_provider AS p ON p.id = l.provider_id AND l.status ='active'";
+		  LEFT JOIN tbl_provider AS p ON p.id = l.provider_id";
 
 		// 	$query = "SELECT l.*,c.firstname AS country_name, FROM tbl_package AS l
 		//    LEFT JOIN tbl_provider AS c ON c.id = l.provider_id ";
 
 		$query .= "WHERE 1";
+		$query .= "WHERE l.status ='active";
 		$query .= $criterial;
 
 		if ($abc == 0) {
