@@ -962,7 +962,7 @@ class AdminAsProvider extends BaseController
                     $small_thumbnail_path = "public/assets/thumbnail/";
                     $this->createFolder($small_thumbnail_path);
                     $small_thumbnail = $small_thumbnail_path . $newName3;
-                    $thumb_url = $this->createThumbnail($img3, $small_thumbnail, 'jpg', 150, 93);
+                    // $thumb_url = $this->createThumbnail($img3, $small_thumbnail, 'jpg', 150, 93);
 
                     $data = array(
                         'title'          => $title,
@@ -978,7 +978,7 @@ class AdminAsProvider extends BaseController
                         'img_url_1'      => $img1,
                         'img_url_2'      => $img2,
                         'img_url_3'      => $img3,
-                        'thumbnail_url'  => $thumb_url,
+                        // 'thumbnail_url'  => $thumb_url,
                         'provider_id'    => $provider_id,
                         'created_date'   => date('Y-m-d H:i:s'),
                         'provider_lat'   => $lat,
