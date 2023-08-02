@@ -30,7 +30,7 @@ class PackageModels extends Model
 			$criterial .= " AND l.status LIKE '%" . $trnx_filters['pickup_loaction'] . "%'";
 		}
 
-		$criterial .= " AND l.pickup_loaction  = 'active'";
+		$criterial .= " AND l.status  = 'active'";
 
 		$query = "SELECT l.*,CONCAT (p.firstname,' ',p.lastname) as provider_name FROM tbl_package AS l
 		  LEFT JOIN tbl_provider AS p ON p.id = l.provider_id";
