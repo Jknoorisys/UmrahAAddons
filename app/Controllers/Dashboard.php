@@ -567,7 +567,7 @@ class Dashboard extends ResourceController
             $info['total_meals'] =  $db->table('tbl_meals')->countAllResults();
             $info['total_sabeel'] =  $db->table('tbl_sabeel')->countAllResults();
 
-            $info['total_package'] =  $db->table('tbl_package')->countAllResults();
+            $info['total_package'] =  $db->table('tbl_package')->where('status','active')->countAllResults();
             $info['total_package_bookings'] =  $db->table('tbl_booking')->where('booking_status_user','confirm')->countAllResults();
             $info['total_sabeel_bookings'] =  $db->table('tbl_sabeel_booking')->where('booking_status_user','confirm')->countAllResults();
             $info['total_meals_bookings'] =  $db->table('meals_booking')->where('booking_status_user','confirm')->countAllResults();
