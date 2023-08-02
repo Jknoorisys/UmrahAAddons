@@ -30,6 +30,11 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control");
 class Dashboard extends ResourceController
 {
 
+    private $user_id = null;
+	private $user_role = null;
+	private $token = null;
+	private $service;
+
     public function __construct()
     {
         $this->service  = new Services();
