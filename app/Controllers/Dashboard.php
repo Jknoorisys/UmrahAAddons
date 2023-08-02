@@ -458,7 +458,7 @@ class Dashboard extends ResourceController
             $info = [];
 
             // Package
-            $info['total_packages'] =  $db->table('tbl_package')->where('provider_id', $_POST['logged_user_id'])->countAllResults();
+            $info['total_packages'] =  $db->table('tbl_package')->where('provider_id', $_POST['logged_user_id'])->where('status','active')->countAllResults();
             $info['total_package_bookings'] =  $db->table('tbl_booking')->where('provider_id', $_POST['logged_user_id'])->where('booking_status_user', 'confirm')->countAllResults();
             $info['total_package_completed_bookings'] =  $db->table('tbl_booking')->where('provider_id', $_POST['logged_user_id'])->where('payment_status', 'completed')->where('booking_status', 'accepted')->countAllResults();
             $info['total_package_pending_bookings'] =  $db->table('tbl_booking')->where('provider_id', $_POST['logged_user_id'])->where('payment_status', 'completed')->where('booking_status', 'pending')->countAllResults();
