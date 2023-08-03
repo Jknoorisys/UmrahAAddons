@@ -31,6 +31,7 @@ use \Firebase\JWT\JWT;
 use Exception;
 
 use Config\Services;
+use RuntimeException;
 
 // headers
 header("Access-Control-Allow-Origin: *");
@@ -39,6 +40,8 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control");
 
 class UserRegistration extends ResourceController
 {
+
+    private $service;
 
     public function __construct()
     {
@@ -754,34 +757,34 @@ class UserRegistration extends ResourceController
     }
 
     // example  function
-    private function sendOTP(array $isCustomer)
-    {
-        if (!empty($isCustomer) && is_array($isCustomer)) {
-            helper('text');
-            $OTP = random_string('numeric', 6);
-            $data['otp'] = $OTP;
-            $this->customer->allowCallbacks(false);
+    // private function sendOTP(array $isCustomer)
+    // {
+    //     if (!empty($isCustomer) && is_array($isCustomer)) {
+    //         helper('text');
+    //         $OTP = random_string('numeric', 6);
+    //         $data['otp'] = $OTP;
+    //         $this->customer->allowCallbacks(false);
 
-            if ( $this->customer->update($isCustomer['id'], $data) ) {
+    //         if ( $this->customer->update($isCustomer['id'], $data) ) {
 
-                $message['data']   =  '<div style="font-family: Quicksand, sans-serif;">Dear Customer,</div>';
-                $message['data']  .=  '<br><div style="font-family: Quicksand, sans-serif;">Your PIN is: <b> '.$OTP.' </b></div>';
-                $message['data']  .=  '<br><div style="font-family: Quicksand, sans-serif;">Please use this PIN to complete your login.</div><br><br>';
-                $message['data']  .=  '<div style="font-family: Quicksand, sans-serif;">Kind regards,</div><br><div style="font-family: Quicksand, sans-serif;">Welzo Verification Team</div><br>';
+    //             $message['data']   =  '<div style="font-family: Quicksand, sans-serif;">Dear Customer,</div>';
+    //             $message['data']  .=  '<br><div style="font-family: Quicksand, sans-serif;">Your PIN is: <b> '.$OTP.' </b></div>';
+    //             $message['data']  .=  '<br><div style="font-family: Quicksand, sans-serif;">Please use this PIN to complete your login.</div><br><br>';
+    //             $message['data']  .=  '<div style="font-family: Quicksand, sans-serif;">Kind regards,</div><br><div style="font-family: Quicksand, sans-serif;">Welzo Verification Team</div><br>';
 
-                $message['email']  =  $this->service->encryption( $isCustomer['email'], 0);
-                $message['support_email'] = 'contact@welzo.com';
-                $msg_template = view('common/email_template', $message);
-                $subject      = 'Login OTP';
-                $to_email     =  $this->service->encryption( $isCustomer['email'], 0);
+    //             $message['email']  =  $this->service->encryption( $isCustomer['email'], 0);
+    //             $message['support_email'] = 'contact@welzo.com';
+    //             $msg_template = view('common/email_template', $message);
+    //             $subject      = 'Login OTP';
+    //             $to_email     =  $this->service->encryption( $isCustomer['email'], 0);
 
-                return MailSender::sendMail($to_email, $subject, $msg_template , '', '', "Welzo", '');
-                // return true;
-            }
-            return false;
-        }
-        return false;
-    }
+    //             return MailSender::sendMail($to_email, $subject, $msg_template , '', '', "Welzo", '');
+    //             // return true;
+    //         }
+    //         return false;
+    //     }
+    //     return false;
+    // }
 
 
     // // guide registration
