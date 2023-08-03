@@ -934,6 +934,7 @@ class AdminAsProvider extends BaseController
                 $image_1  =  $this->request->getFile('image_1');
                 $image_2  =  $this->request->getFile('image_2');
                 $image_3  =  $this->request->getFile('image_3');
+                $fileExtension3 = $image_3->getExtension();
 
                 $validated = $this->validate([
                     'file' => [
@@ -945,15 +946,20 @@ class AdminAsProvider extends BaseController
 
                 if($validated)
                 {   
+
                     $file_path = 'public/assets/uploads/meals/';
                     // Image 1
                     $newName1 = $image_1->getRandomName();
+
                     $image_1->move($file_path, $newName1);
                     $img1 = $file_path . $newName1;
+
                     // Image 2
                     $newName2 = $image_2->getRandomName();
                     $image_2->move($file_path, $newName2);
+
                     $img2 = $file_path . $newName2;
+
                     // Image 3
                     $newName3 = $image_3->getRandomName();
                     $image_3->move($file_path, $newName3);
@@ -962,7 +968,7 @@ class AdminAsProvider extends BaseController
                     $small_thumbnail_path = "public/assets/thumbnail/";
                     $this->createFolder($small_thumbnail_path);
                     $small_thumbnail = $small_thumbnail_path . $newName3;
-                    // $thumb_url = $this->createThumbnail($img3, $small_thumbnail, 'jpg', 150, 93);
+                    $thumb_url = $this->createThumbnail($img3, $small_thumbnail, $fileExtension3, 150, 93);
 
                     $data = array(
                         'title'          => $title,
@@ -978,7 +984,7 @@ class AdminAsProvider extends BaseController
                         'img_url_1'      => $img1,
                         'img_url_2'      => $img2,
                         'img_url_3'      => $img3,
-                        // 'thumbnail_url'  => $thumb_url,
+                        'thumbnail_url'  => $thumb_url,
                         'provider_id'    => $provider_id,
                         'created_date'   => date('Y-m-d H:i:s'),
                         'provider_lat'   => $lat,
@@ -1073,7 +1079,6 @@ class AdminAsProvider extends BaseController
         $service->cors();
 
         // $pageNo            =  $this->request->getVar('pageNo');
-        $logged_user_id    =  $this->request->getVar('logged_user_id');
         $token            =  $this->request->getVar('authorization');
         $user_role        =  $this->request->getVar('logged_user_role');
         $provider_id      =  $this->request->getVar('provider_id');
@@ -1245,7 +1250,7 @@ class AdminAsProvider extends BaseController
                         'meals_service'  => $meals_service,
                         'pickup_address' => (isset($pickup_address))?$pickup_address:'',
                         'cities'         => (isset($cities))?$cities:'',
-                        'provider_id'    => $logged_user_id,
+                        'provider_id'    => $provider_id,
                         'provider_lat'   => $provider_lat ? $provider_lat : '',   
                         'provider_long'  => $provider_long ? $provider_long : '',   
                         'updated_date'   => date('Y-m-d H:i:s')

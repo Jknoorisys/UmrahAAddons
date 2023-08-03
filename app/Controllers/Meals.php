@@ -318,6 +318,7 @@ class Meals extends ResourceController
                 $image_1  =  $this->request->getFile('image_1');
                 $image_2  =  $this->request->getFile('image_2');
                 $image_3  =  $this->request->getFile('image_3');
+                $fileExtension3 = $image_3->getExtension();
 
                 $validated = $this->validate([
                     'file' => [
@@ -328,16 +329,19 @@ class Meals extends ResourceController
                 ]);
 
                 if($validated)
-                {   
+                {  
+ 
                     $file_path = 'public/assets/uploads/meals/';
                     // Image 1
                     $newName1 = $image_1->getRandomName();
                     $image_1->move($file_path, $newName1);
                     $img1 = $file_path . $newName1;
+
                     // Image 2
                     $newName2 = $image_2->getRandomName();
                     $image_2->move($file_path, $newName2);
                     $img2 = $file_path . $newName2;
+                    
                     // Image 3
                     $newName3 = $image_3->getRandomName();
                     $image_3->move($file_path, $newName3);
@@ -346,7 +350,7 @@ class Meals extends ResourceController
                     $small_thumbnail_path = "public/assets/thumbnail/";
                     $this->createFolder($small_thumbnail_path);
                     $small_thumbnail = $small_thumbnail_path . $newName3;
-                    // $thumb_url = $this->createThumbnail($img3, $small_thumbnail, 'jpg', 150, 93);
+                    $thumb_url = $this->createThumbnail($img3, $small_thumbnail, $fileExtension3, 150, 93);
 
                     $data = array(
                         'title'          => $title,
@@ -362,7 +366,7 @@ class Meals extends ResourceController
                         'img_url_1'      => $img1,
                         'img_url_2'      => $img2,
                         'img_url_3'      => $img3,
-                        // 'thumbnail_url'  => $thumb_url,
+                        'thumbnail_url'  => $thumb_url,
                         'provider_id'    => $logged_user_id,
                         'created_date'   => date('Y-m-d H:i:s'),
                         'provider_lat'   => $lat,
