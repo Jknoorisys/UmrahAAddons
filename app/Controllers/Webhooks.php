@@ -150,7 +150,7 @@ class Webhooks extends ResourceController
 
             case 'payment_method.attached':
                 $paymentMethod = $event->data->object; // contains a \Stripe\PaymentMethod
-                handlePaymentMethodAttached($paymentMethod);
+                // handlePaymentMethodAttached($paymentMethod);
                 break;
             // ... handle other event types
             default:

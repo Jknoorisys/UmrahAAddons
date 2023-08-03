@@ -700,7 +700,6 @@ class AdminAsProvider extends BaseController
         
         $token            =  $this->request->getVar('authorization');
         $user_role        =  $this->request->getVar('logged_user_role');
-        $logged_user_id   =  $this->request->getVar('logged_user_id');
         $provider_id      =  $this->request->getVar('provider_id');
         $sabeel_id        =  $this->request->getVar('sabeel_id');
 
@@ -821,7 +820,6 @@ class AdminAsProvider extends BaseController
         $service->cors();
 
         $token             =  $this->request->getVar('authorization');
-        $pageNo            =  $this->request->getVar('pageNo');
         $provider_id       =  $this->request->getVar('provider_id');
         $user_role         =  $this->request->getVar('logged_user_role');
         $cuisine_id        =  $this->request->getVar('cuisine_id');
@@ -1323,7 +1321,6 @@ class AdminAsProvider extends BaseController
         $service->cors();
         $token            =  $this->request->getVar('authorization');
         $user_role        =  $this->request->getVar('logged_user_role');
-        $logged_user_id   =  $this->request->getVar('logged_user_id');
         $provider_id      =  $this->request->getVar('provider_id');
         $meals_id         =  $this->request->getVar('meals_id');
 

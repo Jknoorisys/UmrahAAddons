@@ -94,7 +94,7 @@ class Bookings extends ResourceController
           }
 
           if( isset($booking_status) && $booking_status!='' ){
-              $whereCondition .= " AND b.action	= '".$booking_status."' "  ;
+              $whereCondition .= " AND b.booking_status	= '".$booking_status."' "  ;
           }
 
           if( isset($provider_id) && $provider_id>0 ){

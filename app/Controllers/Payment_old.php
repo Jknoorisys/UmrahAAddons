@@ -48,6 +48,7 @@ class Payment extends ResourceController
 	private $user_id = null;
 	private $user_role = null;
 	private $token = null;
+	private $service;
 
 	public function __construct()
 	{

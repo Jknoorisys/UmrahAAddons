@@ -30,6 +30,8 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control");
 class ListFilter extends ResourceController
 {
 
+	private $service;
+	
 	public function __construct()
 	{
 		$this->service  = new Services();
