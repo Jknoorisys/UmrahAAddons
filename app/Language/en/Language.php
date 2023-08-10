@@ -128,4 +128,7 @@ return [
 	'Transaction  Failed' => 'Transaction Failed',
 	'sabeel_not_found' => 'Sabeel not found',
 
+	// Manage Duas
+	'Dua Not Found' => 'Dua Not Found',
+	'Dua status changed successfully'=>'Dua status changed successfully',
 ];

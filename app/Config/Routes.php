@@ -256,3 +256,14 @@ $routes->post('admin-dashboard', 'Dashboard::adminDashboard');
 $routes->post('package-cod', 'Payment::packageCodBooking');
 
 // END - RIZ
+
+// Manage Duas By Javeriya Kauser
+$routes->group('duas', function ($routes) {
+	$routes->post('list', 'ManageDuas::index');
+	$routes->post('add', 'ManageDuas::addDuas');
+	$routes->post('view', 'ManageDuas::viewDua');
+	$routes->post('update', 'ManageDuas::editDuas');
+	$routes->post('delete', 'ManageDuas::deleteDuas');
+	$routes->post('change-status', 'ManageDuas::changeDuaStatus');
+
+});
