@@ -182,7 +182,6 @@ class ManageDuas extends BaseController
         $service        =  new Services();
         $service->cors();
 
-        $ota_id            =  $this->request->getVar('ota_id');
         $logged_user_id    =  $this->request->getVar('logged_user_id');
         $logged_user_type  =  $this->request->getVar('logged_user_role');
 
@@ -197,12 +196,6 @@ class ManageDuas extends BaseController
                 'errors'        => [
                     'required'      =>  Lang('Language.required'),
                     'in_list'       =>  Lang('Language.in_list', [LANGUAGES]),
-                ]
-            ],
-            'ota_id' => [
-                'rules'         =>  'required|numeric',
-                'errors'        => [
-                    'required'      =>  Lang('Language.required'),
                 ]
             ],
             'logged_user_id' => [
@@ -261,7 +254,7 @@ class ManageDuas extends BaseController
             $data = array(
                 'user_id'   =>    $logged_user_id,
                 'user_type' =>    $logged_user_type,
-                'ota_id'    =>    $ota_id,
+                'ota_id'    =>    '2',
                 'language'  =>    $dua_language,
                 'title'     =>    $title,
                 'reference' =>    $reference,
