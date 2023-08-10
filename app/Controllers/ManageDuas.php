@@ -5,13 +5,10 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 
 use App\Models\Duas;
-use CodeIgniter\API\ResponseTrait;
-use \Firebase\JWT\JWT;
 
 use Exception;
 
 use Config\Services;
-use RuntimeException;
 
 use CodeIgniter\HTTP\ResponseInterface;
 

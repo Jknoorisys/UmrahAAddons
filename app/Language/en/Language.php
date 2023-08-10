@@ -131,4 +131,7 @@ return [
 	// Manage Duas
 	'Dua Not Found' => 'Dua Not Found',
 	'Dua status changed successfully'=>'Dua status changed successfully',
+
+	// Manage Visa Price
+	'Visa Price Not Found' => 'Visa Price Not Found',
 ];

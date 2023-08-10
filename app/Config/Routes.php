@@ -265,5 +265,11 @@ $routes->group('duas', function ($routes) {
 	$routes->post('update', 'ManageDuas::editDuas');
 	$routes->post('delete', 'ManageDuas::deleteDuas');
 	$routes->post('change-status', 'ManageDuas::changeDuaStatus');
+});
 
+// Manage Visa Price By Javeriya Kauser
+$routes->group('visa', function ($routes) {
+	$routes->post('list', 'ManageVisa::index');
+	$routes->post('view', 'ManageVisa::viewVisa');
+	$routes->post('update', 'ManageVisa::editVisa');
 });
