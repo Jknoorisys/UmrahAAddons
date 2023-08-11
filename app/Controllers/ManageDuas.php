@@ -146,14 +146,14 @@ class ManageDuas extends BaseController
             $db = db_connect();
             if ($language == 'en') {
                 $duasData = $db->table('tbl_duas as s')
-                                ->select('s.id, s.user_id, s.user_type, s.title_en as title, s.reference_en as reference, s.image, s.type, s.created_at, s.updated_at')
+                                ->select('s.id, s.user_id, s.user_type, s.title_en as title, s.reference_en as reference, s.image, s.type, s.status, s.created_at, s.updated_at')
                                 ->where($whereCondition)
                                 ->orderBy('s.id', 'DESC')
                                 ->limit($limit, $offset)
                                 ->get()->getResult();
             } else {
                 $duasData = $db->table('tbl_duas as s')
-                                ->select('s.id, s.user_id, s.user_type, s.title_ur as title, s.reference_ur as reference, s.image, s.type, s.created_at, s.updated_at')
+                                ->select('s.id, s.user_id, s.user_type, s.title_ur as title, s.reference_ur as reference, s.image, s.type, s.status, s.created_at, s.updated_at')
                                 ->where($whereCondition)
                                 ->orderBy('s.id', 'DESC')
                                 ->limit($limit, $offset)
