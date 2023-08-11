@@ -118,7 +118,7 @@ class ManageVisa extends BaseController
 
             // By Query Builder
             $db = db_connect();
-            $duasData = $db->table('tbl_visa as s')
+            $visaPrice = $db->table('tbl_visa as s')
                 ->select('s.*')
                 ->where($whereCondition)
                 ->orderBy('s.id', 'DESC')
@@ -127,9 +127,7 @@ class ManageVisa extends BaseController
             return $service->success(
                 [
                     'message'       =>  Lang('Language.list_success'),
-                    'data'          =>  [
-                        'duasList'         =>  $duasData,
-                    ]
+                    'data'          =>  $visaPrice
                 ],
                 ResponseInterface::HTTP_OK,
                 $this->response
