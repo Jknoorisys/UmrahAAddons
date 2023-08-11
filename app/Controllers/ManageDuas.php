@@ -185,10 +185,12 @@ class ManageDuas extends BaseController
         $logged_user_id    =  $this->request->getVar('logged_user_id');
         $logged_user_type  =  $this->request->getVar('logged_user_role');
 
-        $title        =  $this->request->getVar('title');
-        $reference    =  $this->request->getVar('reference');
+        $title_en        =  $this->request->getVar('title_en');
+        $reference_en    =  $this->request->getVar('reference_en');
+        $title_ur        =  $this->request->getVar('title_ur');
+        $reference_ur    =  $this->request->getVar('reference_ur');
+
         $type         =  $this->request->getVar('type');
-        $dua_language = $this->request->getVar('dua_language');
 
         $rules = [
             'language' => [
@@ -204,19 +206,25 @@ class ManageDuas extends BaseController
                     'required'      =>  Lang('Language.required'),
                 ]
             ],
-            'dua_language' => [
+            'title_en' => [
                 'rules'         =>  'required',
                 'errors'        => [
                     'required'      =>  Lang('Language.required'),
                 ]
             ],
-            'title' => [
+            'reference_en' => [
                 'rules'         =>  'required',
                 'errors'        => [
                     'required'      =>  Lang('Language.required'),
                 ]
             ],
-            'reference' => [
+            'title_ur' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+            'reference_ur' => [
                 'rules'         =>  'required',
                 'errors'        => [
                     'required'      =>  Lang('Language.required'),
@@ -252,15 +260,15 @@ class ManageDuas extends BaseController
             }
 
             $data = array(
-                'user_id'   =>    $logged_user_id,
-                'user_type' =>    $logged_user_type,
-                'ota_id'    =>    '2',
-                'language'  =>    $dua_language,
-                'title'     =>    $title,
-                'reference' =>    $reference,
-                'type'      =>    $type,
-                'image'     =>    $photo_url ? $photo_url : '',
-                'created_at'   => date('Y-m-d H:i:s'),
+                'user_id'       =>    $logged_user_id,
+                'user_type'     =>    $logged_user_type,
+                'title_en'      =>    $title_en,
+                'reference_en'  =>    $reference_en,
+                'title_ur'      =>    $title_ur,
+                'reference_ur'  =>    $reference_ur,
+                'type'          =>    $type,
+                'image'         =>    $photo_url ? $photo_url : '',
+                'created_at'    => date('Y-m-d H:i:s'),
             );
 
             $db = db_connect();
@@ -383,10 +391,11 @@ class ManageDuas extends BaseController
         $logged_user_id    =  $this->request->getVar('logged_user_id');
         $logged_user_type  =  $this->request->getVar('logged_user_type');
 
-        $title        =  $this->request->getVar('title');
-        $reference    =  $this->request->getVar('reference');
+        $title_en        =  $this->request->getVar('title_en');
+        $reference_en    =  $this->request->getVar('reference_en');
+        $title_ur        =  $this->request->getVar('title_ur');
+        $reference_ur    =  $this->request->getVar('reference_ur');
         $type         =  $this->request->getVar('type');
-        $dua_language = $this->request->getVar('dua_language');
 
         $rules = [
             'language' => [
@@ -445,12 +454,13 @@ class ManageDuas extends BaseController
             }
 
             $data = [
-                'language'  =>    $dua_language ? $dua_language : $duaDetails['language'],
-                'title'     =>    $title ? $title : $duaDetails['title'],
-                'reference' =>    $reference ? $reference : $duaDetails['reference'],
-                'type'      =>    $type ? $type : $duaDetails['type'],
-                'image'     =>    $photo_url ? $photo_url : $duaDetails['image'],
-                'updated_at'   => date('Y-m-d H:i:s'),
+                'title_en'      =>    $title_en ? $title_en : $duaDetails['title_en'],
+                'reference_en'  =>    $reference_en ? $reference_en : $duaDetails['reference_en'],
+                'title_ur'      =>    $title_ur ? $title_ur : $duaDetails['title_ur'],
+                'reference_ur'  =>    $reference_ur ? $reference_ur : $duaDetails['reference_ur'],
+                'type'          =>    $type ? $type : $duaDetails['type'],
+                'image'         =>    $photo_url ? $photo_url : $duaDetails['image'],
+                'updated_at'    => date('Y-m-d H:i:s'),
             ];
 
             $db = db_connect();

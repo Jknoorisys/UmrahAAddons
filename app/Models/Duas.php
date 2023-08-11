@@ -14,7 +14,7 @@ class Duas extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['user_id','user_type', 'ota_id', 'language', 'title', 'reference', 'image', 'status', 'created_at', 'updated_at'];
+    protected $allowedFields    = ['user_id','user_type', 'title_en','reference_en', 'title_ur', 'reference_ur', 'image', 'status', 'created_at', 'updated_at'];
 
     // Dates
     protected $useTimestamps = false;
