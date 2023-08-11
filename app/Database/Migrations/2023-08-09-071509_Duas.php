@@ -25,21 +25,21 @@ class Duas extends Migration
                 'constraint' => '50',
                 'default' => 'admin'
             ],
-            'ota_id' => [ 
-                'type' => 'INT',
-                'constraint' => '11',
-            ],
-            'language' => [ 
-                'type' => 'VARCHAR',
-                'constraint' => '50',
-                'default' => 'en',
-            ],
-            'title' => [ 
+            'title_en' => [ 
                 'type' => 'VARCHAR',
                 'constraint' => '250',
                 null => true,
             ],
-            'reference' => [ 
+            'reference_en' => [ 
+                'type' => 'LONGTEXT',
+                null => true,
+            ],
+            'title_ur' => [ 
+                'type' => 'VARCHAR',
+                'constraint' => '250',
+                null => true,
+            ],
+            'reference_ur' => [ 
                 'type' => 'LONGTEXT',
                 null => true,
             ],
