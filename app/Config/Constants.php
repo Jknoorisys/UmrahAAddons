@@ -102,4 +102,4 @@ defined("FROM_EMAIL") || define('FROM_EMAIL', "noori.developer@gmail.com");
 defined("FROM_NAME") || define('FROM_NAME', "Umrahaaddons");
 
 defined('PAGE_LENGTH') || define('PAGE_LENGTH', 0);
-defined('LANGUAGES')   || define('LANGUAGES', 'en,ar');
+defined('LANGUAGES')   || define('LANGUAGES', 'en,ar,ur');
