@@ -273,3 +273,7 @@ $routes->group('visa', function ($routes) {
 	$routes->post('view', 'ManageVisa::viewVisa');
 	$routes->post('update', 'ManageVisa::editVisa');
 });
+
+$routes->post('api/dua-list', 'UserLists::listOfDua');
+$routes->post('api/view-dua', 'UserLists::viewDua');
+$routes->post('api/visa-price', 'UserLists::listOfVisaPrice');
