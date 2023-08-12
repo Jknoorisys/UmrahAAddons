@@ -153,6 +153,7 @@ class UserLists extends BaseController
         $service->cors();
 
         $dua_id            =  $this->request->getVar('dua_id');
+        $language           = $this->request->getVar('language');
 
         $rules = [
             'language' => [
@@ -182,7 +183,25 @@ class UserLists extends BaseController
         }
 
         try {
-            $duaDetails = $duaModel->where("id", $dua_id)->where("status",'1')->first();
+
+             // By Query Builder
+             $db = db_connect();
+
+            if ($language == 'en') {
+                $duaDetails = $db->table('tbl_duas as s')
+                                ->select('s.id, s.user_id, s.user_type, s.title_en as title, s.reference_en as reference, s.image, s.type, s.status, s.created_at, s.updated_at')
+                                ->where("id", $dua_id)
+                                ->where("status",'1')
+                                ->get()->getRow();
+            } else {
+                $duaDetails = $db->table('tbl_duas as s')
+                                ->select('s.id, s.user_id, s.user_type, s.title_ur as title, s.reference_ur as reference, s.image, s.type, s.status, s.created_at, s.updated_at')
+                                ->where("id", $dua_id)
+                                ->where("status",'1')
+                                ->get()->getRow();
+            }
+
+            // $duaDetails = $duaModel->where("id", $dua_id)->where("status",'1')->first();
 
             if(!empty($duaDetails)) 
             {
