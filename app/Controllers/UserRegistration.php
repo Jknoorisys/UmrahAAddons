@@ -648,7 +648,7 @@ class UserRegistration extends ResourceController
         return $this->respondCreated($response);
     }
 
-    // GENERATE OTP FUNCTION
+    // GENERATE OTP FUNCTION 
     public function generateNumericOTP($n)
     {
         $generator = "135792468";
@@ -659,7 +659,7 @@ class UserRegistration extends ResourceController
         return $result;
     }
 
-    // new customer registration and login api
+    // new customer registration and login api with email id
     public function userRegtLogin()
     {
         $email = \Config\Services::email();
@@ -748,6 +748,145 @@ class UserRegistration extends ResourceController
             ];
             return $this->respond($response);
         }
+        $response = [
+            'status' => 'failed',
+            'status_code' => 500,
+            'messages' => lang('Language.User not found or Inactive')
+        ];
+        return $this->respond($response);
+    }
+
+    // new customer registration and login api with mobile number
+    public function userRegtLoginwithMobile()
+    {
+        $service        =  new Services();
+        $service->cors();
+
+        $UserModels = new UserModels();
+        $OtaMoodel = new OtaMoodel();
+
+        $rules = [
+            'language' => [
+                'rules'         =>  'required|in_list[' . LANGUAGES . ']',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                    'in_list'       =>  Lang('Language.in_list', [LANGUAGES]),
+                ]
+            ],
+            'ota_id' => [
+                'rules'         =>  'required|numeric',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+            'country_code' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+            'mobile' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+            'device_token' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+            'device_type' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+        ];
+
+        if(!$this->validate($rules)) {
+            return $service->fail(
+                [
+                    'errors'     =>  $this->validator->getErrors(),
+                    'message'   =>  lang('Language.invalid_inputs')
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+
+        $ota_id = $this->request->getPost('ota_id');
+        $country_code = $this->request->getPost('country_code');
+        $mobile = $this->request->getPost('mobile');
+
+        $device_token = $this->request->getPost('device_token');
+        $device_type = $this->request->getPost('device_type');
+
+        // check ota
+        $otadata = $OtaMoodel->where("id", $ota_id)->first();
+        if (empty($otadata)) {
+            echo json_encode(['status' => 'failed', 'messages' => lang('Language.OTA Not Exists')]);
+            die();
+        }
+
+        // check user 
+        $userdata = $UserModels->where("country_code", $country_code)->where("mobile", $mobile)->first();
+        if (!empty($userdata)) {
+            $updateuser = [
+                'ota_id' => $ota_id,
+                'device_type' => $device_type,
+                'device_token' => $device_token,
+            ];
+
+            $res = $UserModels->update($userdata['id'], $updateuser);
+            $response = [
+                'status' => 'success',
+                'status_code' => 200,
+                'messages' => lang('Language.OTP Send successfully'),
+            ];
+            return $this->respond($response);
+        } else {
+            $otp = $this->generateNumericOTP(6);
+            $newuser = [
+                'country_code' => $country_code,
+                'mobile' => $mobile,
+                'ota_id' => $ota_id,
+                'created_by_id' => $ota_id,
+                'user_role' => 'user',
+                'created_by_role' => 'ota',
+                'device_type' => $device_type,
+                'device_token' => $device_token,
+            ];
+
+            $UserModels->insert($newuser);
+            // PUSH NOTIFICATION
+            helper('notifications');
+            $userinfo = $UserModels->where("mobile", $mobile)->first();
+
+            $title = "Registration";
+            $message = "Thanks for registering with Umrah Addons.";
+            $fmc_ids = array($userinfo['device_token']);
+            
+            $notification = array(
+                'title' => $title ,
+                'message' => $message,
+                'click_action' => 'FLUTTER_NOTIFICATION_CLICK', // DO NOT CHANGE THE VALUE
+                'date' => date('Y-m-d H:i'),
+            );
+
+            if($userinfo['device_type']!='web'){ sendFCMMessage($notification, $fmc_ids); }
+            // EnD
+
+            $response = [
+                'status' => "success",
+                'status_code' => 200,
+                // 'otp' => $otp,
+                'messages' => lang("Language.Users Create Successfully")
+            ];
+            return $this->respond($response);
+        }
+
         $response = [
             'status' => 'failed',
             'status_code' => 500,

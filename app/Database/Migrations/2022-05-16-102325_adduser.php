@@ -48,6 +48,11 @@ class Adduser extends Migration
 					'type' => 'TEXT',
 					'constraint' => '10',
 				],
+				'country_code' => [
+					'type' => 'VARCHAR',
+					'constraint' => '50',
+					'null' => false,
+				],
 				'mobile' => [
 					'type' => 'VARCHAR',
 					'constraint' => '50',

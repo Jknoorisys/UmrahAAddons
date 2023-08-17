@@ -100,6 +100,7 @@ $routes->post('api/SearchForUser', 'UserRegistration::packageListSearchForUser')
 $routes->post('api/list_of_booking_history', 'ListFilter::listOfBookingHistory');//done
 $routes->post('api/booked_package_detail_by_id', 'User::bookingPackageDetailById');
 $routes->post('api/user_regt_login', 'UserRegistration::userRegtLogin');
+$routes->post('api/user_regt_login_mobile', 'UserRegistration::userRegtLoginwithMobile');
 $routes->post('api/otp_verification', 'UserRegistration::otpVerification');
 
 // master data
