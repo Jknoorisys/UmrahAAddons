@@ -8,7 +8,7 @@ class UserModels extends Model
 	protected $table = 'tbl_user';
 	protected $primaryKey = 'id';
 	protected $useTimestamps = true;
-	protected $allowedFields = ['firstname','created_by_id','created_by_role','lastname','username','email','password','plain_password','mobile','dob','gender','profile_pic','city','state','country','zip_code','token','user_role','id_prrof','document','status','created_by','otp','device_type','device_token'];
+	protected $allowedFields = ['firstname','created_by_id','created_by_role','lastname','username','email','password','plain_password','country_code','mobile','dob','gender','profile_pic','city','state','country','zip_code','token','user_role','id_prrof','document','status','created_by','otp','device_type','device_token'];
 	protected $createdField  = 'created_date';
   	protected $updatedField  = 'updated_date';
 
