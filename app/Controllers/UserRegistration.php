@@ -833,21 +833,26 @@ class UserRegistration extends ResourceController
         // check user 
         $userdata = $UserModels->where("country_code", $country_code)->where("mobile", $mobile)->first();
         if (!empty($userdata)) {
+
+            $token = $this->service->getSignedAccessTokenForUser('user', $userdata['id']);
+
             $updateuser = [
                 'ota_id' => $ota_id,
                 'device_type' => $device_type,
                 'device_token' => $device_token,
+                'token' => $token
             ];
 
             $res = $UserModels->update($userdata['id'], $updateuser);
+            $userdata['token'] = $token;
             $response = [
                 'status' => 'success',
                 'status_code' => 200,
                 'messages' => lang('Language.OTP Send successfully'),
+                'data' => $userdata,
             ];
             return $this->respond($response);
         } else {
-            $otp = $this->generateNumericOTP(6);
             $newuser = [
                 'country_code' => $country_code,
                 'mobile' => $mobile,
@@ -859,7 +864,19 @@ class UserRegistration extends ResourceController
                 'device_token' => $device_token,
             ];
 
-            $UserModels->insert($newuser);
+            $user_id = $UserModels->insert($newuser);
+            $token = $this->service->getSignedAccessTokenForUser('user', $user_id);
+
+            $updateuser = [
+                'ota_id' => $ota_id,
+                'device_type' => $device_type,
+                'device_token' => $device_token,
+                'token' => $token
+            ];
+
+            $res = $UserModels->update($user_id, $updateuser);
+            $user = $UserModels->where("country_code", $country_code)->where("mobile", $mobile)->first();
+
             // PUSH NOTIFICATION
             helper('notifications');
             $userinfo = $UserModels->where("mobile", $mobile)->first();
@@ -882,7 +899,8 @@ class UserRegistration extends ResourceController
                 'status' => "success",
                 'status_code' => 200,
                 // 'otp' => $otp,
-                'messages' => lang("Language.Users Create Successfully")
+                'messages' => lang("Language.Users Create Successfully"),
+                'data' => $user
             ];
             return $this->respond($response);
         }
