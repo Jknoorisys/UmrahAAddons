@@ -20,6 +20,8 @@ use Config\Services;
 use Exception;
 
 use App\Libraries\MailSender;
+use App\Models\FullPackageEnquiry;
+use App\Models\VisaEnquiry;
 
 class Enquiry extends ResourceController
 {
@@ -444,6 +446,8 @@ class Enquiry extends ResourceController
         $guide_enquiry   = new GuideEnquiryModel();
         $transport_enquiry   = new TransportModel();
         $package_enqiry   = new PackageInquiryModel();
+        $full_package_enqiry   = new FullPackageEnquiry();
+        $visa_enquiry     = new VisaEnquiry();
         $service->cors();
 
         $token            =  $this->request->getVar('token');
@@ -518,11 +522,14 @@ class Enquiry extends ResourceController
                     $isExist = $guide_enquiry->where(['id'=> $enquiry_id])->first();
                 } else if($service_type=='transport') {
                     $isExist = $transport_enquiry->where(['id'=> $enquiry_id])->first();
+                } else if($service_type=='visa') {
+                    $isExist = $visa_enquiry->where(['id'=> $enquiry_id])->first();
+                } else if($service_type=='full-package') {
+                    $isExist = $full_package_enqiry->where(['id'=> $enquiry_id])->first();
                 }
 
                 
-                if(empty($isExist))
-                {
+                if(empty($isExist)){
                     return $service->fail(
                         [
                             'errors'    =>  "",
@@ -531,8 +538,7 @@ class Enquiry extends ResourceController
                         ResponseInterface::HTTP_BAD_REQUEST,
                         $this->response
                     );
-                } else 
-                {
+                } else {
                     if($isExist['booking_status']=='accept'){
                         return $service->fail(
                             [
@@ -566,9 +572,13 @@ class Enquiry extends ResourceController
                         $update = $guide_enquiry->update($enquiry_id, $updateData);
                     } else if($service_type=='transport') {
                         $update = $transport_enquiry->update($enquiry_id, $updateData);
+                    } else if($service_type=='visa') {
+                        $update = $visa_enquiry->update($enquiry_id, $updateData);
+                    } else if($service_type=='full-package') {
+                        $update = $full_package_enqiry->update($enquiry_id, $updateData);
                     } 
-                    if($update)
-                    {
+
+                    if($update){
                         $user_id = $isExist['user_id'];
                         $db = db_connect();
                         $info = $db->table('tbl_user')
@@ -580,7 +590,7 @@ class Enquiry extends ResourceController
                         if($service_type=='package'){
                             $data = array('status' => $status, 'user_name' => $isExist['full_name']);
                             $msg_template = view('emmail_templates/meals_enquiry.php', $data);
-                            $subject      = 'Package Inquiry';
+                            $subject      = 'Package Enquiry';
                             $to_email     =  $info->email; // provider email
                             $filename = "";
                             $send     = sendEmail($to_email, $subject, $msg_template,$filename);                        }
@@ -588,7 +598,7 @@ class Enquiry extends ResourceController
                         if($service_type=='guide'){
                             $data = array('status' => $status, 'user_name' => $isExist['name']);
                             $msg_template = view('emmail_templates/guide_enquiry.php', $data);
-                            $subject      = 'Guide Inquiry';
+                            $subject      = 'Guide Enquiry';
                             $to_email     =  $info->email; // provider email
                             $filename = "";
                             $send     = sendEmail($to_email, $subject, $msg_template,$filename);                        }
@@ -603,11 +613,15 @@ class Enquiry extends ResourceController
                              ->get()->getRow();
                          
                             if($service_type=='guide') {
-                               $title = "Guide Inquiry";
+                               $title = "Guide Enquiry";
                             } elseif ($service_type=='package') {
-                                $title = "Package Inquiry";
+                                $title = "Package Enquiry";
                             } elseif ($service_type=='transport') {
-                                $title = "Transport Inquiry";
+                                $title = "Transport Enquiry";
+                            } elseif ($service_type=='visa') {
+                                $title = "Visa Enquiry";
+                            } elseif ($service_type=='full-package') {
+                                $title = "Full Package Enquiry";
                             }
 
                          if($status=='accept'){
@@ -887,6 +901,5 @@ class Enquiry extends ResourceController
             );
         }
     }
-
 
 }
