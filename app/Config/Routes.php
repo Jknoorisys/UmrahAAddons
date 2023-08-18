@@ -273,6 +273,24 @@ $routes->group('visa', function ($routes) {
 	$routes->post('list', 'ManageVisa::index');
 	$routes->post('view', 'ManageVisa::viewVisa');
 	$routes->post('update', 'ManageVisa::editVisa');
+
+	// Visa Enquiry
+	$routes->post('enquiry-list', 'ManageVisa::enquiryList');
+	$routes->post('send-enquiry', 'ManageVisa::addEnquiry');
+	$routes->post('view-enquiry', 'ManageVisa::viewEnquiry');
+
+});
+
+$routes->group('full-package', function ($routes) {
+	$routes->post('list', 'FullPackage::index');
+	$routes->post('view', 'FullPackage::viewVisa');
+	$routes->post('update', 'FullPackage::editVisa');
+
+	// Visa Enquiry
+	$routes->post('enquiry-list', 'FullPackage::enquiryList');
+	$routes->post('send-enquiry', 'FullPackage::addEnquiry');
+	$routes->post('view-enquiry', 'FullPackage::viewEnquiry');
+
 });
 
 $routes->post('api/dua-list', 'UserLists::listOfDua');
