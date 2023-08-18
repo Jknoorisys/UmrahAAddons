@@ -80,7 +80,8 @@ class FullPackage extends BaseController
             $db = db_connect();
             $data = $db->table('tbl_full_package_enquiry as e')
                 ->join('tbl_user as u','u.id = e.user_id')
-                ->select("e.*, CONCAT(u.firstname,' ',u.lastname) as user_name")
+                ->join('tbl_full_package as p','p.id = e.full_package_id')
+                ->select("e.*, CONCAT(u.firstname,' ',u.lastname) as user_name, p.name as package_name")
                 ->where($whereCondition)
                 ->orderBy('e.id', 'DESC')
                 ->limit($limit, $offset)
@@ -121,6 +122,7 @@ class FullPackage extends BaseController
         $user_role         =  $this->request->getVar('logged_user_role');
 
         $ota_id            =  $this->request->getVar('ota_id');
+        $full_package_id   =  $this->request->getVar('full_package_id');
         $name              =  $this->request->getVar('name');
         $date              =  $this->request->getVar('date');
         $country_code      =  $this->request->getVar('country_code');
@@ -148,6 +150,12 @@ class FullPackage extends BaseController
                 ]
             ],
             'ota_id' => [
+                'rules'         =>  'required|numeric',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+            'full_package_id' => [
                 'rules'         =>  'required|numeric',
                 'errors'        => [
                     'required'      =>  Lang('Language.required'),
@@ -200,6 +208,7 @@ class FullPackage extends BaseController
             $data = array(
                 'user_id'       => $logged_user_id,
                 'ota_id'        => $ota_id,
+                'full_package_id' => $full_package_id,
                 'name'          => (isset($name)) ? $name: '',
                 'country_code'  => (isset($country_code)) ? $country_code : '',
                 'mobile'        => (isset($mobile)) ? $mobile : '',
@@ -317,7 +326,8 @@ class FullPackage extends BaseController
             $db = db_connect();
             $info = $db->table('tbl_full_package_enquiry as e')
                 ->join('tbl_user as u','u.id = e.user_id')
-                ->select("e.*, CONCAT(u.firstname,' ',u.lastname) as user_name")
+                ->join('tbl_full_package as p','p.id = e.full_package_id')
+                ->select("e.*, CONCAT(u.firstname,' ',u.lastname) as user_name, p.name as package_name")
                 ->where('e.status','1')
                 ->where('e.id',$enquiry_id)
                 ->get()->getRow();
