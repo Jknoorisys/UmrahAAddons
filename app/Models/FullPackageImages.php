@@ -14,7 +14,7 @@ class FullPackageImages extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['id', 'full_package_id', 'image', 'created_at', 'updated_at'];
 
     // Dates
     protected $useTimestamps = false;

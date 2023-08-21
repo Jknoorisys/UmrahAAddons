@@ -19,7 +19,7 @@ class FullPackageImages extends Migration
 				'type' => 'BIGINT',
 				'constraint' => '20',
 			],
-            'imgs' => [
+            'image' => [
 				'type' => 'VARCHAR',
 				'constraint' => '255',
 			],
