@@ -1,49 +1,45 @@
-<?php namespace App\Database\Migrations;
+<?php
+
+namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class TblPackageImage extends Migration
+class FullPackageImages extends Migration
 {
-	public function up()
-	{
-		$fields =[
+    public function up()
+    {
+        $fields =[
 			'id' => [
 				'type' => 'BIGINT',
 				'constraint' => 20,
 				'unsigned' => true,
 				'auto_increment' => true,
 			],
-			'package_id' => [
+			'full_package_id' => [
 				'type' => 'BIGINT',
 				'constraint' => '20',
 			],
-			'status' => [
-				'type' => 'ENUM',
-				'constraint' => ['active','inactive'],
-				'default' => 'active',
-				'null' => false,
-			],
-			'package_imgs' => [
+            'imgs' => [
 				'type' => 'VARCHAR',
 				'constraint' => '255',
 			],
-			'created_date' => [
+			'created_at' => [
 				'type' => 'VARCHAR',
 				'constraint' => '50',
 				null => true,
 			],
-			'updated_date' => [
+			'updated_at' => [
 				'type' => 'VARCHAR',
 				'constraint' => '50',
 				null => true,
 			]
 		];$this->forge->addField($fields);
 		$this->forge->addKey('id', true);
-		$this->forge->createTable('tbl_package_image');
+		$this->forge->createTable('tbl_full_package_image');
     }
 
     public function down()
     {
-        $this->forge->dropTable('tbl_package_image');
+        $this->forge->dropTable('tbl_full_package_image');
     }
 }

@@ -282,14 +282,17 @@ $routes->group('visa', function ($routes) {
 });
 
 $routes->group('full-package', function ($routes) {
-	$routes->post('list', 'FullPackage::index');
-	$routes->post('view', 'FullPackage::viewVisa');
-	$routes->post('update', 'FullPackage::editVisa');
+	$routes->post('add', 'FullPackage::addPackage');
+	$routes->post('delete', 'FullPackage::packageDelete');
+	$routes->post('list', 'FullPackage::packageList');
+	$routes->post('change-status', 'FullPackage::changePackageStatus');
+	$routes->post('view', 'FullPackage::viewPackage');
+	// $routes->post('update', 'FullPackage::editVisa');
 
-	// Visa Enquiry
-	$routes->post('enquiry-list', 'FullPackage::enquiryList');
-	$routes->post('send-enquiry', 'FullPackage::addEnquiry');
-	$routes->post('view-enquiry', 'FullPackage::viewEnquiry');
+	// // full Package Enquiry
+	// $routes->post('enquiry-list', 'FullPackage::enquiryList');
+	// $routes->post('send-enquiry', 'FullPackage::addEnquiry');
+	// $routes->post('view-enquiry', 'FullPackage::viewEnquiry');
 
 });
 

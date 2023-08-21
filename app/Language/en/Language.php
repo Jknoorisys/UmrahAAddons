@@ -134,4 +134,9 @@ return [
 
 	// Manage Visa Price
 	'Visa Price Not Found' => 'Visa Price Not Found',
+
+	// Manage Full Package
+	'Package Created Successfully' => 'Package Created Successfully',
+	'Package status changed successfully' => 'Package status changed successfully',
+	'Unable to change Package status, please try again' => 'Unable to change Package status, please try again'
 ];
