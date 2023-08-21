@@ -464,93 +464,93 @@ class FullPackage extends BaseController
         }
     }
 
-     // view package by Admin - by Javeriya Kauser
-     public function viewPackage()
-     {
-         $package   =  new ModelsFullPackage();
-         $dates   =  new FullPackageDates();
-         $images   =  new FullPackageImages();
-         $service   =  new Services();
-         $service->cors();
- 
-         $package_id       =  $this->request->getVar('full_package_id');
- 
-         $rules = [
-             'language' => [
-                 'rules'         =>  'required|in_list[' . LANGUAGES . ']',
-                 'errors'        => [
-                     'required'      =>  Lang('Language.required'),
-                     'in_list'       =>  Lang('Language.in_list', [LANGUAGES]),
-                 ]
-             ],
-             'logged_user_id' => [
-                 'rules'         =>  'required',
-                 'errors'        => [
-                     'required'      =>  Lang('Language.required'),
-                 ]
-             ],
-             'logged_user_role' => [
-                 'rules'         =>  'required',
-                 'errors'        => [
-                     'required'      =>  Lang('Language.required'),
-                 ]
-             ],
-             'full_package_id' => [
-                 'rules'         =>  'required',
-                 'errors'        => [
-                     'required'      =>  Lang('Language.required'),
-                 ]
-             ],
-         ];
- 
-         if(!$this->validate($rules)) {
-             return $service->fail(
-                 [
-                     'errors'     =>  $this->validator->getErrors(),
-                     'message'   =>  lang('Language.invalid_inputs')
-                 ],
-                 ResponseInterface::HTTP_BAD_REQUEST,
-                 $this->response
-             );
-         }
- 
-         try {
-                $isExist = $package->where('id',$package_id)->where('status !=','2')->first();
-                 if(!empty($isExist))
-                 {
-                    $db = db_connect();
-                    $isExist['departure_dates'] = $db->table('tbl_full_package_dates')->where('full_package_id', $package_id)->get()->getResult();
-                    $isExist['images'] = $db->table('tbl_full_package_image')->where('full_package_id', $package_id)->get()->getResult();
+    // view package by Admin - by Javeriya Kauser
+    public function viewPackage()
+    {
+        $package   =  new ModelsFullPackage();
+        $dates   =  new FullPackageDates();
+        $images   =  new FullPackageImages();
+        $service   =  new Services();
+        $service->cors();
 
-                    return $service->success([
-                        'message'       =>  Lang('Language.details_success'),
-                        'data'          =>  $isExist
+        $package_id       =  $this->request->getVar('full_package_id');
+
+        $rules = [
+            'language' => [
+                'rules'         =>  'required|in_list[' . LANGUAGES . ']',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                    'in_list'       =>  Lang('Language.in_list', [LANGUAGES]),
+                ]
+            ],
+            'logged_user_id' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+            'logged_user_role' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+            'full_package_id' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+        ];
+
+        if(!$this->validate($rules)) {
+            return $service->fail(
+                [
+                    'errors'     =>  $this->validator->getErrors(),
+                    'message'   =>  lang('Language.invalid_inputs')
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+
+        try {
+            $isExist = $package->where('id',$package_id)->where('status !=','2')->first();
+                if(!empty($isExist))
+                {
+                $db = db_connect();
+                $isExist['departure_dates'] = $db->table('tbl_full_package_dates')->where('full_package_id', $package_id)->get()->getResult();
+                $isExist['images'] = $db->table('tbl_full_package_image')->where('full_package_id', $package_id)->get()->getResult();
+
+                return $service->success([
+                    'message'       =>  Lang('Language.details_success'),
+                    'data'          =>  $isExist
+                    ],
+                    ResponseInterface::HTTP_OK,
+                    $this->response
+                );
+                } else {
+                    return $service->fail(
+                        [
+                            'errors'    =>  "",
+                            'message'   =>  Lang('Language.Package Not Found'),
                         ],
-                        ResponseInterface::HTTP_OK,
+                        ResponseInterface::HTTP_BAD_REQUEST,
                         $this->response
                     );
-                 } else {
-                     return $service->fail(
-                         [
-                             'errors'    =>  "",
-                             'message'   =>  Lang('Language.Package Not Found'),
-                         ],
-                         ResponseInterface::HTTP_BAD_REQUEST,
-                         $this->response
-                     );
-                 }
- 
-         } catch (Exception $e) {
-             return $service->fail(
-                 [
-                    'errors'    =>  $e->getMessage(),
-                     'message'   =>  Lang('Language.details_fetch_failed'),
-                 ],
-                 ResponseInterface::HTTP_BAD_REQUEST,
-                 $this->response
-             );
-         }
-     }
+                }
+
+        } catch (Exception $e) {
+            return $service->fail(
+                [
+                'errors'    =>  $e->getMessage(),
+                    'message'   =>  Lang('Language.details_fetch_failed'),
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+    }
 
     public function changePackageStatus()
     {

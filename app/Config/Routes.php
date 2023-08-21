@@ -290,12 +290,14 @@ $routes->group('full-package', function ($routes) {
 	// $routes->post('update', 'FullPackage::editVisa');
 
 	// // full Package Enquiry
-	// $routes->post('enquiry-list', 'FullPackage::enquiryList');
-	// $routes->post('send-enquiry', 'FullPackage::addEnquiry');
-	// $routes->post('view-enquiry', 'FullPackage::viewEnquiry');
+	$routes->post('enquiry-list', 'FullPackage::enquiryList');
+	$routes->post('send-enquiry', 'FullPackage::addEnquiry');
+	$routes->post('view-enquiry', 'FullPackage::viewEnquiry');
 
 });
 
 $routes->post('api/dua-list', 'UserLists::listOfDua');
 $routes->post('api/view-dua', 'UserLists::viewDua');
 $routes->post('api/visa-price', 'UserLists::listOfVisaPrice');
+$routes->post('api/full-package-list', 'UserLists::packageList');
+$routes->post('api/view-full-package', 'UserLists::viewPackage');
