@@ -77,6 +77,7 @@ class FullPackage extends BaseController
     public function addPackage()
     {
         $service   =  new Services();
+        $FullPackageImage = new FullPackageImages();
         $service->cors();
 
         $rules = [
@@ -228,6 +229,7 @@ class FullPackage extends BaseController
         $db = db_connect();
         $fullPackage =  $db->table('tbl_full_package')->insert($data);
         $full_package_id = $db->insertID();
+        $image_array = $this->request->getPost("image_array");
 
         if ($fullPackage && $full_package_id) {
 
@@ -241,16 +243,15 @@ class FullPackage extends BaseController
                 $deperture_date = $db->table('tbl_full_package_dates')->insert($dates_data);
             }
 
-            $image_array = $this->request->getFiles();
-            foreach ($image_array['image_array'] as $file) {
-                $package_pic_path = 'public/assets/uploads/full-package/package_pic/';
+            foreach ($this->request->getFileMultiple('image_array') as $file) {
+                $package_pic_path = 'public/assets/uploads/package/package_pic/';
                 $new_name = $file->getRandomName();
-                $image_data = [
+                $data = [
                     'full_package_id' => $full_package_id,
-                    'imgs' => $package_pic_path . $new_name,
+                    'image' => $package_pic_path . $new_name,
                     'created_at' => date('Y-m-d H:i:s')
                 ];
-                $save = $db->table('tbl_full_package_image')->insert($image_data);
+                $save = $FullPackageImage->insert($data);
                 $file->move($package_pic_path, $new_name);
             }
 
