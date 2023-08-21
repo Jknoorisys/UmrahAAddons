@@ -5,6 +5,9 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 
 use App\Models\Duas;
+use App\Models\FullPackage;
+use App\Models\FullPackageDates;
+use App\Models\FullPackageImages;
 use App\Models\Visa;
 use CodeIgniter\HTTP\ResponseInterface;
 use Exception;
@@ -366,6 +369,162 @@ class UserLists extends BaseController
             return $service->fail(
                 [
                     'errors'    =>  $e->getMessage(),
+                    'message'   =>  Lang('Language.details_fetch_failed'),
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+    }
+
+    // Full Package by Javeriya
+	public function listOfFullPackage()
+    {
+        $service           =  new Services();
+        $service->cors();
+
+        $user_role        =  'user';
+
+        $rules = [
+            'language' => [
+                'rules'         =>  'required|in_list[' . LANGUAGES . ']',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                    'in_list'       =>  Lang('Language.in_list', [LANGUAGES]),
+                ]
+            ],
+        ];
+
+        if(!$this->validate($rules)) {
+            return $service->fail(
+                [
+                    'errors'     =>  $this->validator->getErrors(),
+                    'message'   =>  lang('Language.invalid_inputs')
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+
+        try{
+
+            $whereCondition = "";
+
+            if($user_role == 'admin'){ $whereCondition .= "s.status != '2'"; } 
+
+            if($user_role == 'user'){ $whereCondition .= "s.status = '1'"; } 
+
+            if($user_role == 'provider'){ $whereCondition .= "s.status = '1'"; }
+
+            // By Query Builder
+            $db = db_connect();
+            $visaPrice = $db->table('tbl_visa as s')
+                ->select('s.*')
+                ->where($whereCondition)
+                ->orderBy('s.id', 'DESC')
+                ->get()->getRow();
+
+            return $service->success(
+                [
+                    'message'       =>  Lang('Language.list_success'),
+                    'data'          =>  $visaPrice
+                ],
+                ResponseInterface::HTTP_OK,
+                $this->response
+            );
+
+        } catch (Exception $e) {
+            return $service->fail(
+                [
+                    'errors'    =>  "",
+                    'message'   =>  Lang('Language.fetch_list'),
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+    }
+
+	// Full Pacakge Price by Javeriya
+    public function viewPackage()
+    {
+        $package   =  new FullPackage();
+        $dates   =  new FullPackageDates();
+        $images   =  new FullPackageImages();
+        $service   =  new Services();
+        $service->cors();
+
+        $package_id       =  $this->request->getVar('full_package_id');
+
+        $rules = [
+            'language' => [
+                'rules'         =>  'required|in_list[' . LANGUAGES . ']',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                    'in_list'       =>  Lang('Language.in_list', [LANGUAGES]),
+                ]
+            ],
+            'logged_user_id' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+            'logged_user_role' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+            'full_package_id' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+        ];
+
+        if(!$this->validate($rules)) {
+            return $service->fail(
+                [
+                    'errors'     =>  $this->validator->getErrors(),
+                    'message'   =>  lang('Language.invalid_inputs')
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+
+        try {
+                $isExist = $package->where('id',$package_id)->where('status','1')->first();
+                if(!empty($isExist))
+                {
+                $db = db_connect();
+                $isExist['departure_dates'] = $db->table('tbl_full_package_dates')->where('full_package_id', $package_id)->get()->getResult();
+                $isExist['images'] = $db->table('tbl_full_package_image')->where('full_package_id', $package_id)->get()->getResult();
+
+                return $service->success([
+                    'message'       =>  Lang('Language.details_success'),
+                    'data'          =>  $isExist
+                    ],
+                    ResponseInterface::HTTP_OK,
+                    $this->response
+                );
+                } else {
+                    return $service->fail(
+                        [
+                            'errors'    =>  "",
+                            'message'   =>  Lang('Language.Package Not Found'),
+                        ],
+                        ResponseInterface::HTTP_BAD_REQUEST,
+                        $this->response
+                    );
+                }
+
+        } catch (Exception $e) {
+            return $service->fail(
+                [
+                'errors'    =>  $e->getMessage(),
                     'message'   =>  Lang('Language.details_fetch_failed'),
                 ],
                 ResponseInterface::HTTP_BAD_REQUEST,

@@ -412,7 +412,7 @@ class ManageVisa extends BaseController
         } catch (Exception $e) {
             return $service->fail(
                 [
-                    'errors'    =>  "",
+                    'errors'    =>  $e->getMessage(),
                     'message'   =>  Lang('Language.fetch_list'),
                 ],
                 ResponseInterface::HTTP_BAD_REQUEST,
@@ -423,7 +423,6 @@ class ManageVisa extends BaseController
 
     public function addEnquiry()
     {
-        // echo "YES"; exit;
         $service   =  new Services();
         $service->cors();
 
@@ -558,7 +557,7 @@ class ManageVisa extends BaseController
         } catch (Exception $e) {
             return $service->fail(
                 [
-                    'errors'    =>  "",
+                    'errors'    =>  $e->getMessage(),
                     'message'   =>  Lang('Language.add_failed'),
                 ],
                 ResponseInterface::HTTP_BAD_REQUEST,
@@ -646,7 +645,7 @@ class ManageVisa extends BaseController
         } catch (Exception $e) {
             return $service->fail(
                 [
-                    'errors'    =>  "",
+                    'errors'    =>  $e->getMessage(),
                     'message'   =>  Lang('Language.details_fetch_failed'),
                 ],
                 ResponseInterface::HTTP_BAD_REQUEST,

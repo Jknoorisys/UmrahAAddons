@@ -122,11 +122,11 @@ class TblPackage extends Migration
 		];
 		$this->forge->addField($fields);
 		$this->forge->addKey('id', true);
-		$this->forge->createTable('tbl_package');
+		$this->forge->createTable('tbl_full_package');
     }
 
     public function down()
     {
-        $this->forge->dropTable('tbl_package');
+        $this->forge->dropTable('tbl_full_package');
     }
 }

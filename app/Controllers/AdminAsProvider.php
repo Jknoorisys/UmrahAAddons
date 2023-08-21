@@ -215,8 +215,6 @@ class AdminAsProvider extends BaseController
 
             foreach ($this->request->getFileMultiple('image_array') as $file) {
 
-
-
                 $package_pic_path = 'public/assets/uploads/package/package_pic/';
                 $new_name = $file->getRandomName();
                 $data = [
