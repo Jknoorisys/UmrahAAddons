@@ -377,15 +377,22 @@ class UserLists extends BaseController
         }
     }
 
-    // Full Package by Javeriya
-	public function listOfFullPackage()
-    {
-        $service           =  new Services();
+    // full package list- by Javeriya Kauser
+    public function packageList(){
+        $service   =  new Services();
         $service->cors();
 
-        $user_role        =  'user';
+        $pageNo           =  $this->request->getVar('pageNo');
 
         $rules = [
+            'pageNo' => [
+                'rules'         =>  'required|greater_than[' . PAGE_LENGTH . ']|numeric',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                    'greater_than'  =>  Lang('Language.greater_than', [PAGE_LENGTH]),
+                    'numeric'       =>  Lang('Language.numeric', [$pageNo]),
+                ]
+            ],
             'language' => [
                 'rules'         =>  'required|in_list[' . LANGUAGES . ']',
                 'errors'        => [
@@ -405,29 +412,30 @@ class UserLists extends BaseController
                 $this->response
             );
         }
-
+        
         try{
 
-            $whereCondition = "";
+            $currentPage   = ( !empty( $pageNo ) ) ? $pageNo : 1;
+            $offset        = ( $currentPage - 1 ) * PER_PAGE;
+            $limit         =  PER_PAGE;
 
-            if($user_role == 'admin'){ $whereCondition .= "s.status != '2'"; } 
-
-            if($user_role == 'user'){ $whereCondition .= "s.status = '1'"; } 
-
-            if($user_role == 'provider'){ $whereCondition .= "s.status = '1'"; }
-
-            // By Query Builder
             $db = db_connect();
-            $visaPrice = $db->table('tbl_visa as s')
-                ->select('s.*')
-                ->where($whereCondition)
-                ->orderBy('s.id', 'DESC')
-                ->get()->getRow();
+            $data = $db->table('tbl_full_package as p')
+                        ->where('status', '1')
+                        ->orderBy('p.id', 'DESC')
+                        ->limit($limit, $offset)
+                        ->get()
+                        ->getResult(); // Fetch the paginated results
+                
+            $total = count($data);
 
             return $service->success(
                 [
                     'message'       =>  Lang('Language.list_success'),
-                    'data'          =>  $visaPrice
+                    'data'          =>  [
+                        'total'             =>  $total,
+                        'packages'         =>  $data,
+                    ]
                 ],
                 ResponseInterface::HTTP_OK,
                 $this->response
@@ -436,7 +444,7 @@ class UserLists extends BaseController
         } catch (Exception $e) {
             return $service->fail(
                 [
-                    'errors'    =>  "",
+                    'errors'    =>  $e->getMessage(),
                     'message'   =>  Lang('Language.fetch_list'),
                 ],
                 ResponseInterface::HTTP_BAD_REQUEST,
@@ -444,10 +452,9 @@ class UserLists extends BaseController
             );
         }
     }
-
-	// Full Pacakge Price by Javeriya
-    public function viewPackage()
-    {
+    
+    // view full package- by Javeriya Kauser
+    public function viewPackage(){
         $package   =  new FullPackage();
         $dates   =  new FullPackageDates();
         $images   =  new FullPackageImages();
@@ -462,18 +469,6 @@ class UserLists extends BaseController
                 'errors'        => [
                     'required'      =>  Lang('Language.required'),
                     'in_list'       =>  Lang('Language.in_list', [LANGUAGES]),
-                ]
-            ],
-            'logged_user_id' => [
-                'rules'         =>  'required',
-                'errors'        => [
-                    'required'      =>  Lang('Language.required'),
-                ]
-            ],
-            'logged_user_role' => [
-                'rules'         =>  'required',
-                'errors'        => [
-                    'required'      =>  Lang('Language.required'),
                 ]
             ],
             'full_package_id' => [
@@ -496,7 +491,7 @@ class UserLists extends BaseController
         }
 
         try {
-                $isExist = $package->where('id',$package_id)->where('status','1')->first();
+            $isExist = $package->where('id',$package_id)->where('status','1')->first();
                 if(!empty($isExist))
                 {
                 $db = db_connect();
