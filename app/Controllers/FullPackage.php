@@ -243,8 +243,9 @@ class FullPackage extends BaseController
                 $deperture_date = $db->table('tbl_full_package_dates')->insert($dates_data);
             }
 
+           
             foreach ($this->request->getFileMultiple('image_array') as $file) {
-                $package_pic_path = 'public/assets/uploads/package/package_pic/';
+                $package_pic_path = 'public/assets/uploads/full-package/package_pic/';
                 $new_name = $file->getRandomName();
                 $data = [
                     'full_package_id' => $full_package_id,
