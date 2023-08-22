@@ -155,6 +155,7 @@ class Package extends ResourceController
             echo json_encode(['status' => 'failed', 'messages' => lang('Language.Images required')]);
             die();
         }
+        
         $data = [
             "provider_id" => $user_id,
             "package_title" => $this->request->getPost("package_title"),
@@ -226,20 +227,24 @@ class Package extends ResourceController
                 $no_of_pox_rec =  json_encode($vall['no_of_pox']);
                 $vehicle_type_rec = json_encode($vall['vehicle_type']);
                 $rate_rec = json_encode($vall['rate']);
+                $rate_rec_INR = json_encode($vall['rate_INR']);
+
                 $no_of_pox = trim($no_of_pox_rec, '"');
                 $vehicle_type = trim($vehicle_type_rec, '"');
                 $rate = trim($rate_rec, '"');
+                $rate_INR = trim($rate_rec_INR, '"');
 
                 $vechiles_data = [
                     'package_id' => $package_id,
                     'no_of_pox_id' => $no_of_pox,
                     'vehicle_id' => $vehicle_type,
                     'rate' => $rate,
+                    'rate_INR' => $rate_INR,
                 ];
                 $insert_vechile = $VehicleModels->insert($vechiles_data);
-
                 
             }
+
              // fetching record of  Vechile  data
             $db = \Config\Database::connect();
              $builder = $db->table('tbl_package_vehicle');

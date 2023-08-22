@@ -37,6 +37,10 @@ class TblPackageVehicle extends Migration
 				'type' => 'TEXT',
 				'constraint' => '10',
 			],
+			'rate_INR' => [
+				'type' => 'TEXT',
+				'constraint' => '10',
+			],
 			'created_date' => [
 				'type' => 'VARCHAR',
 				'constraint' => '50',

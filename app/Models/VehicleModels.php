@@ -8,7 +8,7 @@ class VehicleModels extends Model
 	protected $table = 'tbl_package_vehicle';
 	protected $primaryKey = 'id';
 	protected $useTimestamps = true;
-	protected $allowedFields = ['package_id','vehicle_id','no_of_pox_id','rate'];
+	protected $allowedFields = ['package_id','vehicle_id','no_of_pox_id','rate','rate_INR'];
 	protected $createdField  = 'created_date';
   	protected $updatedField  = 'updated_date';
 
