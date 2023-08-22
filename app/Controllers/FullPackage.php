@@ -552,6 +552,221 @@ class FullPackage extends BaseController
         }
     }
 
+    // edit package by Admin - by Javeriya Kauser
+    public function editPackage()
+    {
+        $package   =  new ModelsFullPackage();
+        $dates   =  new FullPackageDates();
+        $images   =  new FullPackageImages();
+        $service   =  new Services();
+        $service->cors();
+
+        $package_id       =  $this->request->getVar('full_package_id');
+
+        $rules = [
+            'language' => [
+                'rules'         =>  'required|in_list[' . LANGUAGES . ']',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                    'in_list'       =>  Lang('Language.in_list', [LANGUAGES]),
+                ]
+            ],
+            'logged_user_id' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+            'logged_user_role' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+            'full_package_id' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+        ];
+
+        if(!$this->validate($rules)) {
+            return $service->fail(
+                [
+                    'errors'     =>  $this->validator->getErrors(),
+                    'message'   =>  lang('Language.invalid_inputs')
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+
+        try {
+            $FullPackageImage = new FullPackageImages();
+
+            $package_id = $this->request->getPost("full_package_id");
+            $name = $this->request->getPost("name");
+            $duration = $this->request->getPost("duration");
+            $mecca_hotel = $this->request->getPost("mecca_hotel");
+            $mecca_hotel_distance = $this->request->getPost("mecca_hotel_distance");
+            $madinah_hotel = $this->request->getPost("madinah_hotel");
+            $madinah_hotel_distance = $this->request->getPost("madinah_hotel_distance");
+            $details = $this->request->getPost("details");
+            $inclusions = $this->request->getPost("inclusions");
+            $single_rate_SAR = $this->request->getPost("single_rate_SAR");
+            $single_rate_INR = $this->request->getPost("single_rate_INR");
+            $double_rate_SAR = $this->request->getPost("double_rate_SAR") ? $this->request->getPost("double_rate_SAR") : '';
+            $double_rate_INR = $this->request->getPost("double_rate_INR") ? $this->request->getPost("double_rate_INR") : '';
+            $triple_rate_SAR = $this->request->getPost("triple_rate_SAR") ? $this->request->getPost("triple_rate_SAR") : '';
+            $triple_rate_INR = $this->request->getPost("triple_rate_INR") ? $this->request->getPost("triple_rate_INR") : '';
+            $quad_rate_SAR = $this->request->getPost("quad_rate_SAR") ? $this->request->getPost("quad_rate_SAR") : '';
+            $quad_rate_INR = $this->request->getPost("quad_rate_INR") ? $this->request->getPost("quad_rate_INR") : '';
+            $pent_rate_SAR = $this->request->getPost("pent_rate_SAR") ? $this->request->getPost("pent_rate_SAR") : '';
+            $pent_rate_INR = $this->request->getPost("pent_rate_INR") ? $this->request->getPost("pent_rate_INR") : '';
+            $infant_rate_with_bed_SAR = $this->request->getPost("infant_rate_with_bed_SAR");
+            $infant_rate_with_bed_INR = $this->request->getPost("infant_rate_with_bed_INR");
+            $infant_rate_without_bed_SAR = $this->request->getPost("infant_rate_without_bed_SAR");
+            $infant_rate_without_bed_INR = $this->request->getPost("infant_rate_without_bed_INR");
+            $dates = json_decode($this->request->getPost("depurture_dates"), TRUE);
+            $images = $this->request->getFileMultiple('image_array');
+
+            $db = db_connect();
+
+            $package = $db->table('tbl_full_package')->where('id', $package_id)->get()->getRow();
+
+            if(!empty($package))
+            {
+                if (isset($_FILES) && !empty($_FILES)) {
+                    $file = $this->request->getFile('main_img');
+                    if (!$file->isValid()) {
+                        throw new RuntimeException($file->getErrorString() . '(' . $file->getError() . ')');
+                    } else {
+                        $path = 'public/assets/uploads/full-package/main_pic/';
+                        $newName = $file->getRandomName();
+                        $file->move($path, $newName);
+                        $url = $path . $newName;
+                    }
+                }else{
+                    $url = $package->main_img;
+                }
+
+                $data = [
+                    "name" => $name ? $name : $package->name,
+                    "duration" => $duration ? $duration : $package->duration,
+                    "mecca_hotel" => $mecca_hotel ? $mecca_hotel : $package->mecca_hotel,
+                    "mecca_hotel_distance" => $mecca_hotel_distance ? $mecca_hotel_distance : $package->mecca_hotel_distance,
+                    "madinah_hotel" => $madinah_hotel ? $madinah_hotel : $package->madinah_hotel,
+                    "madinah_hotel_distance" => $madinah_hotel_distance ? $madinah_hotel_distance : $package->madinah_hotel_distance,
+                    "details" => $details ? $details : $package->details,
+                    "main_img" =>  $url,
+                    "inclusions" => $inclusions ? $inclusions : $package->inclusions,
+                    "single_rate_SAR" => $single_rate_SAR ? $single_rate_SAR : $package->single_rate_SAR,
+                    "single_rate_INR" => $single_rate_INR ? $single_rate_INR : $package->single_rate_INR,
+                    "double_rate_SAR" => $double_rate_SAR ? $double_rate_SAR : $package->double_rate_SAR,
+                    "double_rate_INR" => $double_rate_INR ? $double_rate_INR : $package->double_rate_INR,
+                    "triple_rate_SAR" => $triple_rate_SAR ? $triple_rate_SAR : $package->triple_rate_SAR,
+                    "triple_rate_INR" => $triple_rate_INR ? $triple_rate_INR : $package->triple_rate_INR,
+                    "quad_rate_SAR" => $quad_rate_SAR ? $quad_rate_SAR : $package->quad_rate_SAR,
+                    "quad_rate_INR" => $quad_rate_INR ? $quad_rate_INR : $package->quad_rate_INR,
+                    "pent_rate_SAR" => $pent_rate_SAR ? $pent_rate_SAR : $package->pent_rate_SAR,
+                    "pent_rate_INR" => $pent_rate_INR ? $pent_rate_INR : $package->pent_rate_INR,
+                    "infant_rate_with_bed_SAR" => $infant_rate_with_bed_SAR ? $infant_rate_with_bed_SAR : $package->infant_rate_with_bed_SAR,
+                    "infant_rate_with_bed_INR" => $infant_rate_with_bed_INR ? $infant_rate_with_bed_INR : $package->infant_rate_with_bed_INR,
+                    "infant_rate_without_bed_SAR" => $infant_rate_without_bed_SAR ? $infant_rate_without_bed_SAR : $package->infant_rate_without_bed_SAR,
+                    "infant_rate_without_bed_INR" => $infant_rate_without_bed_INR ? $infant_rate_without_bed_INR : $package->infant_rate_without_bed_INR,
+                    "updated_at" => date('Y-m-d H:i:s')
+                ];
+
+                $package_update = $db->table('tbl_full_package')->where('id', $package_id)->update($data);
+
+                if ($package_update) {
+                    if ($dates) {
+                        $date_ids = [];
+                        foreach ($dates as $date) {
+                            if ($date['id'] != "0") {
+                                $date_ids[] = $date['id'];
+                                $db->table('tbl_full_package_dates')->where('id', $date['id'])->update(['date' => $date['date'], 'updated_at' => date('Y-m-d H:i:s')]);
+                            }elseif ($date['id'] == 0) {
+                                $date_data = [
+                                    'full_package_id' => $package_id,
+                                    'date'            => $date['date'],
+                                    'created_at' => date('Y-m-d H:i:s'),
+                                    "updated_at" => date('Y-m-d H:i:s')
+                                ];
+
+                               $insert = $db->table('tbl_full_package_dates')->insert($date_data);
+                               $insertID = $db->insertID();
+                               $date_ids[] = $insertID;
+                            }
+                        }
+
+                        if ($date_ids) {
+                            $remove = $db->table('tbl_full_package_dates')->where('full_package_id', $package_id)->whereNotIn('id', $date_ids)->delete();
+                        }
+                    }
+
+                    if ($images) {
+                        $imgs = $db->table('tbl_full_package_image')->where('full_package_id', $package_id)->delete();
+                        foreach ($this->request->getFileMultiple('image_array') as $file) {
+                            $package_pic_path = 'public/assets/uploads/full-package/package_pic/';
+                            $new_name = $file->getRandomName();
+                            $data = [
+                                'full_package_id' => $package_id,
+                                'image' => $package_pic_path . $new_name,
+                                'created_at' => date('Y-m-d H:i:s')
+                            ];
+                            $save = $FullPackageImage->insert($data);
+                            $file->move($package_pic_path, $new_name);
+                        }
+                    }
+
+                    $packageDetails = $db->table('tbl_full_package')->where('id', $package_id)->get()->getRowArray();
+                    $packageDetails['departure_dates'] = $db->table('tbl_full_package_dates')->where('full_package_id', $package_id)->get()->getResult();
+                    $packageDetails['images'] = $db->table('tbl_full_package_image')->where('full_package_id', $package_id)->get()->getResult();
+
+
+                    return $service->success([
+                        'message'       =>  Lang('Language.update_success'),
+                        'data'          =>  $packageDetails
+                        ],
+                        ResponseInterface::HTTP_OK,
+                        $this->response
+                    );
+                } else {
+                    return $service->fail(
+                        [
+                            'errors'    =>  "",
+                            'message'   =>  Lang('Language.update_failed'),
+                        ],
+                        ResponseInterface::HTTP_BAD_REQUEST,
+                        $this->response
+                    );
+                }
+                
+            } else {
+                return $service->fail(
+                    [
+                        'errors'    =>  "",
+                        'message'   =>  Lang('Language.Package Not Found'),
+                    ],
+                    ResponseInterface::HTTP_BAD_REQUEST,
+                    $this->response
+                );
+            }
+
+        } catch (Exception $e) {
+            return $service->fail(
+                [
+                'errors'    =>  $e->getMessage(),
+                    'message'   =>  Lang('Language.update_failed'),
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+    }
+
     public function changePackageStatus()
     {
         $packageModel        =  new ModelsFullPackage();

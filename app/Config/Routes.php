@@ -287,7 +287,7 @@ $routes->group('full-package', function ($routes) {
 	$routes->post('list', 'FullPackage::packageList');
 	$routes->post('change-status', 'FullPackage::changePackageStatus');
 	$routes->post('view', 'FullPackage::viewPackage');
-	// $routes->post('update', 'FullPackage::editVisa');
+	$routes->post('update', 'FullPackage::editPackage');
 
 	// // full Package Enquiry
 	$routes->post('enquiry-list', 'FullPackage::enquiryList');
