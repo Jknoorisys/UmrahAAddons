@@ -183,6 +183,33 @@ class FullPackage extends BaseController
                 $this->response
             );
         }
+        
+        if ($this->request->getPost("logged_user_role") == 'admin') {
+            $rules = [
+                'provider_id' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'The {field} field is required when user type is admin.',
+                    ],
+                ]
+            ];
+    
+            if(!$this->validate($rules)) {
+                return $service->fail(
+                    [
+                        'errors'     =>  $this->validator->getErrors(),
+                        'message'   =>  lang('Language.invalid_inputs')
+                    ],
+                    ResponseInterface::HTTP_BAD_REQUEST,
+                    $this->response
+                );
+            }
+
+            $provider_id = $this->request->getPost("provider_id");
+        } else {
+            $provider_id = $this->request->getPost("logged_user_id");
+        }
+        
 
         if (isset($_FILES) && !empty($_FILES)) {
             $file = $this->request->getFile('main_img');
@@ -199,6 +226,7 @@ class FullPackage extends BaseController
         }
 
         $data = [
+            "provider_id" => $provider_id,
             "name" => $this->request->getPost("name"),
             "duration" => $this->request->getPost("duration"),
             "mecca_hotel" => $this->request->getPost("mecca_hotel"),
@@ -425,15 +453,32 @@ class FullPackage extends BaseController
             $offset        = ( $currentPage - 1 ) * PER_PAGE;
             $limit         =  PER_PAGE;
             $search        = $this->request->getVar('search');
+            $search_by_provider        = $this->request->getVar('search_by_provider');
+            $user_role        =  $this->request->getVar('logged_user_role');
+            $logged_user_id   =  $this->request->getVar('logged_user_id');
 
             $db = db_connect();
-            $table = $db->table('tbl_full_package as p')->where('status !=', '2');
+            $table = $db->table('tbl_full_package as e');
             
+            $whereCondition = '';
+
+            if($user_role == 'admin'){ $whereCondition .= "e.status != '2'"; }
+
+            elseif($user_role == 'provider'){ $whereCondition .= "e.provider_id = ".$logged_user_id." AND e.status != '2'"; }
+
             if (isset($search) && !empty($search)) {
-                $table->like('p.name', $search);
+                $table->like('e.name', $search);
+            }
+
+            if (isset($search_by_provider) && !empty($search_by_provider)) {
+                $table->orLike('p.firstname', $search_by_provider);
+                $table->orLike('p.lastname', $search_by_provider);
             }
             
-            $data = $table->orderBy('p.id', 'DESC')
+            $data = $table->orderBy('e.id', 'DESC')
+                ->join('tbl_provider as p','p.id = e.provider_id')
+                ->select("e.*, CONCAT(p.firstname,' ',p.lastname) as provider_name")
+                ->where($whereCondition)
                 ->limit($limit, $offset)
                 ->get()
                 ->getResult(); // Fetch the paginated results

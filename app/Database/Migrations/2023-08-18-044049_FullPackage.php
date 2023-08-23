@@ -16,6 +16,10 @@ class FullPackage extends Migration
 				'unsigned' => true,
 				'auto_increment' => true,
 			],
+			'provider_id' => [
+				'type' => 'BIGINT',
+				'constraint' => 20,
+			],
 			'name' => [
 				'type' => 'VARCHAR',
 				'constraint' => '255',
