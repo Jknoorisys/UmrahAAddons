@@ -379,14 +379,14 @@ class Masters extends ResourceController
        
         try {
                 $db = db_connect();
-                $language = $db->table('tbl_full_package_inclusions')
-                    ->select('id, name')
+                $inclusions = $db->table('tbl_full_package_inclusions')
+                    ->select('id, name, "false" as checked')
                     ->get()->getResult();
-                if(!empty($language))
+                if(!empty($inclusions))
                 {
                     return $service->success([
                         'message'       =>  Lang('Language.list_success'),
-                        'data'          =>  $language
+                        'data'          =>  $inclusions
                         ],
                         ResponseInterface::HTTP_OK,
                         $this->response
