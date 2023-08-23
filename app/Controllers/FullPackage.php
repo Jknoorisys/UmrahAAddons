@@ -967,11 +967,14 @@ class FullPackage extends BaseController
 
             elseif($user_role == 'user'){ $whereCondition .= "e.user_id = ".$logged_user_id." AND e.status = '1'"; }
 
+            elseif($user_role == 'provider'){ $whereCondition .= "pa.provider_id = ".$logged_user_id." AND e.status = '1'"; }
+
             $db = db_connect();
             $data = $db->table('tbl_full_package_enquiry as e')
+                ->join('tbl_full_package as pa','pa.id = e.full_package_id')
                 ->join('tbl_user as u','u.id = e.user_id')
-                ->join('tbl_full_package as p','p.id = e.full_package_id')
-                ->select("e.*, CONCAT(u.firstname,' ',u.lastname) as user_name, p.name as package_name")
+                ->join('tbl_provider as p','p.id = pa.provider_id')
+                ->select("e.*, CONCAT(u.firstname,' ',u.lastname) as user_name, pa.name as package_name, CONCAT(p.firstname,' ',p.lastname) as provider_name")
                 ->where($whereCondition)
                 ->orderBy('e.id', 'DESC')
                 ->limit($limit, $offset)
