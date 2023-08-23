@@ -288,12 +288,12 @@ $routes->group('full-package', function ($routes) {
 	$routes->post('change-status', 'FullPackage::changePackageStatus');
 	$routes->post('view', 'FullPackage::viewPackage');
 	$routes->post('update', 'FullPackage::editPackage');
+	$routes->post('inclusions', 'Masters::fullPackageInclusions');
 
 	// // full Package Enquiry
 	$routes->post('enquiry-list', 'FullPackage::enquiryList');
 	$routes->post('send-enquiry', 'FullPackage::addEnquiry');
 	$routes->post('view-enquiry', 'FullPackage::viewEnquiry');
-
 });
 
 $routes->post('api/dua-list', 'UserLists::listOfDua');

@@ -15,8 +15,8 @@ class VisaPrice extends Seeder
             'status'   => 1,
             'created_at'   => date('Y-m-d H:i:s'),
             'updated_at'   => date('Y-m-d H:i:s'),
-          ];
+        ];
       
-          $this->db->table('tbl_visa')->insert($data);
+        $this->db->table('tbl_visa')->insert($data);
     }
 }
