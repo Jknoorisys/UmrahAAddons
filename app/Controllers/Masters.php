@@ -371,4 +371,46 @@ class Masters extends ResourceController
          }
     }
 
+    public function fullPackageInclusions()
+    {
+       $service   =  new Services();
+       $service->cors();
+
+       
+        try {
+                $db = db_connect();
+                $language = $db->table('tbl_full_package_inclusions')
+                    ->select('id, name')
+                    ->get()->getResult();
+                if(!empty($language))
+                {
+                    return $service->success([
+                        'message'       =>  Lang('Language.list_success'),
+                        'data'          =>  $language
+                        ],
+                        ResponseInterface::HTTP_OK,
+                        $this->response
+                    );
+                } else {
+                    return $service->fail(
+                        [
+                            'errors'    =>  "",
+                            'message'   =>  Lang('Language.fetch_list'),
+                        ],
+                        ResponseInterface::HTTP_BAD_REQUEST,
+                        $this->response
+                    );
+                }
+
+        } catch (Exception $e) {
+            return $service->fail(
+                [
+                    'errors'    =>  "",
+                    'message'   =>  Lang('Language.fetch_list'),
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+    }
 }
