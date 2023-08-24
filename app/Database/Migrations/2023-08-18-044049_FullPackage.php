@@ -28,6 +28,10 @@ class FullPackage extends Migration
 				'type' => 'VARCHAR',
 				'constraint' => '100',
 			],
+			'departure_city' => [
+				'type' => 'VARCHAR',
+				'constraint' => '255',
+			],
 			'mecca_hotel' => [
 				'type' => 'VARCHAR',
 				'constraint' => '255',
