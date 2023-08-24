@@ -384,6 +384,9 @@ class Masters extends ResourceController
                     ->get()->getResult();
                 if(!empty($inclusions))
                 {
+                    foreach ($inclusions as $key) {
+                        $key->checked = FALSE;
+                    }
                     return $service->success([
                         'message'       =>  Lang('Language.list_success'),
                         'data'          =>  $inclusions
