@@ -93,6 +93,12 @@ class FullPackage extends BaseController
                     'required'      =>  Lang('Language.required'),
                 ]
             ],
+            'departure_city' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
             'mecca_hotel' => [
                 'rules'         =>  'required',
                 'errors'        => [
@@ -229,6 +235,7 @@ class FullPackage extends BaseController
             "provider_id" => $provider_id,
             "name" => $this->request->getPost("name"),
             "duration" => $this->request->getPost("duration"),
+            'departure_city' => $this->request->getPost("departure_city"),
             "mecca_hotel" => $this->request->getPost("mecca_hotel"),
             "mecca_hotel_distance" => $this->request->getPost("mecca_hotel_distance"),
             "madinah_hotel" => $this->request->getPost("madinah_hotel"),
@@ -653,6 +660,7 @@ class FullPackage extends BaseController
             $package_id = $this->request->getPost("full_package_id");
             $name = $this->request->getPost("name");
             $duration = $this->request->getPost("duration");
+            $departure_city = $this->request->getPost("departure_city");
             $mecca_hotel = $this->request->getPost("mecca_hotel");
             $mecca_hotel_distance = $this->request->getPost("mecca_hotel_distance");
             $madinah_hotel = $this->request->getPost("madinah_hotel");
@@ -699,6 +707,7 @@ class FullPackage extends BaseController
                 $data = [
                     "name" => $name ? $name : $package->name,
                     "duration" => $duration ? $duration : $package->duration,
+                    "departure_city" => $departure_city ? $departure_city : $package->departure_city,
                     "mecca_hotel" => $mecca_hotel ? $mecca_hotel : $package->mecca_hotel,
                     "mecca_hotel_distance" => $mecca_hotel_distance ? $mecca_hotel_distance : $package->mecca_hotel_distance,
                     "madinah_hotel" => $madinah_hotel ? $madinah_hotel : $package->madinah_hotel,
