@@ -418,10 +418,19 @@ class UserLists extends BaseController
             $currentPage   = ( !empty( $pageNo ) ) ? $pageNo : 1;
             $offset        = ( $currentPage - 1 ) * PER_PAGE;
             $limit         =  PER_PAGE;
+            $search        = $this->request->getVar('search');
 
             $db = db_connect();
-            $data = $db->table('tbl_full_package as p')
-                        ->where('status', '1')
+            $table = $db->table('tbl_full_package as p');
+
+            if (isset($search) && !empty($search)) {
+                $table->like('p.name', $search);
+                $table->orLike('p.details', $search);
+                $table->orLike('p.mecca_hotel', $search);
+                $table->orLike('p.madinah_hotel', $search);
+            }
+
+            $data = $table->where('p.status', '1')
                         ->orderBy('p.id', 'DESC')
                         ->limit($limit, $offset)
                         ->get()

@@ -1029,7 +1029,7 @@ class FullPackage extends BaseController
         $date              =  $this->request->getVar('date');
         $country_code      =  $this->request->getVar('country_code');
         $mobile            =  $this->request->getVar('mobile');
-        $no_of_seats       =  $this->request->getVar('no_of_seats');
+        $no_of_seats       =  $this->request->getVar('no_of_persons');
 
         $rules = [
             'language' => [
@@ -1229,7 +1229,7 @@ class FullPackage extends BaseController
             $info = $db->table('tbl_full_package_enquiry as e')
                 ->join('tbl_user as u','u.id = e.user_id')
                 ->join('tbl_full_package as p','p.id = e.full_package_id')
-                ->select("e.*, CONCAT(u.firstname,' ',u.lastname) as user_name, p.name as package_name")
+                ->select("e.*, e.name as user_name, p.name as package_name")
                 ->where('e.status','1')
                 ->where('e.id',$enquiry_id)
                 ->get()->getRow();
