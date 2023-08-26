@@ -10,23 +10,17 @@ class FullPackageInclusions extends Seeder
     {
         $data = [
             [
-                'name'    => 'Meal',
+                'name'    => 'Flight Ticket',
                 'created_at'   => date('Y-m-d H:i:s'),
                 'updated_at'   => date('Y-m-d H:i:s'),
             ],
 
             [
-                'name'    => 'ZamZam',
+                'name'    => 'Meal',
                 'created_at'   => date('Y-m-d H:i:s'),
                 'updated_at'   => date('Y-m-d H:i:s'),
             ], 
             
-            [
-                'name'    => 'Transport',
-                'created_at'   => date('Y-m-d H:i:s'),
-                'updated_at'   => date('Y-m-d H:i:s'),
-            ],
-
             [
                 'name'    => 'Ziyarat',
                 'created_at'   => date('Y-m-d H:i:s'),
@@ -40,6 +34,24 @@ class FullPackageInclusions extends Seeder
             ],
 
             [
+                'name'    => 'Transport',
+                'created_at'   => date('Y-m-d H:i:s'),
+                'updated_at'   => date('Y-m-d H:i:s'),
+            ],
+
+            [
+                'name'    => 'ZamZam',
+                'created_at'   => date('Y-m-d H:i:s'),
+                'updated_at'   => date('Y-m-d H:i:s'),
+            ],
+
+            [
+                'name'    => 'Ahram',
+                'created_at'   => date('Y-m-d H:i:s'),
+                'updated_at'   => date('Y-m-d H:i:s'),
+            ],
+
+            [
                 'name'    => 'Bags',
                 'created_at'   => date('Y-m-d H:i:s'),
                 'updated_at'   => date('Y-m-d H:i:s'),
@@ -47,12 +59,6 @@ class FullPackageInclusions extends Seeder
 
             [
                 'name'    => 'Books',
-                'created_at'   => date('Y-m-d H:i:s'),
-                'updated_at'   => date('Y-m-d H:i:s'),
-            ],
-
-            [
-                'name'    => 'Ahram',
                 'created_at'   => date('Y-m-d H:i:s'),
                 'updated_at'   => date('Y-m-d H:i:s'),
             ]
