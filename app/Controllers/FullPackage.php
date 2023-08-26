@@ -88,12 +88,12 @@ class FullPackage extends BaseController
                     'required'      =>  Lang('Language.required'),
                 ]
             ],
-            'duration' => [
-                'rules'         =>  'required',
-                'errors'        => [
-                    'required'      =>  Lang('Language.required'),
-                ]
-            ],
+            // 'duration' => [
+            //     'rules'         =>  'required',
+            //     'errors'        => [
+            //         'required'      =>  Lang('Language.required'),
+            //     ]
+            // ],
             'mecca_hotel' => [
                 'rules'         =>  'required',
                 'errors'        => [
@@ -229,7 +229,7 @@ class FullPackage extends BaseController
         $data = [
             "provider_id" => $provider_id,
             "name" => $this->request->getPost("name"),
-            "duration" => $this->request->getPost("duration"),
+            "duration" => $this->request->getPost("duration") ? $this->request->getPost("duration") : '',
             "mecca_hotel" => $this->request->getPost("mecca_hotel"),
             "mecca_hotel_distance" => $this->request->getPost("mecca_hotel_distance"),
             "madinah_hotel" => $this->request->getPost("madinah_hotel"),
@@ -269,7 +269,7 @@ class FullPackage extends BaseController
                     'city'            => $flight['city'],
                     'departure_date'  => $flight['departure_date'],
                     'arrival_date'    => $flight['arrival_date'],
-                    'days'            => $flight['days'],
+                    'days'            => $flight['days'] ? $flight['days'] : 0,
                     'created_at' => date('Y-m-d H:i:s')
                 ];
 
@@ -741,7 +741,7 @@ class FullPackage extends BaseController
                                     'city'            => $date['city'],
                                     'departure_date'  => $date['departure_date'],
                                     'arrival_date'    => $date['arrival_date'],
-                                    'days'            => $date['days'],
+                                    'days'            => $date['days'] ? $date['days'] : 0,
                                     'updated_at' => date('Y-m-d H:i:s')
                                 ];
 
@@ -751,7 +751,7 @@ class FullPackage extends BaseController
                                     'city'            => $date['city'],
                                     'departure_date'  => $date['departure_date'],
                                     'arrival_date'    => $date['arrival_date'],
-                                    'days'            => $date['days'],
+                                    'days'            => $date['days'] ? $date['days'] : 0,
                                     'created_at' => date('Y-m-d H:i:s'),
                                     'updated_at' => date('Y-m-d H:i:s')
                                 ];
