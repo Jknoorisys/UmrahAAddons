@@ -88,12 +88,12 @@ class FullPackage extends BaseController
                     'required'      =>  Lang('Language.required'),
                 ]
             ],
-            'duration' => [
-                'rules'         =>  'required',
-                'errors'        => [
-                    'required'      =>  Lang('Language.required'),
-                ]
-            ],
+            // 'duration' => [
+            //     'rules'         =>  'required',
+            //     'errors'        => [
+            //         'required'      =>  Lang('Language.required'),
+            //     ]
+            // ],
             'mecca_hotel' => [
                 'rules'         =>  'required',
                 'errors'        => [
@@ -229,7 +229,7 @@ class FullPackage extends BaseController
         $data = [
             "provider_id" => $provider_id,
             "name" => $this->request->getPost("name"),
-            "duration" => $this->request->getPost("duration"),
+            "duration" => $this->request->getPost("duration") ? $this->request->getPost("duration") : '',
             "mecca_hotel" => $this->request->getPost("mecca_hotel"),
             "mecca_hotel_distance" => $this->request->getPost("mecca_hotel_distance"),
             "madinah_hotel" => $this->request->getPost("madinah_hotel"),
