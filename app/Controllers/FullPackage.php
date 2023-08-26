@@ -76,6 +76,7 @@ class FullPackage extends BaseController
     // add package by Admin - by Javeriya Kauser
     public function addPackage()
     {
+        $flight_details = json_decode($this->request->getPost("flight_details"), TRUE);
         $service   =  new Services();
         $FullPackageImage = new FullPackageImages();
         $service->cors();
@@ -88,12 +89,6 @@ class FullPackage extends BaseController
                 ]
             ],
             'duration' => [
-                'rules'         =>  'required',
-                'errors'        => [
-                    'required'      =>  Lang('Language.required'),
-                ]
-            ],
-            'departure_city' => [
                 'rules'         =>  'required',
                 'errors'        => [
                     'required'      =>  Lang('Language.required'),
@@ -123,7 +118,7 @@ class FullPackage extends BaseController
                     'required'      =>  Lang('Language.required'),
                 ]
             ],
-            'depurture_dates' => [
+            'flight_details' => [
                 'rules'         =>  'required',
                 'errors'        => [
                     'required'      =>  Lang('Language.required'),
@@ -235,7 +230,6 @@ class FullPackage extends BaseController
             "provider_id" => $provider_id,
             "name" => $this->request->getPost("name"),
             "duration" => $this->request->getPost("duration"),
-            'departure_city' => $this->request->getPost("departure_city"),
             "mecca_hotel" => $this->request->getPost("mecca_hotel"),
             "mecca_hotel_distance" => $this->request->getPost("mecca_hotel_distance"),
             "madinah_hotel" => $this->request->getPost("madinah_hotel"),
@@ -268,14 +262,18 @@ class FullPackage extends BaseController
 
         if ($fullPackage && $full_package_id) {
 
-            $dates = explode(',',$this->request->getPost("depurture_dates"));
-            foreach ($dates as $date) {
-                $dates_data = [
+            $flight_details = json_decode($this->request->getPost("flight_details"), TRUE);
+            foreach ($flight_details as $flight) {
+                $flight_data = [
                     'full_package_id' => $full_package_id,
-                    'date'            => $date,
+                    'city'            => $flight['city'],
+                    'departure_date'  => $flight['departure_date'],
+                    'arrival_date'    => $flight['arrival_date'],
+                    'days'            => $flight['days'],
                     'created_at' => date('Y-m-d H:i:s')
                 ];
-                $deperture_date = $db->table('tbl_full_package_dates')->insert($dates_data);
+
+                $db->table('tbl_full_package_dates')->insert($flight_data);
             }
 
            
@@ -660,7 +658,6 @@ class FullPackage extends BaseController
             $package_id = $this->request->getPost("full_package_id");
             $name = $this->request->getPost("name");
             $duration = $this->request->getPost("duration");
-            $departure_city = $this->request->getPost("departure_city");
             $mecca_hotel = $this->request->getPost("mecca_hotel");
             $mecca_hotel_distance = $this->request->getPost("mecca_hotel_distance");
             $madinah_hotel = $this->request->getPost("madinah_hotel");
@@ -681,7 +678,7 @@ class FullPackage extends BaseController
             $infant_rate_with_bed_INR = $this->request->getPost("infant_rate_with_bed_INR");
             $infant_rate_without_bed_SAR = $this->request->getPost("infant_rate_without_bed_SAR");
             $infant_rate_without_bed_INR = $this->request->getPost("infant_rate_without_bed_INR");
-            $dates = json_decode($this->request->getPost("depurture_dates"), TRUE);
+            $flight_details = json_decode($this->request->getPost("flight_details"), TRUE);
             $images = $this->request->getFileMultiple('image_array');
 
             $db = db_connect();
@@ -707,7 +704,6 @@ class FullPackage extends BaseController
                 $data = [
                     "name" => $name ? $name : $package->name,
                     "duration" => $duration ? $duration : $package->duration,
-                    "departure_city" => $departure_city ? $departure_city : $package->departure_city,
                     "mecca_hotel" => $mecca_hotel ? $mecca_hotel : $package->mecca_hotel,
                     "mecca_hotel_distance" => $mecca_hotel_distance ? $mecca_hotel_distance : $package->mecca_hotel_distance,
                     "madinah_hotel" => $madinah_hotel ? $madinah_hotel : $package->madinah_hotel,
@@ -735,21 +731,32 @@ class FullPackage extends BaseController
                 $package_update = $db->table('tbl_full_package')->where('id', $package_id)->update($data);
 
                 if ($package_update) {
-                    if ($dates) {
+                    if ($flight_details) {
                         $date_ids = [];
-                        foreach ($dates as $date) {
+                        foreach ($flight_details as $date) {
                             if ($date['id'] != "0") {
                                 $date_ids[] = $date['id'];
-                                $db->table('tbl_full_package_dates')->where('id', $date['id'])->update(['date' => $date['date'], 'updated_at' => date('Y-m-d H:i:s')]);
-                            }elseif ($date['id'] == 0) {
-                                $date_data = [
-                                    'full_package_id' => $package_id,
-                                    'date'            => $date['date'],
-                                    'created_at' => date('Y-m-d H:i:s'),
-                                    "updated_at" => date('Y-m-d H:i:s')
+
+                                $flight_data = [
+                                    'city'            => $date['city'],
+                                    'departure_date'  => $date['departure_date'],
+                                    'arrival_date'    => $date['arrival_date'],
+                                    'days'            => $date['days'],
+                                    'updated_at' => date('Y-m-d H:i:s')
                                 ];
 
-                               $insert = $db->table('tbl_full_package_dates')->insert($date_data);
+                                $db->table('tbl_full_package_dates')->where('id', $date['id'])->update($flight_data);
+                            }elseif ($date['id'] == 0) {
+                                $flight_data = [
+                                    'city'            => $date['city'],
+                                    'departure_date'  => $date['departure_date'],
+                                    'arrival_date'    => $date['arrival_date'],
+                                    'days'            => $date['days'],
+                                    'created_at' => date('Y-m-d H:i:s'),
+                                    'updated_at' => date('Y-m-d H:i:s')
+                                ];
+
+                               $insert = $db->table('tbl_full_package_dates')->insert($flight_data);
                                $insertID = $db->insertID();
                                $date_ids[] = $insertID;
                             }

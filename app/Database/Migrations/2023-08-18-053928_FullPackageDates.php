@@ -19,9 +19,20 @@ class FullPackageDates extends Migration
 				'type' => 'BIGINT',
 				'constraint' => '20',
 			],
-            'date' => [
+            'city' => [
 				'type' => 'VARCHAR',
 				'constraint' => '255',
+			],
+			'departure_date' => [
+				'type' => 'VARCHAR',
+				'constraint' => '255',
+			],
+			'arrival_date' => [
+				'type' => 'VARCHAR',
+				'constraint' => '255',
+			],
+			'days' => [
+				'type' => 'BIGINT',
 			],
 			'created_at' => [
 				'type' => 'VARCHAR',
