@@ -180,7 +180,7 @@ class AdminAsProvider extends BaseController
             foreach ($vechiles['vechiles_details'] as $kk => $vall) {
                 $no_of_pox_rec =  json_encode($vall['no_of_pox']);
                 $vehicle_type_rec = json_encode($vall['vehicle_type']);
-                $rate_rec = json_encode($vall['rate']);
+                $rate_rec = json_encode($vall['rate_sar']);
                 $no_of_pox = trim($no_of_pox_rec, '"');
                 $vehicle_type = trim($vehicle_type_rec, '"');
                 $rate = trim($rate_rec, '"');
