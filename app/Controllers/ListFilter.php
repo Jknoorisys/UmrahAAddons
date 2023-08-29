@@ -350,6 +350,127 @@ class ListFilter extends ResourceController
 		return $this->respondCreated($response);
 	}
 
+	// package list by Admin - by Javeriya Kauser
+    // public function packageList()
+    // {
+    //     $service   =  new Services();
+    //     $service->cors();
+
+    //     $pageNo           =  $this->request->getVar('page_no');
+
+    //     $rules = [
+    //         'page_no' => [
+    //             'rules'         =>  'required|greater_than[' . PAGE_LENGTH . ']|numeric',
+    //             'errors'        => [
+    //                 'required'      =>  Lang('Language.required'),
+    //                 'greater_than'  =>  Lang('Language.greater_than', [PAGE_LENGTH]),
+    //                 'numeric'       =>  Lang('Language.numeric', [$pageNo]),
+    //             ]
+    //         ],
+    //         'language' => [
+    //             'rules'         =>  'required|in_list[' . LANGUAGES . ']',
+    //             'errors'        => [
+    //                 'required'      =>  Lang('Language.required'),
+    //                 'in_list'       =>  Lang('Language.in_list', [LANGUAGES]),
+    //             ]
+    //         ],
+    //         'logged_user_id' => [
+    //             'rules'         =>  'required',
+    //             'errors'        => [
+    //                 'required'      =>  Lang('Language.required'),
+    //             ]
+    //         ],
+    //         'logged_user_role' => [
+    //             'rules'         =>  'required',
+    //             'errors'        => [
+    //                 'required'      =>  Lang('Language.required'),
+    //             ]
+    //         ],
+    //     ];
+
+    //     if(!$this->validate($rules)) {
+    //         return $service->fail(
+    //             [
+    //                 'errors'     =>  $this->validator->getErrors(),
+    //                 'message'   =>  lang('Language.invalid_inputs')
+    //             ],
+    //             ResponseInterface::HTTP_BAD_REQUEST,
+    //             $this->response
+    //         );
+    //     }
+       
+    //     try{
+
+    //         $currentPage   = ( !empty( $pageNo ) ) ? $pageNo : 1;
+    //         $offset        = ( $currentPage - 1 ) * PER_PAGE;
+    //         $limit         =  PER_PAGE;
+	// 		$add_filter = $this->request->getPost('add_filter');
+    //         $user_role        =  $this->request->getVar('logged_user_role');
+    //         $logged_user_id   =  $this->request->getVar('logged_user_id');
+
+	// 		$trnx_filters['package_title'] = '';
+	// 		$trnx_filters['city_loaction'] = '';
+	// 		$trnx_filters['pickup_loaction'] = '';
+	// 		$trnx_filters['add_filter'] = '';
+
+	// 		if (isset($_POST['add_filter']) &&  $_POST['add_filter'] == 1) {
+	// 			$trnx_filters['package_title'] = (isset($_POST['package_title']) && !empty($_POST['package_title'])) ? trim($_POST['package_title']) : '';
+	// 			$trnx_filters['city_loaction'] = (isset($_POST['city_loaction']) && !empty($_POST['city_loaction'])) ? trim($_POST['city_loaction']) : '';
+	// 			$trnx_filters['pickup_loaction'] = (isset($_POST['pickup_loaction']) && !empty($_POST['pickup_loaction'])) ? trim($_POST['pickup_loaction']) : '';
+	// 		}
+
+	// 		if (isset($_POST['add_filter']) && $_POST['add_filter'] == 0) {
+	// 			$trnx_filters['package_title'] = '';
+	// 			$trnx_filters['city_loaction'] = '';
+	// 			$trnx_filters['pickup_loaction'] = '';
+	// 		}
+
+    //         $db = db_connect();
+    //         $builder = $db->table('tbl_package l');
+	// 		$builder->where('l.status', 'active');
+	// 		$builder->select('l.*, CONCAT(p.firstname, " ", p.lastname) as provider_name');
+	// 		$builder->join('tbl_provider p', 'p.id = l.provider_id', 'left');
+
+	// 		if (isset($trnx_filters['package_title']) && $trnx_filters['package_title'] != "") {
+	// 			$builder->like('l.package_title', '%' . $trnx_filters['package_title'] . '%');
+	// 		}
+
+	// 		if (isset($trnx_filters['city_loaction']) && $trnx_filters['city_loaction'] != "") {
+	// 			$builder->like('l.city_loaction', '%' . $trnx_filters['city_loaction'] . '%');
+	// 		}
+
+	// 		if (isset($trnx_filters['pickup_loaction']) && $trnx_filters['pickup_loaction'] != "") {
+	// 			$builder->like('l.pickup_loaction', '%' . $trnx_filters['pickup_loaction'] . '%');
+    // 		}
+
+	// 		$total = $builder->countAllResults();
+            
+    //         $data = $builder->limit($limit, $offset)->get()->getResult();// Fetch the paginated results
+                
+    //         return $service->success(
+    //             [
+    //                 'message'       =>  Lang('Language.list_success'),
+    //                 'data'          =>  [
+    //                     'total'             =>  $total,
+    //                     'packages'         =>  $data,
+    //                 ]
+    //             ],
+    //             ResponseInterface::HTTP_OK,
+    //             $this->response
+    //         );
+
+    //     } catch (Exception $e) {
+    //         return $service->fail(
+    //             [
+    //                 'errors'    =>  $e->getMessage(),
+    //                 'message'   =>  Lang('Language.fetch_list'),
+    //             ],
+    //             ResponseInterface::HTTP_BAD_REQUEST,
+    //             $this->response
+    //         );
+    //     }
+    // }
+
 	//package  list by provider
 	public function packageListForProvider()
 	{
