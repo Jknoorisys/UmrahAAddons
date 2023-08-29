@@ -13,70 +13,42 @@ class PackageModels extends Model
 	protected $createdField  = 'created_date';
 	protected $updatedField  = 'updated_date';
 
-	// public function getallTransactionlist(array $trnx_filters, $offset, $limit, $add_filter, $abc)
-	// {
-
-	// 	$criterial = '';
-	// 	// echo json_encode($trnx_filters);die(); 
-	// 	if (isset($trnx_filters['package_title']) && $trnx_filters['package_title'] != "") {
-	// 		$criterial .= " AND l.package_title LIKE '%" . $trnx_filters['package_title'] . "%'";
-	// 	}
-
-	// 	if (isset($trnx_filters['city_loaction']) && $trnx_filters['city_loaction'] != "") {
-	// 		$criterial .= " AND l.city_loaction LIKE '%" . $trnx_filters['city_loaction'] . "%'";
-	// 	}
-		
-	// 	if (isset($trnx_filters['pickup_loaction']) && $trnx_filters['pickup_loaction'] != "") {
-	// 		$criterial .= " AND l.pickup_loaction LIKE '%" . $trnx_filters['pickup_loaction'] . "%'";
-	// 	}
-
-	// 	$criterial .= " AND l.status = 'active'";
-		
-	// 	$query = "SELECT l.*,CONCAT (p.firstname,' ',p.lastname) as provider_name FROM tbl_package AS l
-	// 	  LEFT JOIN tbl_provider AS p ON p.id = l.provider_id ";
-
-	// 	// 	$query = "SELECT l.*,c.firstname AS country_name, FROM tbl_package AS l
-	// 	//    LEFT JOIN tbl_provider AS c ON c.id = l.provider_id ";
-
-	// 	$query .= "WHERE 1";
-	// 	$query .= $criterial;
-
-	// 	if ($abc == 0) {
-	// 		return $this->db->query($query)->getResult();
-	// 	} else {
-	// 		$query .= " LIMIT " . $limit . "," . $offset;
-	// 		return $this->db->query($query)->getResult();
-	// 	}
-	// 	// echo json_encode($total_record);die();
-	// 	return false;
-	// }
-
-	public function getallTransactionlist(array $trnx_filters, $offset, $limit, $add_filter, $abc)
+	public function getallTransactionlist(array $trnx_filters, $per_page, $page_no, $add_filter, $abc)
 	{
-		// Initialize the Query Builder
-		$builder = $this->db->table('tbl_package l');
-		$builder->select('l.*, CONCAT(p.firstname, " ", p.lastname) as provider_name');
-		$builder->join('tbl_provider p', 'p.id = l.provider_id', 'left');
-		$builder->where('l.status', 'active');
 
+		$criterial = '';
+		// echo json_encode($trnx_filters);die(); 
 		if (isset($trnx_filters['package_title']) && $trnx_filters['package_title'] != "") {
-			$builder->like('l.package_title', '%' . $trnx_filters['package_title'] . '%');
+			$criterial .= " AND l.package_title LIKE '%" . $trnx_filters['package_title'] . "%'";
 		}
 
 		if (isset($trnx_filters['city_loaction']) && $trnx_filters['city_loaction'] != "") {
-			$builder->like('l.city_loaction', '%' . $trnx_filters['city_loaction'] . '%');
+			$criterial .= " AND l.city_loaction LIKE '%" . $trnx_filters['city_loaction'] . "%'";
 		}
-
+		
 		if (isset($trnx_filters['pickup_loaction']) && $trnx_filters['pickup_loaction'] != "") {
-			$builder->like('l.pickup_loaction', '%' . $trnx_filters['pickup_loaction'] . '%');
+			$criterial .= " AND l.pickup_loaction LIKE '%" . $trnx_filters['pickup_loaction'] . "%'";
 		}
 
-		if ($abc != 0) {
-			$builder->limit($limit, $offset);
-		}
+		$criterial .= " AND l.status = 'active'";
+		
+		$query = "SELECT l.*,CONCAT (p.firstname,' ',p.lastname) as provider_name FROM tbl_package AS l
+		  LEFT JOIN tbl_provider AS p ON p.id = l.provider_id ";
 
-		// Execute the query and return results
-		return $builder->get()->getResult();
+		// 	$query = "SELECT l.*,c.firstname AS country_name, FROM tbl_package AS l
+		//    LEFT JOIN tbl_provider AS c ON c.id = l.provider_id ";
+
+		$query .= "WHERE 1";
+		$query .= $criterial;
+
+		if ($abc == 0) {
+			return $this->db->query($query)->getResult();
+		} else {
+			$query .= " LIMIT " . $page_no . "," . $per_page;
+			return $this->db->query($query)->getResult();
+		}
+		// echo json_encode($total_record);die();
+		return false;
 	}
 
 
