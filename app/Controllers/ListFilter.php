@@ -293,13 +293,12 @@ class ListFilter extends ResourceController
 		$logged_user_role = $this->request->getPost('logged_user_role');
 		$logged_user_id = $this->request->getPost('logged_user_id');
 		// $user_role = $this->request->getPost('user_role');
-		$pageNo = $this->request->getPost('page_no');
 		$add_filter = $this->request->getPost('add_filter');
 
+		$pageNo = $this->request->getPost('page_no');
 		$per_page = PER_PAGE;
 		$currentPage   = ( !empty( $pageNo ) ) ? $pageNo : 1;
 		$page_no        = ( $currentPage - 1 ) * PER_PAGE;
-		// echo json_encode($user_id);die();
 
 		$filter['transfer']['package_title'] = '';
 		$filter['transfer']['city_loaction'] = '';
@@ -357,7 +356,10 @@ class ListFilter extends ResourceController
 		$user_role = $this->request->getPost('logged_user_role');
 		$provider_id = $this->request->getPost('logged_user_id');
 		// $user_role = $this->request->getPost('user_role');
-		$page_no = $this->request->getPost('page_no');
+		$pageNo = $this->request->getPost('page_no');
+		$per_page = PER_PAGE;
+		$currentPage   = ( !empty( $pageNo ) ) ? $pageNo : 1;
+		$page_no        = ( $currentPage - 1 ) * PER_PAGE;		
 		$add_filter = $this->request->getPost('add_filter');
 
 		// Email Validation
@@ -367,8 +369,6 @@ class ListFilter extends ResourceController
 			die();
 		}
 
-		$per_page = PER_PAGE_FOR_PROVIDER;
-		// echo json_encode($userdata);die();
 
 		$filter['transfer']['package_title'] = '';
 		$filter['transfer']['city_loaction'] = '';
@@ -430,11 +430,14 @@ class ListFilter extends ResourceController
 		$BookingModel = new BookingModel();
 		$logged_user_id = $this->request->getPost("logged_user_id");
 		$logged_user_role = $this->request->getPost("logged_user_role");
-		$page_no = $this->request->getPost('page_no');
 		$add_filter = $this->request->getPost('add_filter');
 		$rate = $this->request->getPost('rate');
 
+		$pageNo = $this->request->getPost('page_no');
 		$per_page = PER_PAGE;
+		$currentPage   = ( !empty( $pageNo ) ) ? $pageNo : 1;
+		$page_no        = ( $currentPage - 1 ) * PER_PAGE;	
+
 		$service_type = "package";
 
 
@@ -512,7 +515,6 @@ class ListFilter extends ResourceController
 		$user_role = $this->request->getPost('logged_user_role');
 		$provider_id = $this->request->getPost('logged_user_id');
 		// $user_role = $this->request->getPost('user_role');
-		$page_no = $this->request->getPost('page_no');
 		$add_filter = $this->request->getPost('add_filter');
 
 		// Email Validation
@@ -522,8 +524,10 @@ class ListFilter extends ResourceController
 			die();
 		}
 
+		$pageNo = $this->request->getPost('page_no');
 		$per_page = PER_PAGE;
-		// echo json_encode($userdata);die();
+		$currentPage   = ( !empty( $pageNo ) ) ? $pageNo : 1;
+		$page_no        = ( $currentPage - 1 ) * PER_PAGE;	
 
 		$filter['transfer']['activitie_title'] = '';
 		$filter['transfer']['city_loaction'] = '';
@@ -595,13 +599,15 @@ class ListFilter extends ResourceController
 		$BookingModel = new BookingModel();
 		$logged_user_id = $this->request->getPost("logged_user_id");
 		$logged_user_role = $this->request->getPost("logged_user_role");
-		$page_no = $this->request->getPost('page_no');
 		$add_filter = $this->request->getPost('add_filter');
 		$package_title = $this->request->getPost('package_title');
 		$ota_id = $this->request->getPost('ota_id');
 
 
+		$pageNo = $this->request->getPost('page_no');
 		$per_page = PER_PAGE;
+		$currentPage   = ( !empty( $pageNo ) ) ? $pageNo : 1;
+		$page_no        = ( $currentPage - 1 ) * PER_PAGE;			
 		$service_type = "package";
 		// check ota
 		$otadata = $OtaMoodel->where("id", $ota_id)->first();
@@ -750,13 +756,15 @@ class ListFilter extends ResourceController
 		$GuideDocModel = new GuideDocModel();
 		$logged_user_id = $this->request->getPost("logged_user_id");
 		$logged_user_role = $this->request->getPost("logged_user_role");
-		$page_no = $this->request->getPost('page_no');
 		$add_filter = $this->request->getPost('add_filter');
 		$guide_name = $this->request->getPost('guide_name');
 		$guide_email = $this->request->getPost('guide_email');
 
 
+		$pageNo = $this->request->getPost('page_no');
 		$per_page = PER_PAGE;
+		$currentPage   = ( !empty( $pageNo ) ) ? $pageNo : 1;
+		$page_no        = ( $currentPage - 1 ) * PER_PAGE;			
 
 		if ($logged_user_role == "admin") {
 			// $filter['transfer']['project_title'] = '';
