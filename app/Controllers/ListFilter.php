@@ -15,6 +15,7 @@ use App\Models\GuideDocModel;
 use App\Libraries\MailSender;
 
 use CodeIgniter\API\ResponseTrait;
+use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use \Firebase\JWT\JWT;
 use Exception;
@@ -286,7 +287,7 @@ class ListFilter extends ResourceController
 		return $this->respondCreated($response);
 	}
 
-	// List of Package
+	// // List of Package
 	public function packagelist()
 	{
 		$PackageModels = new PackageModels();
@@ -297,7 +298,9 @@ class ListFilter extends ResourceController
 		$add_filter = $this->request->getPost('add_filter');
 
 		$per_page = PER_PAGE;
-		// echo json_encode($user_id);die();
+		$currentPage   = ( !empty( $page_no ) ) ? $page_no : 1;
+        $offset        = ( $currentPage - 1 ) * PER_PAGE;
+        $limit         =  PER_PAGE;
 
 		$filter['transfer']['package_title'] = '';
 		$filter['transfer']['city_loaction'] = '';
@@ -315,8 +318,8 @@ class ListFilter extends ResourceController
 			$filter['transfer']['city_loaction'] = '';
 			$filter['transfer']['pickup_loaction'] = '';
 		}
-		$complaints = $PackageModels->getallTransactionlist($filter['transfer'], $per_page, $page_no, $add_filter, $abc = 1);
-		$countlist = $PackageModels->getallTransactionlist($filter['transfer'], $per_page, $page_no, $add_filter, $abc = 0);
+		$complaints = $PackageModels->getallTransactionlist($filter['transfer'], $offset, $limit, $add_filter, $abc = 1);
+		$countlist = $PackageModels->getallTransactionlist($filter['transfer'], $offset, $limit, $add_filter, $abc = 0);
 		if ($_POST['add_filter'] == 0) {
 			$db = \Config\Database::connect();
 
