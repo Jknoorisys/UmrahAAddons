@@ -293,10 +293,12 @@ class ListFilter extends ResourceController
 		$logged_user_role = $this->request->getPost('logged_user_role');
 		$logged_user_id = $this->request->getPost('logged_user_id');
 		// $user_role = $this->request->getPost('user_role');
-		$page_no = $this->request->getPost('page_no');
+		$pageNo = $this->request->getPost('page_no');
 		$add_filter = $this->request->getPost('add_filter');
 
 		$per_page = PER_PAGE;
+		$currentPage   = ( !empty( $pageNo ) ) ? $pageNo : 1;
+		$page_no        = ( $currentPage - 1 ) * PER_PAGE;
 		// echo json_encode($user_id);die();
 
 		$filter['transfer']['package_title'] = '';
