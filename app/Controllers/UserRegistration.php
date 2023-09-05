@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Database\Migrations\TblTransportEnquiry;
 use App\Models\OtaMoodel;
 use App\Models\ProviderModel;
 use App\Models\UserModels;
@@ -23,7 +24,12 @@ use App\Libraries\MailSender;
 use App\Models\StateModel;
 
 use App\Models\City;
-
+use App\Models\FullPackageEnquiry;
+use App\Models\MealsBookingModel;
+use App\Models\PackageInquiryModel;
+use App\Models\SabeelBookingModel;
+use App\Models\TransportModel;
+use App\Models\VisaEnquiry;
 use CodeIgniter\API\ResponseTrait;
 use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -765,6 +771,8 @@ class UserRegistration extends ResourceController
         $UserModels = new UserModels();
         $OtaMoodel = new OtaMoodel();
 
+        $db = \Config\Database::connect();
+
         $rules = [
             'language' => [
                 'rules'         =>  'required|in_list[' . LANGUAGES . ']',
@@ -843,8 +851,22 @@ class UserRegistration extends ResourceController
                 'token' => $token
             ];
 
-            $res = $UserModels->update($userdata['id'], $updateuser);
+            $res = $UserModels->where($userdata['id'], $updateuser);
+            $MealBooking = $db->table('meals_booking')->where('user_id', $userdata['id'])->orderBy('id', 'desc')->get()->getRow();
+            $PackageBooking = $db->table('tbl_full_package_enquiry')->where('user_id', $userdata['id'])->orderBy('id', 'desc')->get()->getRow();
+            $ZiyaratBooking = $db->table('tbl_package_enquiry')->where('user_id', $userdata['id'])->orderBy('id', 'desc')->get()->getRow();
+            $SabeelBooking = $db->table('tbl_sabeel_booking')->where('user_id', $userdata['id'])->orderBy('id', 'desc')->get()->getRow();
+            $TransportBooking = $db->table('tbl_transport_enquiry')->where('user_id', $userdata['id'])->orderBy('id', 'desc')->get()->getRow();
+            $VisaBooking = $db->table('tbl_visa_enquiry')->where('user_id', $userdata['id'])->orderBy('id', 'desc')->get()->getRow();
+
             $userdata['token'] = $token;
+            $userdata['MealBooking'] = $MealBooking;
+            $userdata['PackageBooking'] = $PackageBooking;
+            $userdata['ZiyaratBooking'] = $ZiyaratBooking;
+            $userdata['SabeelBooking'] = $SabeelBooking;
+            $userdata['TransportBooking'] = $TransportBooking;
+            $userdata['VisaBooking'] = $VisaBooking;
+
             $response = [
                 'status' => 'success',
                 'status_code' => 200,
