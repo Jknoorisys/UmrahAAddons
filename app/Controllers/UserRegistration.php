@@ -860,12 +860,25 @@ class UserRegistration extends ResourceController
             $VisaBooking = $db->table('tbl_visa_enquiry')->where('user_id', $userdata['id'])->orderBy('id', 'desc')->get()->getRow();
 
             $userdata['token'] = $token;
-            $userdata['MealBooking'] = $MealBooking;
-            $userdata['PackageBooking'] = $PackageBooking;
-            $userdata['ZiyaratBooking'] = $ZiyaratBooking;
-            $userdata['SabeelBooking'] = $SabeelBooking;
-            $userdata['TransportBooking'] = $TransportBooking;
-            $userdata['VisaBooking'] = $VisaBooking;
+            $bookingData['MealBooking'] = $MealBooking;
+            $bookingData['PackageBooking'] = $PackageBooking;
+            $bookingData['ZiyaratBooking'] = $ZiyaratBooking;
+            $bookingData['SabeelBooking'] = $SabeelBooking;
+            $bookingData['TransportBooking'] = $TransportBooking;
+            $bookingData['VisaBooking'] = $VisaBooking;
+
+            // Initialize bookingDetails as null
+            $bookingDetails = null;
+
+            // Iterate through each booking type and set bookingDetails if not empty
+            foreach ($bookingData as $bookingType => $booking) {
+                if (!empty($booking)) {
+                    $bookingDetails = $booking;
+                    break; // Stop the loop once a non-empty booking is found
+                }
+            }
+
+            $userdata['bookingDetails'] = $bookingDetails;
 
             $response = [
                 'status' => 'success',
