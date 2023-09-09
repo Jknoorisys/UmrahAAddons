@@ -845,13 +845,13 @@ class UserRegistration extends ResourceController
             $token = $this->service->getSignedAccessTokenForUser('user', $userdata['id']);
 
             $updateuser = [
-                'ota_id' => $ota_id,
+                // 'ota_id' => $ota_id,
                 'device_type' => $device_type,
                 'device_token' => $device_token,
                 'token' => $token
             ];
 
-            $res = $UserModels->where($userdata['id'], $updateuser);
+            $res = $db->table('tbl_user')->where('id', $userdata['id'])->update($updateuser);
             $MealBooking = $db->table('meals_booking')->where('user_id', $userdata['id'])->orderBy('id', 'desc')->get()->getRow();
             $PackageBooking = $db->table('tbl_full_package_enquiry')->where('user_id', $userdata['id'])->orderBy('id', 'desc')->get()->getRow();
             $ZiyaratBooking = $db->table('tbl_package_enquiry')->where('user_id', $userdata['id'])->orderBy('id', 'desc')->get()->getRow();
