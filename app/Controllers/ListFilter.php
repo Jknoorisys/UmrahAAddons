@@ -322,16 +322,18 @@ class ListFilter extends ResourceController
 		}
 		$complaints = $PackageModels->getallTransactionlist($filter['transfer'], $per_page, $page_no, $add_filter, $abc = 1);
 		$countlist = $PackageModels->getallTransactionlist($filter['transfer'], $per_page, $page_no, $add_filter, $abc = 0);
-		if ($_POST['add_filter'] == 0) {
-			$db = \Config\Database::connect();
+		// if ($_POST['add_filter'] == 0) {
+		// 	$db = \Config\Database::connect();
 
-			$builder1 = $db->table('tbl_package as l');
-			$total_loan_record = $builder1->get()->getResult();
-			$total_record = count($total_loan_record);
-			// echo json_encode($total_record);die();
-		} else {
-			$total_record = count($countlist);
-		}
+		// 	$builder1 = $db->table('tbl_package as l');
+		// 	$total_loan_record = $builder1->get()->getResult();
+		// 	$total_record = count($total_loan_record);
+		// 	// echo json_encode($total_record);die();
+		// } else {
+		// 	$total_record = count($countlist);
+		// }
+
+		$total_record = count($countlist);
 		if ($complaints != null) {
 
 			$response = [
