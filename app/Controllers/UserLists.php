@@ -431,6 +431,7 @@ class UserLists extends BaseController
             }
 
             $data = $table->where('p.status', '1')
+                        ->select('p.id, p.provider_id, p.name, p.duration, p.departure_city, p.mecca_hotel, p.mecca_hotel_distance, p.madinah_hotel, p.madinah_hotel_distance, p.details, p.main_img, p.inclusions, p.pent_rate_SAR as single_rate_SAR, p.pent_rate_INR as single_rate_INR, p.infant_rate_with_bed_SAR, p.infant_rate_with_bed_INR, p.infant_rate_without_bed_SAR, p.infant_rate_without_bed_INR, p.status, p.created_at, p.updated_at')
                         ->orderBy('p.id', 'DESC')
                         ->limit($limit, $offset)
                         ->get()
