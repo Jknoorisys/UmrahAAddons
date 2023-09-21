@@ -799,12 +799,12 @@ class UserRegistration extends ResourceController
                     'required'      =>  Lang('Language.required'),
                 ]
             ],
-            'device_token' => [
-                'rules'         =>  'required',
-                'errors'        => [
-                    'required'      =>  Lang('Language.required'),
-                ]
-            ],
+            // 'device_token' => [
+            //     'rules'         =>  'required',
+            //     'errors'        => [
+            //         'required'      =>  Lang('Language.required'),
+            //     ]
+            // ],
             'device_type' => [
                 'rules'         =>  'required',
                 'errors'        => [
@@ -828,7 +828,7 @@ class UserRegistration extends ResourceController
         $country_code = $this->request->getPost('country_code');
         $mobile = $this->request->getPost('mobile');
 
-        $device_token = $this->request->getPost('device_token');
+        $device_token = $this->request->getPost('device_token') ? $this->request->getPost('device_token') : '';
         $device_type = $this->request->getPost('device_type');
 
         // check ota
