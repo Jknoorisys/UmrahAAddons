@@ -387,16 +387,22 @@ class ManageVisa extends BaseController
             elseif($user_role == 'user'){ $whereCondition .= "e.user_id = ".$logged_user_id." AND e.status = '1'"; }
 
             $db = db_connect();
-            $data = $db->table('tbl_visa_enquiry as e')
+            $table = $db->table('tbl_visa_enquiry as e')
                 ->join('tbl_user as u','u.id = e.user_id')
                 ->select("e.*, CONCAT(u.firstname,' ',u.lastname) as user_name")
-                ->where($whereCondition)
-                ->orderBy('e.id', 'DESC')
+                ->where($whereCondition);
+
+
+                // Clone the builder to use for total count query
+                $totalBuilder = clone $table;
+
+                // Calculate the total count
+                $total = $totalBuilder->countAllResults(false);
+
+            $data = $table->orderBy('e.id', 'DESC')
                 ->limit($limit, $offset)
                 ->get()->getResult();
                 
-            $total = count($data);
-
             return $service->success(
                 [
                     'message'       =>  Lang('Language.list_success'),
