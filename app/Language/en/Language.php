@@ -138,5 +138,15 @@ return [
 	// Manage Full Package
 	'Package Created Successfully' => 'Package Created Successfully',
 	'Package status changed successfully' => 'Package status changed successfully',
-	'Unable to change Package status, please try again' => 'Unable to change Package status, please try again'
+	'Unable to change Package status, please try again' => 'Unable to change Package status, please try again',
+
+	// Manage Cities
+	'City Not Found' => 'City Not Found',
+	'City status changed successfully' => 'City status changed successfully',
+	'Unable to change City status, please try again' => 'Unable to change City status, please try again',
+
+	// Manage Ziyarat Points
+	'Ziyarat Point Not Found' => 'Ziyarat Point Not Found',
+	'Ziyarat Point status changed successfully' => 'Ziyarat Point status changed successfully',
+	'Unable to change Ziyarat Point status, please try again' => 'Unable to change Ziyarat Point status, please try again',
 ];

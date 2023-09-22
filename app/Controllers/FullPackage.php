@@ -136,18 +136,6 @@ class FullPackage extends BaseController
                     'required'      =>  Lang('Language.required'),
                 ]
             ],
-            'single_rate_SAR' => [
-                'rules'         =>  'required',
-                'errors'        => [
-                    'required'      =>  Lang('Language.required'),
-                ]
-            ],
-            'single_rate_INR' => [
-                'rules'         =>  'required',
-                'errors'        => [
-                    'required'      =>  Lang('Language.required'),
-                ]
-            ],
             'infant_rate_with_bed_SAR' => [
                 'rules'         =>  'required',
                 'errors'        => [
@@ -237,8 +225,8 @@ class FullPackage extends BaseController
             "details" => $this->request->getPost("details"),
             "main_img" =>  $path . $newName,
             "inclusions" => $this->request->getPost("inclusions"),
-            "single_rate_SAR" => $this->request->getPost("single_rate_SAR"),
-            "single_rate_INR" => $this->request->getPost("single_rate_INR"),
+            "single_rate_SAR" => $this->request->getPost("single_rate_SAR") ? $this->request->getPost("single_rate_SAR") : '',
+            "single_rate_INR" => $this->request->getPost("single_rate_INR") ? $this->request->getPost("single_rate_INR") : '',
             "double_rate_SAR" => $this->request->getPost("double_rate_SAR") ? $this->request->getPost("double_rate_SAR") : '',
             "double_rate_INR" => $this->request->getPost("double_rate_INR") ? $this->request->getPost("double_rate_INR") : '',
             "triple_rate_SAR" => $this->request->getPost("triple_rate_SAR") ? $this->request->getPost("triple_rate_SAR") : '',
@@ -463,33 +451,39 @@ class FullPackage extends BaseController
             $logged_user_id   =  $this->request->getVar('logged_user_id');
 
             $db = db_connect();
-            $table = $db->table('tbl_full_package as e');
+            $table = $db->table('tbl_full_package as e')->join('tbl_provider as p','p.id = e.provider_id');
             
             $whereCondition = '';
 
-            if($user_role == 'admin'){ $whereCondition .= "e.status != '2'"; }
+            if($user_role == 'admin')
+            { $whereCondition .= "e.status != '2'"; }
 
-            elseif($user_role == 'provider'){ $whereCondition .= "e.provider_id = ".$logged_user_id." AND e.status != '2'"; }
+            elseif($user_role == 'provider')
+            { $whereCondition .= "e.provider_id = ".$logged_user_id." AND e.status != '2'"; }
+
+            $table->where($whereCondition);
 
             if (isset($search) && !empty($search)) {
                 $table->like('e.name', $search);
             }
 
             if (isset($search_by_provider) && !empty($search_by_provider)) {
-                $table->orLike('p.firstname', $search_by_provider);
+                $table->like('p.firstname', $search_by_provider);
                 $table->orLike('p.lastname', $search_by_provider);
             }
             
+            // Clone the builder to use for total count query
+            $totalBuilder = clone $table;
+
+            // Calculate the total count
+            $total = $totalBuilder->countAllResults(false);
+
             $data = $table->orderBy('e.id', 'DESC')
-                ->join('tbl_provider as p','p.id = e.provider_id')
                 ->select("e.*, CONCAT(p.firstname,' ',p.lastname) as provider_name")
-                ->where($whereCondition)
                 ->limit($limit, $offset)
                 ->get()
                 ->getResult(); // Fetch the paginated results
                 
-            $total = count($data);
-
             return $service->success(
                 [
                     'message'       =>  Lang('Language.list_success'),
@@ -664,8 +658,8 @@ class FullPackage extends BaseController
             $madinah_hotel_distance = $this->request->getPost("madinah_hotel_distance");
             $details = $this->request->getPost("details");
             $inclusions = $this->request->getPost("inclusions");
-            $single_rate_SAR = $this->request->getPost("single_rate_SAR");
-            $single_rate_INR = $this->request->getPost("single_rate_INR");
+            $single_rate_SAR = $this->request->getPost("single_rate_SAR") ? $this->request->getPost("single_rate_SAR") : '';
+            $single_rate_INR = $this->request->getPost("single_rate_INR") ? $this->request->getPost("single_rate_INR") : '';
             $double_rate_SAR = $this->request->getPost("double_rate_SAR") ? $this->request->getPost("double_rate_SAR") : '';
             $double_rate_INR = $this->request->getPost("double_rate_INR") ? $this->request->getPost("double_rate_INR") : '';
             $triple_rate_SAR = $this->request->getPost("triple_rate_SAR") ? $this->request->getPost("triple_rate_SAR") : '';
