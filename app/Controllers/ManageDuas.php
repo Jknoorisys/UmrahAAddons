@@ -3,13 +3,9 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-
 use App\Models\Duas;
-
 use Exception;
-
 use Config\Services;
-
 use CodeIgniter\HTTP\ResponseInterface;
 
 // headers

@@ -51,10 +51,6 @@ class FullPackage extends Migration
             'details' => [
 				'type' => 'TEXT',
 			],
-			'main_img' => [
-				'type' => 'VARCHAR',
-				'constraint' => '255',
-			],
 			'inclusions' => [
 				'type' => 'TEXT',
 			],
