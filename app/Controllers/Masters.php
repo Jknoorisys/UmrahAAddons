@@ -96,7 +96,7 @@ class Masters extends ResourceController
                         {
                             return $service->success([
                                 'message'       =>  Lang('Language.New application version is available, please update to continue.'),
-                                'data'          =>  ['forcefully_update' => 1],
+                                'data'          =>  ['forcefullyUpdate' => 1],
                             ],
                                 ResponseInterface::HTTP_OK,
                                 $this->response
@@ -104,7 +104,7 @@ class Masters extends ResourceController
                         } else { 
                                 return $service->success([
                                 'message'       =>  Lang('Language.New application version is available, please update to continue.'),
-                                'data'          =>  ['forcefully_update' => 0],
+                                'data'          =>  ['forcefullyUpdate' => 0],
                             ],
                                 ResponseInterface::HTTP_OK,
                                 $this->response
@@ -115,7 +115,6 @@ class Masters extends ResourceController
                             [
                                 'errors'    =>  "",
                                 'message'   =>  "You have latest version of application.",
-                                'forcefully_update' => 0,
                             ],
                             ResponseInterface::HTTP_BAD_REQUEST,
                             $this->response
@@ -127,7 +126,7 @@ class Masters extends ResourceController
                         {
                             return $service->success([
                                 'message'       =>  Lang('Language.New application version is available, please update to continue.'),
-                                'data'          =>  ['forcefully_update' => 1],
+                                'data'          =>  ['forcefullyUpdate' => 1],
                             ],
                                 ResponseInterface::HTTP_OK,
                                 $this->response
@@ -135,7 +134,7 @@ class Masters extends ResourceController
                         } else { 
                                 return $service->success([
                                 'message'       =>  Lang('Language.New application version is available, please update to continue.'),
-                                'data'          =>  ['forcefully_update' => 0],
+                                'data'          =>  ['forcefullyUpdate' => 0],
                             ],
                                 ResponseInterface::HTTP_OK,
                                 $this->response
