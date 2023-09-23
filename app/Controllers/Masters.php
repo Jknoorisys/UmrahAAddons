@@ -116,7 +116,7 @@ class Masters extends ResourceController
                         return $service->fail(
                             [
                                 'errors'    =>  "",
-                                'message'   =>  "",
+                                'message'   =>  "You have latest version of application.",
                                 'forcefully_update' => 0,
                             ],
                             ResponseInterface::HTTP_BAD_REQUEST,
@@ -147,7 +147,7 @@ class Masters extends ResourceController
                         return $service->fail(
                             [
                                 'errors'    =>  "",
-                                'message'   =>  "",
+                                'message'   =>  "You have latest version of application.",
                             ],
                             ResponseInterface::HTTP_BAD_REQUEST,
                             $this->response
