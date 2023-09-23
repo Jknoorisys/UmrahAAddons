@@ -601,7 +601,6 @@ class FullPackage extends BaseController
     {
         $package   =  new ModelsFullPackage();
         $dates   =  new FullPackageDates();
-        $images   =  new FullPackageImages();
         $service   =  new Services();
         $service->cors();
 

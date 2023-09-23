@@ -91,12 +91,12 @@ class Masters extends ResourceController
                 $db = db_connect();
                 $app_version = $db->table('tbl_users_app_version')->select('*')->where('app_name',$app_name)->get()->getRow();
                 if ($device_type == 'android') {
-                    if(version_compare($app_ver, $app_version->app_version_android) < 0) {
+                    if(version_compare($app_ver, $app_version->app_version_android)) {
                         if($app_version->forcefully_update_android == 1) 
                         {
                             return $service->success([
                                 'message'       =>  Lang('Language.New application version is available, please update to continue.'),
-                                // 'data'          =>  '',
+                                'data'          =>  '',
                                 'forcefully_update' => 1,
                             ],
                                 ResponseInterface::HTTP_OK,
@@ -105,7 +105,7 @@ class Masters extends ResourceController
                         } else { 
                                 return $service->success([
                                 'message'       =>  Lang('Language.New application version is available, please update to continue.'),
-                                // 'data'          =>  '',
+                                'data'          =>  '',
                                 'forcefully_update' => 0,
                             ],
                                 ResponseInterface::HTTP_OK,
@@ -124,7 +124,7 @@ class Masters extends ResourceController
                         );
                     }
                 } else {
-                    if(version_compare($app_ver, $app_version->app_version_ios) < 0) {
+                    if(version_compare($app_ver, $app_version->app_version_ios)) {
                         if($app_version->forcefully_update_android == 1) 
                         {
                             return $service->success([
