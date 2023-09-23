@@ -392,12 +392,11 @@ class ManageVisa extends BaseController
                 ->select("e.*, CONCAT(u.firstname,' ',u.lastname) as user_name")
                 ->where($whereCondition);
 
+            // Clone the builder to use for total count query
+            $totalBuilder = clone $table;
 
-                // Clone the builder to use for total count query
-                $totalBuilder = clone $table;
-
-                // Calculate the total count
-                $total = $totalBuilder->countAllResults(false);
+            // Calculate the total count
+            $total = $totalBuilder->countAllResults(false);
 
             $data = $table->orderBy('e.id', 'DESC')
                 ->limit($limit, $offset)
