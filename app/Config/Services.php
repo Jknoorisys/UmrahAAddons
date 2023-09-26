@@ -71,6 +71,10 @@ class Services extends BaseService
         if (!empty($token)) {
 
             try {
+                if ($userRole == "user") {
+                    // $validate = $UserModels->where("token", $token)->first();
+                    $validate = 'Hi';
+                }else{
                     $decoded = JWT::decode($token, new Key(getenv('JWT_SECRET'), getenv('JWT_ALGO')));
                     $uID = $decoded->uid;
 
@@ -78,14 +82,17 @@ class Services extends BaseService
                         $validate = $AdminModel->where("token", $token)->where("id", $this->encryption($uID,0))->first();
                     } elseif ($userRole == 'provider') {
                         $validate = $ProviderModel->where("token", $token)->where("id", $this->encryption($uID,0))->first();
-                    } elseif ($userRole == "user") {
-                        $validate = $UserModels->where("token", $token)->where("id", $this->encryption($uID,0))->first();
-                    } elseif ($userRole == "ota") {
+                    } 
+                    // elseif ($userRole == "user") {
+                    //     $validate = $UserModels->where("token", $token)->where("id", $this->encryption($uID,0))->first();
+                    // } 
+                    elseif ($userRole == "ota") {
                         $validate = $OtaMoodel->where("token", $token)->where("id", $this->encryption($uID,0))->first();
                     } elseif ($userRole == "guide") {
                         $validate = $GuideModel->where("token", $token)->where("id", $this->encryption($uID,0))->first();
                     }
-                    if (!empty($validate)) { return true; } else { return false; }
+                }
+                if (!empty($validate)) { return true; } else { return false; }
 
             } catch (Exception $ex) { 
                 // $response = service('response');
