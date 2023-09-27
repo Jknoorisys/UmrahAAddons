@@ -40,27 +40,37 @@ class AdminAsProvider extends BaseController
 
 		helper('auth');
 		helper('notifications');
-		$lang = (isset($_POST) && !empty($_POST)) ? $_POST["language"] : '';
+
+		$lang = (isset($_POST["language"]) && !empty($_POST["language"])) ? $_POST["language"] : '';
 		if (!empty($lang)) {
 			$language = \Config\Services::language();
 			$language->setLocale($lang);
 		} else {
-			echo json_encode(['status' => 403, 'messages' => 'language required']);
+			echo json_encode(['status' => 403, 'messages' => 'Language is Required']);
 			die();
 		}
 
-		// $str = substr($_SERVER["REQUEST_URI"], strrpos($_SERVER["REQUEST_URI"], "/") + 1);
-		// if ($str != 'accessDefine') {
-		// 	checkEmptyPost($_POST);
-		// }
-
 		$db = \Config\Database::connect();
 		// Check Authentication
-		$this->token = $token = $_POST['authorization'];
-		$this->user_id = $user_id = $_POST['logged_user_id'];
-		$this->user_role = $user_role = $_POST['logged_user_role'];
+        
+		$this->token = $token = (isset($_POST["authorization"]) && !empty($_POST["authorization"])) ? $_POST["authorization"] : '';
+		$this->user_id = $user_id = (isset($_POST["logged_user_id"]) && !empty($_POST["logged_user_id"])) ? $_POST["logged_user_id"] : '';
+		$this->user_role = $user_role = (isset($_POST["logged_user_role"]) && !empty($_POST["logged_user_role"])) ? $_POST["logged_user_role"] : '';
 
-		// echo json_encode($decoded);die();
+        if (empty($token)) {
+			echo json_encode(['status' => 403, 'messages' => 'Authorization Token is Required']);
+			die();
+		} 
+
+        if (empty($user_id)) {
+			echo json_encode(['status' => 403, 'messages' => 'User ID is Required']);
+			die();
+		} 
+
+        if (empty($user_role)) {
+			echo json_encode(['status' => 403, 'messages' => 'User Role is Required']);
+			die();
+		} 
 
 		if (!$this->service->getAccessForSignedUser($token, $user_role)) {
 			echo json_encode(['status' => 'failed', 'messages' => 'Access denied', 'status_code' => '401']);
@@ -212,6 +222,357 @@ class AdminAsProvider extends BaseController
                 "package_amount" => $SmallestPrices
              ];
              $PackageModels->update($package_id, $update_package);
+
+            foreach ($this->request->getFileMultiple('image_array') as $file) {
+
+                $package_pic_path = 'public/assets/uploads/package/package_pic/';
+                $new_name = $file->getRandomName();
+                $data = [
+                    'package_id' => $package_id,
+                    'status' => "active",
+                    'package_imgs' => $package_pic_path . $new_name,
+                ];
+                $save = $ImagePackageModels->insert($data);
+                $file->move($package_pic_path, $new_name);
+            }
+            $response = [
+                'status' => "success",
+                'status_code' => 200,
+                'messages' => lang("Language.Package Create Successfully")
+            ];
+        } else {
+            $response = [
+                'status' => "failed",
+                'status_code' => 500,
+                'messages' => lang("Language.Failed to Create")
+            ];
+        }
+        return $this->respondCreated($response);
+    }
+
+    // update package by Admin - by Javeriya Kauser
+    public function updatePackage()
+    {
+        $service   =  new Services();
+        $ProviderModel = new ProviderModel();
+        $PackageModels = new PackageModels();
+        $MovmentModels = new MovmentModels();
+        $VehicleModels = new VehicleModels();
+        $ImagePackageModels = new ImagePackageModels();
+        $DayMappingModel = new DayMappingModel();
+
+        $rules = [
+            'package_id' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => lang('Language.required'),
+                ],
+            ]
+        ];
+
+        if(!$this->validate($rules)) {
+            return $service->fail(
+                [
+                    'errors'     =>  $this->validator->getErrors(),
+                    'message'   =>  lang('Language.invalid_inputs')
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+
+        $image_array = $this->request->getFileMultiple('image_array');
+        $movements = json_decode($this->request->getPost("movement_json"), TRUE);
+        $vechiles = json_decode($this->request->getPost("vehicle_json"), TRUE);
+
+        $package_id = $this->request->getPost("package_id");
+        $package_title = $this->request->getPost("package_title");
+        $package_details = $this->request->getPost("package_details");
+        $city_loaction = $this->request->getPost("city_loaction");
+        $ideal_for = $this->request->getPost("ideal_for");
+        $included = $this->request->getPost("included");
+        $not_included = $this->request->getPost("not_included");
+        $pickup_loaction = $this->request->getPost("pickup_loaction");
+        $drop_loaction = $this->request->getPost("drop_loaction");
+        $accommodations = $this->request->getPost("accommodations");
+        $accommodations_title = $this->request->getPost("accommodations_title");
+        $accommodations_detail = $this->request->getPost("accommodations_detail");
+        $return_policy = $this->request->getPost("return_policy");
+        $type_of_package = $this->request->getPost("type_of_package");
+        $package_amount = $this->request->getPost("package_amount");
+        $package_duration = $this->request->getPost("package_duration");
+        $reason = $this->request->getPost("reason");
+        $language = $this->request->getPost("language");
+
+        $db = db_connect();
+        $package = $db->table('tbl_package')->where('id', $package_id)->get()->getRow();
+
+        if(!empty($package))
+        {
+            $file = $this->request->getFile('main_img');
+            if ($file) {
+                if (!$file->isValid()) {
+                    throw new RuntimeException($file->getErrorString() . '(' . $file->getError() . ')');
+                } else {
+                    $path = 'public/assets/uploads/package/main_pic/';
+                    $newName = $file->getRandomName();
+                    $file->move($path, $newName);
+                    $url = $path . $newName;
+                }
+            }else{
+                $url = $package->main_img;
+            }
+        } else {
+            return $service->fail(
+                [
+                    'errors'    =>  "",
+                    'message'   =>  Lang('Language.Package Not Found'),
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+        
+        $data = [
+            "package_title" => $package_title ? $package_title : $package->package_title,
+            "package_details" => $package_details ? $package_details : $package->package_details,
+            "city_loaction" => $city_loaction ? $city_loaction : $package->city_loaction,
+            "ideal_for" => $ideal_for ? $ideal_for : $package->ideal_for,
+            "main_img" =>  $url,
+            "included" => $included ? $included : $package->included,
+            "not_included" => $not_included ? $not_included : $package->not_included,
+            "pickup_loaction" => $pickup_loaction ? $pickup_loaction : $package->pickup_loaction,
+            "drop_loaction" => $drop_loaction ? $drop_loaction : $package->drop_loaction,
+            "accommodations" => $accommodations ? $accommodations : $package->accommodations,
+            "accommodations_title" => $accommodations_title ? $accommodations_title : $package->accommodations_title,
+            "accommodations_detail" => $accommodations_detail ? $accommodations_detail : $package->accommodations_detail,
+            "return_policy" => $return_policy ? $return_policy : $package->return_policy,
+            "type_of_package" => $type_of_package ? $type_of_package : $package->type_of_package,
+            "package_amount" => $package_amount ? $package_amount : $package->package_amount,
+            "package_duration" => $package_duration ? $package_duration : $package->package_duration,
+            "reason" => $reason ? $reason : $package->reason,
+            "language" => $language ? $language : $package->language,
+            "updated_date" => date('Y-m-d H:i:s')
+        ];
+
+        $package_update = $db->table('tbl_package')->where('id', $package_id)->update($data);
+        if ($package_update) {
+
+            if ($vechiles) {
+                $vechile_ids = [];
+                foreach ($vechiles as $vechile) {
+                    if ($vechile['id'] != "0") {
+                        $vechile_ids[] = $vechile['id'];
+
+                        $vechile_data = [
+                            'no_of_pox_id' => $vechile['no_of_pox_id'],
+                            'package_id'         => $package_id,
+                            'rate'         => $vechile['rate'],
+                            'vehicle_id' => $vechile['vehicle_id'],
+                            'updated_date' => date('Y-m-d H:i:s')
+                        ];
+
+                        $db->table('tbl_package_vehicle')->where('id', $vechile['id'])->update($vechile_data);
+                    }elseif ($vechile['id'] == 0) {
+                        $vechile_data = [
+                            'no_of_pox_id' => $vechile['no_of_pox_id'],
+                            'package_id'         => $package_id,
+                            'rate'         => $vechile['rate'],
+                            'vehicle_id' => $vechile['vehicle_id'],
+                            'created_date' => date('Y-m-d H:i:s'),
+                            'updated_date' => date('Y-m-d H:i:s')
+                        ];
+
+                       $insert = $db->table('tbl_package_vehicle')->insert($vechile_data);
+                       $insertID = $db->insertID();
+                       $vechile_ids[] = $insertID;
+                    }
+                }
+
+                if ($vechile_ids) {
+                    $remove = $db->table('tbl_package_vehicle')->where('package_id', $package_id)->whereNotIn('id', $vechile_ids)->delete();
+                }
+            }
+
+            if ($movements) {
+                $movement_ids = [];
+                foreach ($movements as $movement) {
+                    if ($movement['id'] != "0") {
+                        $movement_ids[] = $movement['id'];
+                        $movement_id = $movement['id'];
+
+                        $movement_data = [
+                            'day' => $movement['day'],
+                            'package_id'         => $package_id,
+                            'updated_date' => date('Y-m-d H:i:s')
+                        ];
+
+                        $db->table('tbl_package_movment')->where('id', $movement['id'])->update($movement_data);
+                    }elseif ($movement['id'] == 0) {
+                        $movement_data = [
+                            'day' => $movement['day'],
+                            'package_id'         => $package_id,
+                            'created_date' => date('Y-m-d H:i:s'),
+                            'updated_date' => date('Y-m-d H:i:s')
+                        ];
+
+                       $insert = $db->table('tbl_package_movment')->insert($movement_data);
+                       $insertID = $db->insertID();
+                       $movement_id = $insertID;
+                       $movement_ids[] = $insertID;
+                    }
+
+                    $inventories = $movement['inventatory_details'];
+                    $inventory_ids = [];
+                    foreach ($inventories as $inventory) {
+                        if ($inventory['id'] != "0") {
+                            $inventory_ids[] = $inventory['id'];                            
+                            $inventory_data = [
+                                'movement_id' => $movement_id,
+                                'package_id'         => $package_id,
+                                'day' => $movement['day'],
+                                'time' => $inventory['time'],
+                                'description' => $inventory['description'],
+                                'updated_date' => date('Y-m-d H:i:s')
+                            ];
+
+                            $db->table('tbl_package_day_mapping')->where('id', $inventory['id'])->update($inventory_data);
+                        }elseif ($inventory['id'] == 0) {
+                            $inventory_data = [
+                                'movement_id' => $movement_id,
+                                'package_id'         => $package_id,
+                                'day' => $movement['day'],
+                                'time' => $inventory['time'],
+                                'description' => $inventory['description'],
+                                'created_date' => date('Y-m-d H:i:s'),
+                                'updated_date' => date('Y-m-d H:i:s')
+                            ];
+
+                            $insert = $db->table('tbl_package_day_mapping')->insert($inventory_data);
+                            $insertID1 = $db->insertID();
+                            $inventory_ids[] = $insertID1;
+                        }
+                    }
+
+                    if ($inventory_ids) {
+                        $remove = $db->table('tbl_package_day_mapping')->where('movement_id', $movement_id)->whereNotIn('id', $inventory_ids)->delete();
+                    }
+                }
+
+                if ($movement_ids) {
+                    $remove = $db->table('tbl_package_movment')->where('package_id', $package_id)->whereNotIn('id', $movement_ids)->delete();
+                }
+            }
+
+            if ($image_array) {
+                $imgs = $db->table('tbl_package_image')->where('package_id', $package_id)->delete();
+                foreach ($this->request->getFileMultiple('image_array') as $file) {
+                    $package_pic_path = 'public/assets/uploads/package/package_pic/';
+                    $new_name = $file->getRandomName();
+                    $data = [
+                        'package_id' => $package_id,
+                        'package_imgs' => $package_pic_path . $new_name,
+                        'created_date' => date('Y-m-d H:i:s')
+                    ];
+                    $save = $ImagePackageModels->insert($data);
+                    $file->move($package_pic_path, $new_name);
+                }
+            }
+
+            $packageDetails = $db->table('tbl_package')->where('id', $package_id)->get()->getRowArray();
+            $packageDetails['movements'] = $db->table('tbl_package_movment')->where('package_id', $package_id)->get()->getResult();
+            $packageDetails['vehicles'] = $db->table('tbl_package_vehicle')->where('package_id', $package_id)->get()->getResult();
+            $packageDetails['images'] = $db->table('tbl_package_image')->where('package_id', $package_id)->get()->getResult();
+
+            return $service->success([
+                'message'       =>  Lang('Language.update_success'),
+                'data'          =>  ""
+                ],
+                ResponseInterface::HTTP_OK,
+                $this->response
+            );
+        } else {
+            return $service->fail(
+                [
+                    'errors'    =>  "",
+                    'message'   =>  Lang('Language.update_failed'),
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+
+
+        if ($PackageModels->insert($data)) {
+
+            $movment_json = $this->request->getPost("movment_json");
+            $package_id = $PackageModels->insertID();
+            $image_array = $this->request->getPost("image_array");
+            $vehicle_json = $this->request->getPost("vehicle_json");
+
+            $movements = json_decode($movment_json, TRUE);
+            $vechiles = json_decode($vehicle_json, TRUE);
+
+            // inserting movment  in tables
+            foreach ($movements['inventatory'] as $key => $value) {
+                $day_record = json_encode($value['inventatory_day']);
+                $day = trim($day_record, '"');
+                $add_movement = [
+                    'package_id' => $package_id,
+                    'day'=> $day
+                ];
+
+                $insert_Movment = $MovmentModels->insert($add_movement);
+                $MovmentId = $MovmentModels->insertID();
+                foreach ($value['inventatory_details'] as $k => $val) {
+                    $time_record =  json_encode($val['time']);
+                    $dec_record = json_encode($val['description']);
+                    $time = trim($time_record, '"');
+                    $description = trim($dec_record, '"');
+
+                    $movment_data = [
+                        'package_id' => $package_id,
+                        'movement_id'=>$MovmentId,
+                        'time' => $time,
+                        'description' => $description,
+                        'day'=>$day
+                    ];  
+                    $insert_Movment = $DayMappingModel->insert($movment_data);
+                }
+            }
+
+            // inserting vechiles
+            foreach ($vechiles['vechiles_details'] as $kk => $vall) {
+                $no_of_pox_rec =  json_encode($vall['no_of_pox']);
+                $vehicle_type_rec = json_encode($vall['vehicle_type']);
+                $rate_rec = json_encode($vall['rate']);
+                $no_of_pox = trim($no_of_pox_rec, '"');
+                $vehicle_type = trim($vehicle_type_rec, '"');
+                $rate = trim($rate_rec, '"');
+
+                $vechiles_data = [
+                    'package_id' => $package_id,
+                    'no_of_pox_id' => $no_of_pox,
+                    'vehicle_id' => $vehicle_type,
+                    'rate' => $rate,
+                ];
+                $insert_vechile = $VehicleModels->insert($vechiles_data);
+            }
+             // fetching record of  Vechile  data
+            $db = \Config\Database::connect();
+            $builder = $db->table('tbl_package_vehicle');
+            $builder->select('MIN(rate) AS SmallestPrice');
+            $builder->where('package_id', $package_id);
+            $Smallestamount = $builder->get()->getResult();
+
+            $SmallestPrices = $Smallestamount[0]->SmallestPrice;
+
+            // update package for Rate  
+            $update_package = [
+            "package_amount" => $SmallestPrices
+            ];
+
+            $PackageModels->update($package_id, $update_package);
 
             foreach ($this->request->getFileMultiple('image_array') as $file) {
 
