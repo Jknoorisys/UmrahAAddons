@@ -34,8 +34,8 @@
                     <tr>
                     <td class="" align="left">
                         <p style="margin-top: 35px;"> Kind Regards,</p>
-                        <p > Team Umrah Addons</p>
-                        <p ><a href="www.umrahaddons.com"> www.umrahaddons.com </a></p>
+                        <p > Team Umrah Plus</p>
+                        <p ><a href="https://umrahplus.net"> https://umrahplus.net </a></p>
                     </td>
                     </tr>
 
@@ -71,7 +71,7 @@
                     <tr>
                     <td class="" bgcolor="" align="left" style="padding-top: 20px;">
                         <p>Dear <?= $user_name ?>, </p>
-                        <p>  Thanks for choosing Umrah Addons. </p>
+                        <p>  Thanks for choosing Umrah Plus. </p>
                         <p>  Your enquiry has been successfully received. Kindly check your email. </p>
                         <p>  The guide will contact you soon. </p>
                         <p style="margin-top: 35px;"> We wish you a happy journey. </p>
@@ -81,8 +81,8 @@
                     <tr>
                     <td class="" align="left">
                         <p style="margin-top: 35px;"> Kind Regards,</p>
-                        <p> Team Umrah Addons</p>
-                        <p><a href="www.umrahaddons.com"> www.umrahaddons.com </a></p>
+                        <p> Team Umrah Plus</p>
+                        <p><a href="https://umrahplus.net"> https://umrahplus.net </a></p>
                     </td>
                     </tr>
 

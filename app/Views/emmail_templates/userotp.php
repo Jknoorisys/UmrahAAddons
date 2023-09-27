@@ -31,8 +31,8 @@
             	<tr>
                 <td class="" align="left">
                   <p style="margin-top: 35px;"> Kind Regards,</p>
-                  <p> Team Umrah Addons</p>
-                  <p><a href="www.umrahaddons.com"> www.umrahaddons.com </a></p>
+                  <p> Team Umrah Plus</p>
+                  <p><a href="https://umrahplus.net"> https://umrahplus.net </a></p>
                 </td>
               </tr>
 

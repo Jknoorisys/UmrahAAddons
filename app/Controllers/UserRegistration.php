@@ -734,7 +734,7 @@ class UserRegistration extends ResourceController
             helper('notifications');
             $userinfo = $UserModels->where("email", $email_id)->first();
             $title = "Registration";
-            $message = "Thanks for registering with Umrah Addons.";
+            $message = "Thanks for registering with Umrah Plus.";
             $fmc_ids = array($userinfo['device_token']);
             
             $notification = array(
@@ -842,7 +842,8 @@ class UserRegistration extends ResourceController
         $userdata = $UserModels->where("country_code", $country_code)->where("mobile", $mobile)->first();
         if (!empty($userdata)) {
 
-            $token = $this->service->getSignedAccessTokenForUser('user', $userdata['id']);
+            // $token = $this->service->getSignedAccessTokenForUser('user', $userdata['id']);
+            $token = '1234567890';
 
             $updateuser = [
                 // 'ota_id' => $ota_id,
@@ -900,8 +901,9 @@ class UserRegistration extends ResourceController
             ];
 
             $user_id = $UserModels->insert($newuser);
-            $token = $this->service->getSignedAccessTokenForUser('user', $user_id);
+            // $token = $this->service->getSignedAccessTokenForUser('user', $user_id);
 
+            $token = '1234567890';
             $updateuser = [
                 'ota_id' => $ota_id,
                 'device_type' => $device_type,
@@ -917,7 +919,7 @@ class UserRegistration extends ResourceController
             $userinfo = $UserModels->where("mobile", $mobile)->first();
 
             $title = "Registration";
-            $message = "Thanks for registering with Umrah Addons.";
+            $message = "Thanks for registering with Umrah Plus.";
             $fmc_ids = array($userinfo['device_token']);
             
             $notification = array(
@@ -1078,7 +1080,7 @@ class UserRegistration extends ResourceController
             helper('notifications');
             $userinfo = $GuideDocModel->where("email", $email)->first();
             $title = "Registration";
-            $message = "Thanks for registering with Umrah Addons.";
+            $message = "Thanks for registering with Umrah Plus.";
             $fmc_ids = array($userinfo['device_token']);
             
             $notification = array(
