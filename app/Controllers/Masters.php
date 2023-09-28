@@ -91,7 +91,7 @@ class Masters extends ResourceController
                 $db = db_connect();
                 $app_version = $db->table('tbl_users_app_version')->select('*')->where('app_name',$app_name)->get()->getRow();
                 if ($device_type == 'android') {
-                    if(version_compare($app_ver, $app_version->app_version_android)) {
+                    if($app_ver < $app_version->app_version_android) {
                         if($app_version->forcefully_update_android == 1) 
                         {
                             return $service->success([
@@ -121,7 +121,7 @@ class Masters extends ResourceController
                         );
                     }
                 } else {
-                    if(version_compare($app_ver, $app_version->app_version_ios)) {
+                    if($app_ver < $app_version->app_version_ios) {
                         if($app_version->forcefully_update_android == 1) 
                         {
                             return $service->success([
