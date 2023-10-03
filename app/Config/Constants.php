@@ -93,13 +93,13 @@ defined("STRIPE_SECRET") || define('STRIPE_SECRET', "sk_test_51NY56dJcWpwScJc8xc
 // defined("USERNAME") || define('USERNAME', "info@nooridev.in");
 // defined("PASSWORD") || define('PASSWORD', "HsF9l5PEctZ8");
 // defined("FROM_EMAIL") || define('FROM_EMAIL', "info@nooridev.in");
-// defined("FROM_NAME") || define('FROM_NAME', "Umrahaaddons");
+// defined("FROM_NAME") || define('FROM_NAME', "Umrah Plus");
 
 defined("HOST") || define('HOST', "smtp.gmail.com");
 defined("USERNAME") || define('USERNAME', "Noorisys Technologies Pvt Ltd");
 defined("PASSWORD") || define('PASSWORD', "mfhvxyvoiihvfmxe");
 defined("FROM_EMAIL") || define('FROM_EMAIL', "noori.developer@gmail.com");
-defined("FROM_NAME") || define('FROM_NAME', "Umrahaaddons");
+defined("FROM_NAME") || define('FROM_NAME', "Umrah Plus");
 
 defined('PAGE_LENGTH') || define('PAGE_LENGTH', 0);
 defined('LANGUAGES')   || define('LANGUAGES', 'en,ar,ur');

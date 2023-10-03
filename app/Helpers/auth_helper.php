@@ -64,7 +64,7 @@ if (!function_exists('sendEmail')) {
     function sendEmail($to_email, $subject, $message,$filename)
     {
         $email = \Config\Services::email();
-        $email->setFrom('noori.developer@gmail.com','Umrahaaddons', $subject);
+        $email->setFrom('noori.developer@gmail.com','Umrah Plus', $subject);
         $email->setTo($to_email);
         $email->setSubject($subject);
         $email->setMessage($message); //your message here

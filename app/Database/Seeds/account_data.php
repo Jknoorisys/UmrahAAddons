@@ -14,7 +14,7 @@ class AccountData extends Seeder
       'bank_name'   => 'ICICI',
       'bank_branch'   => 'Malegaon',
       'amount'   => '00',
-      'remark'   => 'Umrahaddons Money',
+      'remark'   => 'Umrah Plus Money',
       'status'   => 'Active',
       'created_date'   => date('Y-m-d H:i:s'),
       'updated_date'   => date('Y-m-d H:i:s'),
