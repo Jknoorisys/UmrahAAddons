@@ -45,8 +45,8 @@
                     </tr>
 
                     <tr>
-                    <td align="left"><a href="#" rel="nofollow"><img src="https://tlr.stripocdn.email/content/guids/CABINET_e48ed8a1cdc6a86a71047ec89b3eabf6/images/92051534250512328.png" alt="App Store" class="adapt-img" title="App Store" width="133"></a>
-                    <a href="#" rel="nofollow"><img class="adapt-img" src="https://tlr.stripocdn.email/content/guids/CABINET_e48ed8a1cdc6a86a71047ec89b3eabf6/images/82871534250557673.png" alt="Google Play" title="Google Play" width="133"></a>
+                    <td align="left"><a href="https://apps.apple.com/us/app/umrahplus/id1640429513" rel="nofollow"><img src="https://tlr.stripocdn.email/content/guids/CABINET_e48ed8a1cdc6a86a71047ec89b3eabf6/images/92051534250512328.png" alt="App Store" class="adapt-img" title="App Store" width="133"></a>
+                    <a href="https://play.google.com/store/apps/details?id=com.app.umacustomer" rel="nofollow"><img class="adapt-img" src="https://tlr.stripocdn.email/content/guids/CABINET_e48ed8a1cdc6a86a71047ec89b3eabf6/images/82871534250557673.png" alt="Google Play" title="Google Play" width="133"></a>
                     </td>
                     </tr>
 
