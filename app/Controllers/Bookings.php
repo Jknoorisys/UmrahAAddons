@@ -125,7 +125,9 @@ class Bookings extends ResourceController
               ->join('tbl_provider as pro','pro.id = b.provider_id')
               ->join('tbl_ota as o','o.id = b.ota_id')
               ->where($whereCondition)
-              ->orderBy('b.id', 'DESC')
+            //   ->orderBy('b.id', 'DESC')
+              ->orderBy("CASE WHEN booking_status = 'pending' THEN 1 ELSE 2 END")
+              ->orderBy('created_date', 'DESC')      
               ->limit($limit, $offset)
               ->get()->getResult();
 

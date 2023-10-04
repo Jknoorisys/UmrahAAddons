@@ -1923,6 +1923,7 @@ class Meals extends ResourceController
                     'session_id' => '',
                     'checkout_id' => 'COD',
                     'remianing_amount_pay' => 0,
+                    'created_date' => date('Y-m-d H:i:s'),
                 ];
 
                 if ($bookingModel->insert($inprocessbooking)) {
