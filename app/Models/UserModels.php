@@ -29,6 +29,10 @@ class UserModels extends Model
 			$criterial .= " AND l.email LIKE '%" . $trnx_filters['email'] . "%'";
 		}
 
+		if (isset($trnx_filters['mobile']) && $trnx_filters['mobile'] != "") {
+			$criterial .= " AND l.mobile LIKE '%" . $trnx_filters['mobile'] . "%'";
+		}
+
 		$query = "SELECT l.*,c.name AS country_name,s.name AS state_name,ci.name AS city_name FROM tbl_user AS l
        LEFT JOIN countries AS c ON c.id = l.country LEFT JOIN states AS s ON s.id = l.state LEFT JOIN cities AS ci ON ci.id = l.city ";
 

@@ -245,18 +245,21 @@ class ListFilter extends ResourceController
 		$filter['transfer']['firstname'] = '';
 		$filter['transfer']['lastname'] = '';
 		$filter['transfer']['email'] = '';
+		$filter['transfer']['mobile'] = '';
 		$filter['transfer']['add_filter'] = '';
 
 		if (isset($_POST['add_filter']) &&  $_POST['add_filter'] == 1) {
 			$filter['transfer']['firstname'] = (isset($_POST['firstname']) && !empty($_POST['firstname'])) ? trim($_POST['firstname']) : '';
 			$filter['transfer']['lastname'] = (isset($_POST['lastname']) && !empty($_POST['lastname'])) ? trim($_POST['lastname']) : '';
 			$filter['transfer']['email'] = (isset($_POST['email']) && !empty($_POST['email'])) ? trim($_POST['email']) : '';
+			$filter['transfer']['mobile'] = (isset($_POST['mobile']) && !empty($_POST['mobile'])) ? trim($_POST['mobile']) : '';
 		}
 
 		if (isset($_POST['add_filter']) && $_POST['add_filter'] == 0) {
 			$filter['transfer']['firstname'] = '';
 			$filter['transfer']['lastname'] = '';
 			$filter['transfer']['email'] = '';
+			$filter['transfer']['mobile'] = '';
 		}
 		$complaints = $UserModels->getallTransactionlist($filter['transfer'], $per_page, $page_no, $add_filter, $abc = 1);
 		$countlist = $UserModels->getallTransactionlist($filter['transfer'], $per_page, $page_no, $add_filter, $abc = 0);
