@@ -480,6 +480,11 @@ class Dashboard extends ResourceController
             $info['total_sabeel_completed_bookings'] =  $db->table('tbl_sabeel_booking')->where('provider_id', $_POST['logged_user_id'])->where('payment_status', 'completed')->where('booking_status', 'accepted')->countAllResults();
             $info['total_sabeel_pending_bookings'] =  $db->table('tbl_sabeel_booking')->where('provider_id', $_POST['logged_user_id'])->where('payment_status', 'completed')->where('booking_status', 'pending')->countAllResults();
             
+              // Full Package
+              $info['total_full_package'] =  $db->table('tbl_full_package')->where('provider_id', $_POST['logged_user_id'])->where('status !=', '2')->countAllResults();
+              $info['total_full_package_bookings'] =  $db->table('tbl_full_package_enquiry')->join('tbl_full_package', 'tbl_full_package_enquiry.full_package_id = tbl_full_package.id')->where('tbl_full_package.provider_id', $_POST['logged_user_id'])->countAllResults();
+              $info['total_full_package_completed_bookings'] =  $db->table('tbl_full_package_enquiry')->join('tbl_full_package', 'tbl_full_package_enquiry.full_package_id = tbl_full_package.id')->where('tbl_full_package.provider_id', $_POST['logged_user_id'])->where('booking_status', 'accepted')->countAllResults();
+              $info['total_full_package_pending_bookings'] =  $db->table('tbl_full_package_enquiry')->join('tbl_full_package', 'tbl_full_package_enquiry.full_package_id = tbl_full_package.id')->where('tbl_full_package.provider_id', $_POST['logged_user_id'])->where('booking_status', 'pending')->countAllResults();
 
             return $service->success([
                 'message'       =>  Lang('Language.details_success'),
@@ -571,11 +576,37 @@ class Dashboard extends ResourceController
             $info['total_ota'] =  $db->table('tbl_ota')->countAllResults();
             $info['total_meals'] =  $db->table('tbl_meals')->where('status !=','deleted')->countAllResults();
             $info['total_sabeel'] =  $db->table('tbl_sabeel')->where('status !=','0')->countAllResults();
-
             $info['total_package'] =  $db->table('tbl_package')->where('status','active')->countAllResults();
+            $info['total_full_package'] =  $db->table('tbl_full_package')->where('status !=','2')->countAllResults();
+
             $info['total_package_bookings'] =  $db->table('tbl_booking')->where('booking_status_user','confirm')->countAllResults();
             $info['total_sabeel_bookings'] =  $db->table('tbl_sabeel_booking')->where('booking_status_user','confirm')->countAllResults();
             $info['total_meals_bookings'] =  $db->table('meals_booking')->where('booking_status_user','confirm')->countAllResults();
+            $info['total_full_package_bookings'] =  $db->table('tbl_full_package_enquiry')->countAllResults();
+            $info['total_visa_bookings'] =  $db->table('tbl_visa_enquiry')->countAllResults();
+            $info['total_transport_bookings'] =  $db->table('tbl_transport_enquiry')->countAllResults();
+
+
+            $info['pending_package_bookings'] =  $db->table('tbl_booking')->where('booking_status','pending')->countAllResults();
+            $info['pending_sabeel_bookings'] =  $db->table('tbl_sabeel_booking')->where('booking_status','pending')->countAllResults();
+            $info['pending_meals_bookings'] =  $db->table('meals_booking')->where('booking_status','pending')->countAllResults();
+            $info['pending_full_package_bookings'] =  $db->table('tbl_full_package_enquiry')->where('booking_status', 'pending')->countAllResults();
+            $info['pending_visa_bookings'] =  $db->table('tbl_visa_enquiry')->where('booking_status', 'pending')->countAllResults();
+            $info['pending_transport_bookings'] =  $db->table('tbl_transport_enquiry')->where('booking_status', 'pending')->countAllResults();
+
+            $info['accepted_package_bookings'] =  $db->table('tbl_booking')->where('booking_status','accepted')->countAllResults();
+            $info['accepted_sabeel_bookings'] =  $db->table('tbl_sabeel_booking')->where('booking_status','accepted')->countAllResults();
+            $info['accepted_meals_bookings'] =  $db->table('meals_booking')->where('booking_status','accepted')->countAllResults();
+            $info['accepted_full_package_bookings'] =  $db->table('tbl_full_package_enquiry')->where('booking_status', 'accepted')->countAllResults();
+            $info['accepted_visa_bookings'] =  $db->table('tbl_visa_enquiry')->where('booking_status', 'accepted')->countAllResults();
+            $info['accepted_transport_bookings'] =  $db->table('tbl_transport_enquiry')->where('booking_status', 'accepted')->countAllResults();
+
+            $info['rejected_package_bookings'] =  $db->table('tbl_booking')->where('booking_status','rejected')->countAllResults();
+            $info['rejected_sabeel_bookings'] =  $db->table('tbl_sabeel_booking')->where('booking_status','rejected')->countAllResults();
+            $info['rejected_meals_bookings'] =  $db->table('meals_booking')->where('booking_status','rejected')->countAllResults();
+            $info['rejected_full_package_bookings'] =  $db->table('tbl_full_package_enquiry')->where('booking_status', 'rejected')->countAllResults();
+            $info['rejected_visa_bookings'] =  $db->table('tbl_visa_enquiry')->where('booking_status', 'rejected')->countAllResults();
+            $info['rejected_transport_bookings'] =  $db->table('tbl_transport_enquiry')->where('booking_status', 'rejected')->countAllResults();
 
             return $service->success([
                 'message'       =>  Lang('Language.details_success'),
