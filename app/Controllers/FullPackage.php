@@ -1140,15 +1140,17 @@ class FullPackage extends BaseController
 
                 $title = "Full package Enquiry";
                 $message = "Your Enquiry has been sent. Thank you.";
-                $fmc_ids = array($userinfo->device_token);
+                if($userinfo){
+                    $fmc_ids = $userinfo->device_token ? array($userinfo->device_token) : '';
                 
-                $notification = array(
-                    'title' => $title ,
-                    'message' => $message,
-                    'click_action' => 'FLUTTER_NOTIFICATION_CLICK', // DO NOT CHANGE THE VALUE
-                    'date' => date('Y-m-d H:i'),
-                );
-                if($userinfo->device_type!='web'){ sendFCMMessage($notification, $fmc_ids); }
+                    $notification = array(
+                        'title' => $title ,
+                        'message' => $message,
+                        'click_action' => 'FLUTTER_NOTIFICATION_CLICK', // DO NOT CHANGE THE VALUE
+                        'date' => date('Y-m-d H:i'),
+                    );
+                    if($userinfo->device_type!='web'){ sendFCMMessage($notification, $fmc_ids); }
+                }
                 // EnD
 
                 return $service->success([

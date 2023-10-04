@@ -609,7 +609,7 @@ class Enquiry extends ResourceController
                          $db = db_connect();
                          $userinfo = $db->table('tbl_user')
                              ->select('*')
-                             ->where('id', $_POST['logged_user_id'])
+                             ->where('id', $user_id)
                              ->get()->getRow();
                          
                             if($service_type=='guide') {
@@ -629,15 +629,17 @@ class Enquiry extends ResourceController
                          } else {
                              $message = "Sorry, your enquiry has been rejected, you can contact another provider.";
                          }
-                         $fmc_ids = array($userinfo->device_token);
-                         
-                         $notification = array(
-                             'title' => $title ,
-                             'message' => $message,
-                             'click_action' => 'FLUTTER_NOTIFICATION_CLICK', // DO NOT CHANGE THE VALUE
-                             'date' => date('Y-m-d H:i'),
-                         );
-                         if($userinfo->device_type!='web'){ sendFCMMessage($notification, $fmc_ids); }
+                         if($userinfo){
+                            $fmc_ids = $userinfo->device_token ? array($userinfo->device_token) : '';
+                        
+                            $notification = array(
+                                'title' => $title ,
+                                'message' => $message,
+                                'click_action' => 'FLUTTER_NOTIFICATION_CLICK', // DO NOT CHANGE THE VALUE
+                                'date' => date('Y-m-d H:i'),
+                            );
+                            if($userinfo->device_type!='web'){ sendFCMMessage($notification, $fmc_ids); }
+                        }
                          // EnD
 
                         return $service->success([
@@ -843,7 +845,7 @@ class Enquiry extends ResourceController
                         $db = db_connect();
                         $userinfo = $db->table('tbl_user')
                             ->select('*')
-                            ->where('id', $_POST['logged_user_id'])
+                            ->where('id', $user_id)
                             ->get()->getRow();
                          
                         if($service_type=='package') {
