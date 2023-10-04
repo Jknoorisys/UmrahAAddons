@@ -1749,6 +1749,8 @@ class Meals extends ResourceController
         $meals_type       = $this->request->getVar('meals_type');
         $meals_service    = $this->request->getVar('meals_service');
         $city             = $this->request->getVar('city');
+        $lat              = $this->request->getVar('lat');
+        $long             = $this->request->getVar('long');
         $address          = $this->request->getVar('address');
         $cost_per_day_person    = $this->request->getVar('cost_per_day_person');
         $no_of_days       = $this->request->getVar('no_of_days');
@@ -1900,6 +1902,8 @@ class Meals extends ResourceController
                     'meals_type' => $meals_type,
                     'meals_service' => $meals_service,
                     'city' => $city,
+                    'lat'  => $lat ? $lat : '',
+                    'long'  => $long ? $long : '',
                     'address' => $address,
                     'cost_per_day_person' => $cost_per_day_person,
                     'no_of_days' => $no_of_days,
