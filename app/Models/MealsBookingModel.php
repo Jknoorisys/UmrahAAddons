@@ -14,7 +14,7 @@ class MealsBookingModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['provider_id','meals_id','user_id','ota_id','full_name','mobile','no_of_person','start_date','end_date','meals_type','meals_service','city','address','cost_per_day_person','no_of_days','total_cost','notes','status','booking_status','reject_reason','created_date','booking_status_user','booking_status_stripe','payment_status','provider_payment_status','session_id','checkout_id','admin_commision','ota_commision','provider_commision','total_admin_comm_amount','remaining_admin_comm_amount','ota_commision_amount','provider_amount','ota_payment_status','remianing_amount_pay'];
+    protected $allowedFields    = ['provider_id','meals_id','user_id','ota_id','full_name','mobile','no_of_person','start_date','end_date','meals_type','meals_service','city','lat','long','address','cost_per_day_person','no_of_days','total_cost','notes','status','booking_status','reject_reason','created_date','booking_status_user','booking_status_stripe','payment_status','provider_payment_status','session_id','checkout_id','admin_commision','ota_commision','provider_commision','total_admin_comm_amount','remaining_admin_comm_amount','ota_commision_amount','provider_amount','ota_payment_status','remianing_amount_pay'];
 
     // Dates
     protected $useTimestamps = false;
