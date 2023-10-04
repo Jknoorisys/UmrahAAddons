@@ -9,11 +9,12 @@ use App\Models\FullPackage;
 use App\Models\FullPackageDates;
 use App\Models\FullPackageImages;
 use App\Models\Visa;
+use App\Models\ZiyaratPoints;
+use App\Models\ZiyaratPointsImages;
 use CodeIgniter\HTTP\ResponseInterface;
 use Exception;
 
 use Config\Services;
-
 
 // headers
 header("Access-Control-Allow-Origin: *");
@@ -29,12 +30,12 @@ class UserLists extends BaseController
 		$this->service  = new Services();
 		helper('auth');
 
-        $lang = $_POST["language"];
+        $lang = (isset($_POST["language"]) && !empty($_POST["language"])) ? $_POST["language"] : '';
 		if (!empty($lang)) {
 			$language = \Config\Services::language();
 			$language->setLocale($lang);
 		} else {
-			echo json_encode(['status' => 403, 'messages' => 'language required']);
+			echo json_encode(['status' => 403, 'messages' => 'Language is Required']);
 			die();
 		}
 	}
@@ -129,7 +130,7 @@ class UserLists extends BaseController
                     'message'       =>  Lang('Language.list_success'),
                     'data'          =>  [
                         'total'             =>  $total,
-                        'duasList'         =>  $duasData,
+                        'list'         =>  $duasData,
                     ]
                 ],
                 ResponseInterface::HTTP_OK,
@@ -530,6 +531,290 @@ class UserLists extends BaseController
             return $service->fail(
                 [
                 'errors'    =>  $e->getMessage(),
+                    'message'   =>  Lang('Language.details_fetch_failed'),
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+    }
+
+    // City List by Javeriya
+	public function listOfCities()
+    {
+        $service           =  new Services();
+        $service->cors();
+
+        // $pageNo           =  $this->request->getVar('pageNo');
+
+        $search           =  $this->request->getVar('search');
+
+        // $rules = [
+        //     'pageNo' => [
+        //         'rules'         =>  'required|greater_than[' . PAGE_LENGTH . ']|numeric',
+        //         'errors'        => [
+        //             'required'      =>  Lang('Language.required'),
+        //             'greater_than'  =>  Lang('Language.greater_than', [PAGE_LENGTH]),
+        //             'numeric'       =>  Lang('Language.numeric', [$pageNo]),
+        //         ]
+        //     ]
+        // ];
+
+        // if(!$this->validate($rules)) {
+        //     return $service->fail(
+        //         [
+        //             'errors'     =>  $this->validator->getErrors(),
+        //             'message'   =>  lang('Language.invalid_inputs')
+        //         ],
+        //         ResponseInterface::HTTP_BAD_REQUEST,
+        //         $this->response
+        //     );
+        // }
+
+        try{
+
+            // $currentPage   = ( !empty( $pageNo ) ) ? $pageNo : 1;
+            // $offset        = ( $currentPage - 1 ) * PER_PAGE;
+            // $limit         =  PER_PAGE;
+
+            // By Query Builder
+            $db = db_connect();
+            $table = $db->table('tbl_city_master as c')
+                        ->where('c.status', '1');
+            
+                        
+            if(isset($search) && $search!=''){
+                $table->like('c.name', $search);            
+            }
+            
+            // Clone the builder to use for total count query
+            $totalBuilder = clone $table;
+
+            // Calculate the total count
+            $total = $totalBuilder->countAllResults(false);
+
+            $pointData = $table->orderBy('c.id', 'DESC')
+                        // ->limit($limit, $offset)
+                        ->get()->getResult();
+
+            return $service->success(
+                [
+                    'message'       =>  Lang('Language.list_success'),
+                    'data'          =>  [
+                    'total'         =>  $total,
+                    'city_list'      =>  $pointData,
+                    ]
+                ],
+                ResponseInterface::HTTP_OK,
+                $this->response
+            );
+
+        } catch (Exception $e) {
+            return $service->fail(
+                [
+                    'errors'    =>  "",
+                    'message'   =>  Lang('Language.fetch_list'),
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+    }
+
+    // Ziyarat Points List by Javeriya
+	public function listOfPoint()
+    {
+        $service           =  new Services();
+        $service->cors();
+
+        $pageNo           =  $this->request->getVar('pageNo');
+        $user_role        =  'user';
+
+        $search           =  $this->request->getVar('search');
+        $language = $this->request->getVar('lang');
+
+        $rules = [
+            'pageNo' => [
+                'rules'         =>  'required|greater_than[' . PAGE_LENGTH . ']|numeric',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                    'greater_than'  =>  Lang('Language.greater_than', [PAGE_LENGTH]),
+                    'numeric'       =>  Lang('Language.numeric', [$pageNo]),
+                ]
+            ],
+            'lang' => [
+                'rules'         =>  'required|in_list[' . LANGUAGES . ']',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                    'in_list'       =>  Lang('Language.in_list', [LANGUAGES]),
+                ]
+            ],
+            'city_id' => [
+                'rules'         =>  'required|numeric',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+        ];
+
+        if(!$this->validate($rules)) {
+            return $service->fail(
+                [
+                    'errors'     =>  $this->validator->getErrors(),
+                    'message'   =>  lang('Language.invalid_inputs')
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+
+        try{
+
+            $currentPage   = ( !empty( $pageNo ) ) ? $pageNo : 1;
+            $offset        = ( $currentPage - 1 ) * PER_PAGE;
+            $limit         =  PER_PAGE;
+            $city_id       =  $this->request->getVar('city_id');
+
+            $whereCondition = "";
+
+            if($user_role == 'admin'){ $whereCondition .= "s.status != '2'"; } 
+
+            if($user_role == 'user'){ $whereCondition .= "s.status = '1'"; } 
+
+            if($user_role == 'provider'){ $whereCondition .= "s.status = '1'"; }
+
+            // By Query Builder
+            $db = db_connect();
+            $table = $db->table('tbl_ziyarat_points as s')
+                        ->join('tbl_city_master as c','c.id = s.city_id')
+                        ->where('city_id', $city_id)
+                        ->where($whereCondition);
+            
+                        
+            if(isset($search) && $search!=''){
+                $table->like('s.name_en', $search);
+                $table->orLike('s.title_en', $search);
+                $table->orLike('c.name', $search);            
+            }
+            
+            if ($language == 'en') {
+                $table->select('s.id,c.name as city_name, s.name_en as name, s.title_en as title, s.description_en as description, s.main_img, s.lat, s.long, s.status, s.created_at, s.updated_at');
+            } else {
+                $table->select('s.id,c.name as city_name, s.name_ur as name, s.title_ur as title, s.description_ur as description, s.main_img, s.lat, s.long, s.status, s.created_at, s.updated_at');
+            }
+            
+            // Clone the builder to use for total count query
+            $totalBuilder = clone $table;
+
+            // Calculate the total count
+            $total = $totalBuilder->countAllResults(false);
+
+            $pointData = $table->orderBy('s.id', 'DESC')
+                        ->limit($limit, $offset)
+                        ->get()->getResult();
+
+
+            return $service->success(
+                [
+                    'message'       =>  Lang('Language.list_success'),
+                    'data'          =>  [
+                        'total'             =>  $total,
+                        'list'         =>  $pointData,
+                    ]
+                ],
+                ResponseInterface::HTTP_OK,
+                $this->response
+            );
+
+        } catch (Exception $e) {
+            return $service->fail(
+                [
+                    'errors'    =>  "",
+                    'message'   =>  Lang('Language.fetch_list'),
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+    }
+
+	// view Ziyarat Point by Javeriya
+	public function viewPoint()
+    {
+        $pointModel        =  new ZiyaratPoints();
+        $pointImageModel   = new ZiyaratPointsImages();
+        $service           =  new Services();
+        $service->cors();
+
+        $point_id            =  $this->request->getVar('point_id');
+        $language = $this->request->getVar('lang');
+
+        $rules = [
+            'point_id' => [
+                'rules'         =>  'required|numeric',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+            'lang' => [
+                'rules'         =>  'required|in_list[' . LANGUAGES . ']',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                    'in_list'       =>  Lang('Language.in_list', [LANGUAGES]),
+                ]
+            ],
+        ];
+
+        if(!$this->validate($rules)) {
+            return $service->fail(
+                [
+                    'errors'     =>  $this->validator->getErrors(),
+                    'message'   =>  lang('Language.invalid_inputs')
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+
+        try {
+           // By Query Builder
+           $db = db_connect();
+           $table = $db->table('tbl_ziyarat_points as s')
+                       ->join('tbl_city_master as c','c.id = s.city_id')
+                       ->where('s.id', $point_id);
+           
+           if ($language == 'en') {
+               $table->select('s.id,c.name as city_name, s.name_en as name, s.title_en as title, s.description_en as description, s.main_img, s.lat, s.long, s.status, s.created_at, s.updated_at');
+           } else {
+               $table->select('s.id,c.name as city_name, s.name_ur as name, s.title_ur as title, s.description_ur as description, s.main_img, s.lat, s.long, s.status, s.created_at, s.updated_at');
+           }
+
+            $pointDetails = $table->get()->getRow();
+            if(!empty($pointDetails)) 
+            {
+                $pointDetails->images = $pointImageModel->where("point_id", $point_id)->findAll();
+                return $service->success([
+                        'message'       =>  Lang('Language.details_success'),
+                        'data'          =>  $pointDetails
+                    ],
+                    ResponseInterface::HTTP_CREATED,
+                    $this->response
+                );
+            } else {
+                return $service->fail(
+                    [
+                        'errors'    =>  "",
+                        'message'   =>  Lang('Language.details_fetch_failed'),
+                    ],
+                    ResponseInterface::HTTP_BAD_REQUEST,
+                    $this->response
+                );
+            }
+
+        } catch (Exception $e) {
+            return $service->fail(
+                [
+                    'errors'    =>  $e->getMessage(),
                     'message'   =>  Lang('Language.details_fetch_failed'),
                 ],
                 ResponseInterface::HTTP_BAD_REQUEST,

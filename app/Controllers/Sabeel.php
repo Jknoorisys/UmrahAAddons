@@ -1358,7 +1358,9 @@ class Sabeel extends BaseController
                     ->select("e.*, CONCAT(p.firstname,' ',p.lastname) as provider_name, m.name, CONCAT(u.firstname,' ',u.lastname) as user_name")
                     // ->where('e.status','1')
                     ->where($whereCondition)
-                    ->orderBy('e.id', 'DESC')
+                    // ->orderBy('e.id', 'DESC')
+                    ->orderBy("CASE WHEN booking_status = 'pending' THEN 1 ELSE 2 END")
+                    ->orderBy('created_date', 'DESC')      
                     ->limit($limit, $offset)
                     ->get()->getResult();
                     
