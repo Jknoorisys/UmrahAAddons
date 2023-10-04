@@ -101,6 +101,7 @@ $routes->post('api/list_of_booking_history', 'ListFilter::listOfBookingHistory')
 $routes->post('api/booked_package_detail_by_id', 'User::bookingPackageDetailById');
 $routes->post('api/user_regt_login', 'UserRegistration::userRegtLogin');
 $routes->post('api/user_regt_login_mobile', 'UserRegistration::userRegtLoginwithMobile');
+$routes->post('api/user/login', 'UserRegistration::userRegtLoginwithMobileAndName');
 $routes->post('api/otp_verification', 'UserRegistration::otpVerification');
 
 // master data
@@ -125,6 +126,7 @@ $routes->post('api/get_all_provider', 'Meals::getAllProvider');//done
 // Admin as Provider 
 $routes->post('api/admin_add_package', 'AdminAsProvider::addPackage');
 $routes->post('api/admin_delete_package', 'AdminAsProvider::packageDelete');
+$routes->post('api/admin_update_package', 'AdminAsProvider::updatePackage');
 
 $routes->post('api/admin_add_sabeel', 'AdminAsProvider::addSabeel');
 $routes->post('api/admin_update_sabeel', 'AdminAsProvider::updateSabeel');
@@ -301,3 +303,26 @@ $routes->post('api/view-dua', 'UserLists::viewDua');
 $routes->post('api/visa-price', 'UserLists::listOfVisaPrice');
 $routes->post('api/full-package-list', 'UserLists::packageList');
 $routes->post('api/view-full-package', 'UserLists::viewPackage');
+$routes->post('api/city-list', 'UserLists::listOfCities');
+$routes->post('api/ziyarat-point-list', 'UserLists::listOfPoint');
+$routes->post('api/view-ziyarat-point', 'UserLists::viewpoint');
+
+// Manage Cities By Javeriya kauser
+$routes->group('city', function ($routes) {
+	$routes->post('add', 'ManageCities::addCity');
+	$routes->post('delete', 'ManageCities::deleteCity');
+	$routes->post('list', 'ManageCities::cityList');
+	$routes->post('change-status', 'ManageCities::changeCitytatus');
+	$routes->post('view', 'ManageCities::viewCity');
+	$routes->post('update', 'ManageCities::editCity');
+});
+
+// Manage Ziyarat Points By JAveriya Kauser
+$routes->group('ziyarat-point', function ($routes) {
+	$routes->post('add', 'ManageZiyaratPoints::addPoint');
+	$routes->post('delete', 'ManageZiyaratPoints::deletePoint');
+	$routes->post('list', 'ManageZiyaratPoints::pointList');
+	$routes->post('change-status', 'ManageZiyaratPoints::changePointStatus');
+	$routes->post('view', 'ManageZiyaratPoints::viewPoint');
+	$routes->post('update', 'ManageZiyaratPoints::editPoint');
+});
