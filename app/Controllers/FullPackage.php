@@ -992,7 +992,10 @@ class FullPackage extends BaseController
                 // Calculate the total count
                 $total = $totalBuilder->countAllResults(false);
 
-               $data = $table->orderBy('e.id', 'DESC')
+               $data = $table
+                // ->orderBy('e.id', 'DESC')
+                ->orderBy("CASE WHEN booking_status = 'pending' THEN 1 ELSE 2 END")
+                ->orderBy('created_at', 'DESC')       
                 ->limit($limit, $offset)
                 ->get()->getResult();
                 
