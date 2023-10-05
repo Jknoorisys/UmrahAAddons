@@ -42,6 +42,7 @@ $routes->post('api/add_Provider', 'Admin::addProvider');//done
 $routes->post('api/update_Probider_By_Admin', 'Admin::updateprobiderbyadmin');//done
 $routes->post('api/get_Provider_Detail', 'Admin::getproviderdetail');//done
 $routes->post('api/active_inactive_provider', 'Admin::activeinactiveprovider');//done
+$routes->post('api/delete_provider', 'Admin::deleteProvider');//done
 $routes->post('api/add_ota', 'Admin::addOta');//done
 $routes->post('api/update_Ota_By_Admin', 'Admin::updateOtaByAdmin');//done
 $routes->post('api/get_Ota_Detail', 'Admin::getOtaDetail');//done

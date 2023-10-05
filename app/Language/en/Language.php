@@ -13,6 +13,7 @@ return [
 	"Provider Create Successfully" => "Provider Created Successfully",
 	"Failed to Create" => "Failed to Create",
 	"Provider Update Successfully" => "Provider Update Successfully",
+	"Provider Deleted successfully" => "Provider Deleted successfully",
 	"Failed to update" => "Failed to update",
 	"User Details" => "User Details",
 	"User data not found" => "User data not found",

@@ -25,6 +25,7 @@ use App\Models\DayMappingModel;
 
 use App\Models\UserModels;
 use CodeIgniter\API\ResponseTrait;
+use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use \Firebase\JWT\JWT;
 
@@ -566,6 +567,97 @@ class Admin extends ResourceController
 						'status' => 'success',
 						'status_code' => 200,
 						'messages' => lang('Language.Provider status changed successfully'),
+					];
+				} else {
+					$response = [
+						'status' => 'failed',
+						'status_code' => 500,
+						'messages' => lang('Language.Something wrong'),
+					];
+				}
+			} else {
+				$response = [
+					'status' => 'failed',
+					'status_code' => 500,
+					'messages' => lang('Language.User Not Found')
+				];
+			}
+			return $this->respondCreated($response);
+		} else {
+			$response = [
+				'status' => 'failed',
+				'status_code' => 500,
+				'messages' => lang('Language.User Role Not Found')
+			];
+		}
+	}
+
+	// delete provider by Javeriya Kauser
+	public function deleteProvider()
+	{
+		$service   =  new Services();
+		$ProviderModel = new ProviderModel();
+		$AdminModel = new AdminModel();
+
+		$rules = [
+            'language' => [
+                'rules'         =>  'required|in_list[' . LANGUAGES . ']',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                    'in_list'       =>  Lang('Language.in_list', [LANGUAGES]),
+                ]
+            ],
+            'provider_id' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+            'logged_user_id' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+            'logged_user_role' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+        ];
+
+        if(!$this->validate($rules)) {
+            return $service->fail(
+                [
+                    'errors'     =>  $this->validator->getErrors(),
+                    'message'   =>  lang('Language.invalid_inputs')
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+
+		$provider_id = $this->request->getPost("provider_id");
+		$user_role = $this->request->getPost("logged_user_role");
+
+		// Email Validation
+		$userdata = $ProviderModel->where('user_role', "provider")->where("id", $provider_id)->first();
+		if (empty($userdata)) {
+			echo json_encode(['status' => 'failed', 'messages' => lang('Language.User Not Found')]);
+			die();
+		}
+
+		if ($user_role == "admin") {
+			$userdata = $ProviderModel->where("id", $provider_id)->first();
+			if (!empty($userdata)) {
+				// $res = $ProviderModel->update($provider_id, ['status' => 'deleted']);
+				$res = $ProviderModel->where("id", $provider_id)->delete();
+				if ($res) {
+					$response = [
+						'status' => 'success',
+						'status_code' => 200,
+						'messages' => lang('Language.Provider Deleted successfully'),
 					];
 				} else {
 					$response = [
