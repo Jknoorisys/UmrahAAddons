@@ -950,6 +950,195 @@ class UserRegistration extends ResourceController
         return $this->respond($response);
     }
 
+    public function userRegtLoginwithMobileAndName()
+    {
+        $service        =  new Services();
+        $service->cors();
+
+        $UserModels = new UserModels();
+        $OtaMoodel = new OtaMoodel();
+
+        $db = \Config\Database::connect();
+
+        $rules = [
+            'language' => [
+                'rules'         =>  'required|in_list[' . LANGUAGES . ']',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                    'in_list'       =>  Lang('Language.in_list', [LANGUAGES]),
+                ]
+            ],
+            'ota_id' => [
+                'rules'         =>  'required|numeric',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+            'country_code' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+            'mobile' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+            'name' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+            'device_type' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+        ];
+
+        if(!$this->validate($rules)) {
+            return $service->fail(
+                [
+                    'errors'     =>  $this->validator->getErrors(),
+                    'message'   =>  lang('Language.invalid_inputs')
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+
+        $ota_id = $this->request->getPost('ota_id');
+        $country_code = $this->request->getPost('country_code');
+        $mobile = $this->request->getPost('mobile');
+        $name = $this->request->getPost('name');
+
+        $device_token = $this->request->getPost('device_token') ? $this->request->getPost('device_token') : '';
+        $device_type = $this->request->getPost('device_type');
+
+        // check ota
+        $otadata = $OtaMoodel->where("id", $ota_id)->first();
+        if (empty($otadata)) {
+            echo json_encode(['status' => 'failed', 'messages' => lang('Language.OTA Not Exists')]);
+            die();
+        }
+
+        // check user 
+        $userdata = $UserModels->where("country_code", $country_code)->where("mobile", $mobile)->first();
+        if (!empty($userdata)) {
+
+            // $token = $this->service->getSignedAccessTokenForUser('user', $userdata['id']);
+            $token = '1234567890';
+
+            $updateuser = [
+                'firstname' => $name,
+                'device_type' => $device_type,
+                'device_token' => $device_token,
+                'token' => $token
+            ];
+
+            $res = $db->table('tbl_user')->where('id', $userdata['id'])->update($updateuser);
+            $MealBooking = $db->table('meals_booking')->where('user_id', $userdata['id'])->orderBy('id', 'desc')->get()->getRow();
+            $PackageBooking = $db->table('tbl_full_package_enquiry')->where('user_id', $userdata['id'])->orderBy('id', 'desc')->get()->getRow();
+            $ZiyaratBooking = $db->table('tbl_package_enquiry')->where('user_id', $userdata['id'])->orderBy('id', 'desc')->get()->getRow();
+            $SabeelBooking = $db->table('tbl_sabeel_booking')->where('user_id', $userdata['id'])->orderBy('id', 'desc')->get()->getRow();
+            $TransportBooking = $db->table('tbl_transport_enquiry')->where('user_id', $userdata['id'])->orderBy('id', 'desc')->get()->getRow();
+            $VisaBooking = $db->table('tbl_visa_enquiry')->where('user_id', $userdata['id'])->orderBy('id', 'desc')->get()->getRow();
+
+            $userdata['token'] = $token;
+            $bookingData['MealBooking'] = $MealBooking;
+            $bookingData['PackageBooking'] = $PackageBooking;
+            $bookingData['ZiyaratBooking'] = $ZiyaratBooking;
+            $bookingData['SabeelBooking'] = $SabeelBooking;
+            $bookingData['TransportBooking'] = $TransportBooking;
+            $bookingData['VisaBooking'] = $VisaBooking;
+
+            // Initialize bookingDetails as null
+            $bookingDetails = null;
+
+            // Iterate through each booking type and set bookingDetails if not empty
+            foreach ($bookingData as $bookingType => $booking) {
+                if (!empty($booking)) {
+                    $bookingDetails = $booking;
+                    break; // Stop the loop once a non-empty booking is found
+                }
+            }
+
+            $userdata['bookingDetails'] = $bookingDetails;
+
+            $response = [
+                'status' => 'success',
+                'status_code' => 200,
+                'messages' => lang('Language.OTP Send successfully'),
+                'data' => $userdata,
+            ];
+            return $this->respond($response);
+        } else {
+            $newuser = [
+                'firstname' => $name,
+                'country_code' => $country_code,
+                'mobile' => $mobile,
+                'ota_id' => $ota_id,
+                'created_by_id' => $ota_id,
+                'user_role' => 'user',
+                'created_by_role' => 'ota',
+                'device_type' => $device_type,
+                'device_token' => $device_token,
+            ];
+
+            $user_id = $UserModels->insert($newuser);
+            // $token = $this->service->getSignedAccessTokenForUser('user', $user_id);
+
+            $token = '1234567890';
+            $updateuser = [
+                'ota_id' => $ota_id,
+                'device_type' => $device_type,
+                'device_token' => $device_token,
+                'token' => $token
+            ];
+
+            $res = $UserModels->update($user_id, $updateuser);
+            $user = $UserModels->where("country_code", $country_code)->where("mobile", $mobile)->first();
+
+            // PUSH NOTIFICATION
+            helper('notifications');
+            $userinfo = $UserModels->where("mobile", $mobile)->first();
+
+            $title = "Registration";
+            $message = "Thanks for registering with Umrah Plus.";
+            $fmc_ids = array($userinfo['device_token']);
+            
+            $notification = array(
+                'title' => $title ,
+                'message' => $message,
+                'click_action' => 'FLUTTER_NOTIFICATION_CLICK', // DO NOT CHANGE THE VALUE
+                'date' => date('Y-m-d H:i'),
+            );
+
+            if($userinfo['device_type']!='web'){ sendFCMMessage($notification, $fmc_ids); }
+            // EnD
+
+            $response = [
+                'status' => "success",
+                'status_code' => 200,
+                // 'otp' => $otp,
+                'messages' => lang("Language.Users Create Successfully"),
+                'data' => $user
+            ];
+            return $this->respond($response);
+        }
+
+        $response = [
+            'status' => 'failed',
+            'status_code' => 500,
+            'messages' => lang('Language.User not found or Inactive')
+        ];
+        return $this->respond($response);
+    }
+
     // example  function
     // private function sendOTP(array $isCustomer)
     // {
