@@ -144,6 +144,7 @@ return [
 	'City Not Found' => 'City Not Found',
 	'City status changed successfully' => 'City status changed successfully',
 	'Unable to change City status, please try again' => 'Unable to change City status, please try again',
+	'City Name Already Exists'	=> 'City Name Already Exists',
 
 	// Manage Ziyarat Points
 	'Ziyarat Point Not Found' => 'Ziyarat Point Not Found',

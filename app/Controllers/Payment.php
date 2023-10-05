@@ -891,7 +891,7 @@ class Payment extends ResourceController
 			'checkout_id' => "COD",
 			'guest_fullname' => $guest_fullname,
 			'guest_contact_no' => $guest_contact_no,
-			'guest_email' => $guest_email,
+			'guest_email' => $guest_email ? $guest_email : "",
 		];
 
 		if ($BookingModel->insert($inprocessbooking)) { 
@@ -912,9 +912,11 @@ class Payment extends ResourceController
 			$data = array('user_role' => 'user','user_name' => $guest_fullname, 'provider_name' => $providerFullname, 'package_name'=>$packagedata['package_title']);
 			$msg_template = view('emmail_templates/package_booking.php', $data);
 			$subject      = 'Package Booked';
-			$to_email     =  $guest_email; // user email
-            $filename = "";
-            $send     = sendEmail($to_email, $subject, $msg_template,$filename);			// EnD
+			if ($guest_email) {
+				$to_email     =  $guest_email; // user email
+				$filename = "";
+				$send     = sendEmail($to_email, $subject, $msg_template,$filename);
+			}			// EnD
 
 			// for  provider 
 			$providerAccount = $OtaProviderAccountModel->where('user_role', 'provider')->where('user_id', $provider_id)->first();
