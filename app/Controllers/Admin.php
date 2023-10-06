@@ -651,8 +651,8 @@ class Admin extends ResourceController
 		if ($user_role == "admin") {
 			$userdata = $ProviderModel->where("id", $provider_id)->first();
 			if (!empty($userdata)) {
-				// $res = $ProviderModel->update($provider_id, ['status' => 'deleted']);
-				$res = $ProviderModel->where("id", $provider_id)->delete();
+				$res = $ProviderModel->update($provider_id, ['status' => 'deleted']);
+				// $res = $ProviderModel->where("id", $provider_id)->delete();
 				if ($res) {
 					$response = [
 						'status' => 'success',

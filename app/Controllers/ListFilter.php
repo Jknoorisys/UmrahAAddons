@@ -140,8 +140,8 @@ class ListFilter extends ResourceController
 
 			$builder1 = $db->table('tbl_provider as l');
 			$total_loan_record = $builder1->get()->getResult();
-			$total_record = count($total_loan_record);
-			// echo json_encode($total_record);die();
+			// $total_record = count($total_loan_record);
+			$total_record = count($countlist);
 		} else {
 			$total_record = count($countlist);
 		}
