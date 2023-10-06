@@ -593,7 +593,7 @@ class UserLists extends BaseController
             // Calculate the total count
             $total = $totalBuilder->countAllResults(false);
 
-            $pointData = $table->orderBy('c.id', 'DESC')
+            $pointData = $table->orderBy('c.id')
                         // ->limit($limit, $offset)
                         ->get()->getResult();
 
@@ -709,7 +709,7 @@ class UserLists extends BaseController
             // Calculate the total count
             $total = $totalBuilder->countAllResults(false);
 
-            $pointData = $table->orderBy('s.id', 'DESC')
+            $pointData = $table->orderBy('s.id')
                         ->limit($limit, $offset)
                         ->get()->getResult();
 
