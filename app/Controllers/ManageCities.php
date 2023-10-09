@@ -275,12 +275,6 @@ class ManageCities extends BaseController
                     'in_list'       =>  Lang('Language.in_list', [LANGUAGES]),
                 ]
             ],
-            'provider_id' => [
-                'rules'         =>  'required|numeric',
-                'errors'        => [
-                    'required'      =>  Lang('Language.required'),
-                ]
-            ],
             'city_id' => [
                 'rules'         =>  'required|numeric',
                 'errors'        => [
