@@ -183,19 +183,19 @@ class ManageZiyaratPoints extends BaseController
                 ]
             ],
 
-            'name_en' => [
-                'rules'         =>  'required',
-                'errors'        => [
-                    'required'      =>  Lang('Language.required'),
-                ]
-            ],
+            // 'name_en' => [
+            //     'rules'         =>  'required',
+            //     'errors'        => [
+            //         'required'      =>  Lang('Language.required'),
+            //     ]
+            // ],
 
-            'name_ur' => [
-                'rules'         =>  'required',
-                'errors'        => [
-                    'required'      =>  Lang('Language.required'),
-                ]
-            ],
+            // 'name_ur' => [
+            //     'rules'         =>  'required',
+            //     'errors'        => [
+            //         'required'      =>  Lang('Language.required'),
+            //     ]
+            // ],
 
             'title_en' => [
                 'rules'         =>  'required',
@@ -279,8 +279,8 @@ class ManageZiyaratPoints extends BaseController
 
             $data = array(
                 'city_id'           =>    $city_id,
-                'name_en'           =>    $name_en,
-                'name_ur'           =>    $name_ur,
+                'name_en'           =>    $name_en ? $name_en : "",
+                'name_ur'           =>    $name_ur ? $name_ur : "",
                 'title_en'          =>    $title_en,
                 'title_ur'          =>    $title_ur,
                 'description_en'    =>    $description_en,
@@ -505,8 +505,8 @@ class ManageZiyaratPoints extends BaseController
 
             $data = [
                 "city_id" => $city_id ? $city_id : $pointDetails->city_id,
-                "name_en" => $name_en ? $name_en : $pointDetails->name_en,
-                "name_ur" => $name_ur ? $name_ur : $pointDetails->name_ur,
+                "name_en" => $name_en ? $name_en : ($pointDetails->name_en ? $pointDetails->name_en : ""),
+                "name_ur" => $name_ur ? $name_ur : ($pointDetails->name_ur ? $pointDetails->name_ur : ""),
                 "title_en" => $title_en ? $title_en : $pointDetails->title_en,
                 "title_ur" => $title_ur ? $title_ur : $pointDetails->title_ur,
                 "description_en" => $description_en ? $description_en : $pointDetails->description_en,
