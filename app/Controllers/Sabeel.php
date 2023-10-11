@@ -1586,12 +1586,12 @@ class Sabeel extends BaseController
                     'required'      =>  Lang('Language.required'),
                 ]
             ],
-            'email' => [
-                'rules'         =>  'required',
-                'errors'        => [
-                    'required'      =>  Lang('Language.required'),
-                ]
-            ],
+            // 'email' => [
+            //     'rules'         =>  'required',
+            //     'errors'        => [
+            //         'required'      =>  Lang('Language.required'),
+            //     ]
+            // ],
         ];
 
         if(!$this->validate($rules)) {
