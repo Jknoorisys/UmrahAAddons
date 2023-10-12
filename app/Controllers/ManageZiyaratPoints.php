@@ -277,19 +277,13 @@ class ManageZiyaratPoints extends BaseController
                 die();
             }
 
-            if (isset($_FILES) && !empty($_FILES)) {
-                $file = $this->request->getFile('video');
-                if (!$file->isValid()) {
-                    throw new RuntimeException($file->getErrorString() . '(' . $file->getError() . ')');
-                } else {
-                    $videoPath = 'public/assets/uploads/ziayarat_points/video/';
-                    $videoName = $file->getRandomName();
-                    $file->move($videoPath, $videoName);
-                }
-            } else {
-                echo json_encode(['status' => 'failed', 'messages' => lang('Language.Images required')]);
-                die();
+            $videoFile = $this->request->getFile('video');
+            if ($videoFile) {
+                $videoPath = 'public/assets/uploads/ziayarat_points/video/';
+                $videoName = $videoFile->getRandomName();
+                $videoFile->move($videoPath, $videoName);                
             }
+            
 
             $data = array(
                 'city_id'           =>    $city_id,
@@ -518,17 +512,13 @@ class ManageZiyaratPoints extends BaseController
                 $url = $pointDetails->main_img;
             }
 
-            if ($this->request->getFile('video')) {
-                $file = $this->request->getFile('video');
-                if (!$file->isValid()) {
-                    throw new RuntimeException($file->getErrorString() . '(' . $file->getError() . ')');
-                } else {
-                    $videoPath = 'public/assets/uploads/ziayarat_points/video/';
-                    $videoName = $file->getRandomName();
-                    $file->move($videoPath, $videoName);
-                    $videoUrl = $videoPath. $videoName;
-                }
-            }else{
+            $videoFile = $this->request->getFile('video');
+            if ($videoFile) {
+                $videoPath = 'public/assets/uploads/ziayarat_points/video/';
+                $videoName = $videoFile->getRandomName();
+                $videoFile->move($videoPath, $videoName);
+                $videoUrl = $videoPath. $videoName;                
+            } else {
                 $videoUrl = $pointDetails->video;
             }
 
