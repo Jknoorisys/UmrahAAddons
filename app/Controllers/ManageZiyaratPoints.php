@@ -260,6 +260,7 @@ class ManageZiyaratPoints extends BaseController
             $title_ur       =  $this->request->getVar('title_ur');
             $description_en   =  $this->request->getVar('description_en');
             $description_ur   =  $this->request->getVar('description_ur');
+            $address        = $this->request->getVar('address');
             $lat         =  $this->request->getVar('lat');
             $long        =  $this->request->getVar('long');
                 
@@ -296,6 +297,7 @@ class ManageZiyaratPoints extends BaseController
                 'title_ur'          =>    $title_ur,
                 'description_en'    =>    $description_en,
                 'description_ur'    =>    $description_ur,
+                'address'           =>    $address,
                 'lat'               =>    $lat,
                 'long'              =>    $long,
                 'main_img'          =>  $path . $newName,  
@@ -483,6 +485,7 @@ class ManageZiyaratPoints extends BaseController
             $title_ur       =  $this->request->getVar('title_ur');
             $description_en   =  $this->request->getVar('description_en');
             $description_ur   =  $this->request->getVar('description_ur');
+            $address        = $this->request->getVar('address');
             $lat         =  $this->request->getVar('lat');
             $long        =  $this->request->getVar('long');
             $images      = $this->request->getFileMultiple('image_array');
@@ -533,6 +536,7 @@ class ManageZiyaratPoints extends BaseController
                 "title_ur" => $title_ur ? $title_ur : $pointDetails->title_ur,
                 "description_en" => $description_en ? $description_en : $pointDetails->description_en,
                 "description_ur" => $description_ur ? $description_ur : $pointDetails->description_ur,
+                "address" => $address ? $address : $pointDetails->address,
                 "lat"  => $lat ? $lat : $pointDetails->lat,
                 "long" => $long ? $long : $pointDetails->long,
                 "main_img" =>  $url,
