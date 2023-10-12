@@ -283,6 +283,8 @@ class ManageZiyaratPoints extends BaseController
                 $videoName = $videoFile->getRandomName();
                 $videoFile->move($videoPath, $videoName); 
                 $url = $videoPath . $videoName;               
+            }else{
+                $url = '';
             }
             
 
@@ -297,7 +299,7 @@ class ManageZiyaratPoints extends BaseController
                 'lat'               =>    $lat,
                 'long'              =>    $long,
                 'main_img'          =>  $path . $newName,  
-                'video'             =>  $url ? $url : '',              
+                'video'             =>  $url ,              
                 'created_at'        => date('Y-m-d H:i:s'),
             );
 
