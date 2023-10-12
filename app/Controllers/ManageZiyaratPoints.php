@@ -526,10 +526,10 @@ class ManageZiyaratPoints extends BaseController
                     $videoPath = 'public/assets/uploads/ziayarat_points/video/';
                     $videoName = $file->getRandomName();
                     $file->move($videoPath, $videoName);
-                    $url = $videoPath. $videoName;
+                    $videoUrl = $videoPath. $videoName;
                 }
             }else{
-                $url = $pointDetails->video;
+                $videoUrl = $pointDetails->video;
             }
 
             $data = [
@@ -543,6 +543,7 @@ class ManageZiyaratPoints extends BaseController
                 "lat"  => $lat ? $lat : $pointDetails->lat,
                 "long" => $long ? $long : $pointDetails->long,
                 "main_img" =>  $url,
+                "video" =>  $videoUrl,
                 'updated_at'    => date('Y-m-d H:i:s'),
             ];
 
