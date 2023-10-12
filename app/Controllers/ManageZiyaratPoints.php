@@ -281,7 +281,8 @@ class ManageZiyaratPoints extends BaseController
             if ($videoFile) {
                 $videoPath = 'public/assets/uploads/ziayarat_points/video/';
                 $videoName = $videoFile->getRandomName();
-                $videoFile->move($videoPath, $videoName);                
+                $videoFile->move($videoPath, $videoName); 
+                $url = $videoPath . $videoName;               
             }
             
 
@@ -296,7 +297,7 @@ class ManageZiyaratPoints extends BaseController
                 'lat'               =>    $lat,
                 'long'              =>    $long,
                 'main_img'          =>  $path . $newName,  
-                'video'             =>  $videoPath . $videoName,              
+                'video'             =>  $url ? $url : '',              
                 'created_at'        => date('Y-m-d H:i:s'),
             );
 
