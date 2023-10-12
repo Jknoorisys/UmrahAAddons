@@ -225,6 +225,13 @@ class ManageZiyaratPoints extends BaseController
                 ]
             ],
 
+            'address' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+
             'lat' => [
                 'rules'         =>  'required',
                 'errors'        => [
