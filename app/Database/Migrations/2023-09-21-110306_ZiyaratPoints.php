@@ -53,6 +53,10 @@ class ZiyaratPoints extends Migration
 				'type' => 'TEXT',
                  null => true,
 			],
+            'video' => [
+				'type' => 'TEXT',
+                 null => true,
+			],
             'lat' => [ 
                 'type' => 'VARCHAR',
                 'constraint' => '50',

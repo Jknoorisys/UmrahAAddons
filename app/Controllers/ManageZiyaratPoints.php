@@ -253,29 +253,43 @@ class ManageZiyaratPoints extends BaseController
 
         try {
             
-        $city_id        =  $this->request->getVar('city_id');
-        $name_en        =  $this->request->getVar('name_en');
-        $name_ur        =  $this->request->getVar('name_ur');
-        $title_en       =  $this->request->getVar('title_en');
-        $title_ur       =  $this->request->getVar('title_ur');
-        $description_en   =  $this->request->getVar('description_en');
-        $description_ur   =  $this->request->getVar('description_ur');
-        $lat         =  $this->request->getVar('lat');
-        $long        =  $this->request->getVar('long');
-            
-        if (isset($_FILES) && !empty($_FILES)) {
-            $file = $this->request->getFile('main_img');
-            if (!$file->isValid()) {
-                throw new RuntimeException($file->getErrorString() . '(' . $file->getError() . ')');
+            $city_id        =  $this->request->getVar('city_id');
+            $name_en        =  $this->request->getVar('name_en');
+            $name_ur        =  $this->request->getVar('name_ur');
+            $title_en       =  $this->request->getVar('title_en');
+            $title_ur       =  $this->request->getVar('title_ur');
+            $description_en   =  $this->request->getVar('description_en');
+            $description_ur   =  $this->request->getVar('description_ur');
+            $lat         =  $this->request->getVar('lat');
+            $long        =  $this->request->getVar('long');
+                
+            if (isset($_FILES) && !empty($_FILES)) {
+                $file = $this->request->getFile('main_img');
+                if (!$file->isValid()) {
+                    throw new RuntimeException($file->getErrorString() . '(' . $file->getError() . ')');
+                } else {
+                    $path = 'public/assets/uploads/ziayarat_points/main_pic/';
+                    $newName = $file->getRandomName();
+                    $file->move($path, $newName);
+                }
             } else {
-                $path = 'public/assets/uploads/ziayarat_points/main_pic/';
-                $newName = $file->getRandomName();
-                $file->move($path, $newName);
+                echo json_encode(['status' => 'failed', 'messages' => lang('Language.Images required')]);
+                die();
             }
-        } else {
-            echo json_encode(['status' => 'failed', 'messages' => lang('Language.Images required')]);
-            die();
-        }
+
+            if (isset($_FILES) && !empty($_FILES)) {
+                $file = $this->request->getFile('video');
+                if (!$file->isValid()) {
+                    throw new RuntimeException($file->getErrorString() . '(' . $file->getError() . ')');
+                } else {
+                    $videoPath = 'public/assets/uploads/ziayarat_points/video/';
+                    $videoName = $file->getRandomName();
+                    $file->move($videoPath, $videoName);
+                }
+            } else {
+                echo json_encode(['status' => 'failed', 'messages' => lang('Language.Images required')]);
+                die();
+            }
 
             $data = array(
                 'city_id'           =>    $city_id,
@@ -287,7 +301,8 @@ class ManageZiyaratPoints extends BaseController
                 'description_ur'    =>    $description_ur,
                 'lat'               =>    $lat,
                 'long'              =>    $long,
-                'main_img'          =>  $path . $newName,                
+                'main_img'          =>  $path . $newName,  
+                'video'             =>  $videoPath . $videoName,              
                 'created_at'        => date('Y-m-d H:i:s'),
             );
 
@@ -503,6 +518,20 @@ class ManageZiyaratPoints extends BaseController
                 $url = $pointDetails->main_img;
             }
 
+            if ($this->request->getFile('video')) {
+                $file = $this->request->getFile('video');
+                if (!$file->isValid()) {
+                    throw new RuntimeException($file->getErrorString() . '(' . $file->getError() . ')');
+                } else {
+                    $videoPath = 'public/assets/uploads/ziayarat_points/video/';
+                    $videoName = $file->getRandomName();
+                    $file->move($videoPath, $videoName);
+                    $videoUrl = $videoPath. $videoName;
+                }
+            }else{
+                $videoUrl = $pointDetails->video;
+            }
+
             $data = [
                 "city_id" => $city_id ? $city_id : $pointDetails->city_id,
                 "name_en" => $name_en ? $name_en : ($pointDetails->name_en ? $pointDetails->name_en : ""),
@@ -514,6 +543,7 @@ class ManageZiyaratPoints extends BaseController
                 "lat"  => $lat ? $lat : $pointDetails->lat,
                 "long" => $long ? $long : $pointDetails->long,
                 "main_img" =>  $url,
+                "video" =>  $videoUrl,
                 'updated_at'    => date('Y-m-d H:i:s'),
             ];
 
