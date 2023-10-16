@@ -384,16 +384,16 @@ class ManageCities extends BaseController
                 );
             }
 
-            if ($cityDetails['name'] == $name) {
-                return $service->fail(
-                    [
-                        'errors'    =>  "",
-                        'message'   =>  Lang('Language.City Name Already Exists'),
-                    ],
-                    ResponseInterface::HTTP_BAD_REQUEST,
-                    $this->response
-                );
-            }
+            // if ($cityDetails['name'] == $name) {
+            //     return $service->fail(
+            //         [
+            //             'errors'    =>  "",
+            //             'message'   =>  Lang('Language.City Name Already Exists'),
+            //         ],
+            //         ResponseInterface::HTTP_BAD_REQUEST,
+            //         $this->response
+            //     );
+            // }
 
             if ($this->request->getFile('image')) {
                     $file_path = 'public/assets/uploads/cities/';
