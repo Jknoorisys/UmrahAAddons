@@ -14,7 +14,7 @@ class ZiyaratPoints extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id', 'city_id', 'name_en', 'name_ur', 'title_en', 'title_ur', 'description_en', 'description_ur', 'main_img', 'lat', 'long', 'status', 'created_at', 'updated_at'];
+    protected $allowedFields    = ['id', 'city_id', 'name_en', 'name_ur', 'title_en', 'title_ur', 'description_en', 'description_ur', 'main_img', 'lat', 'long', 'video', 'status', 'created_at', 'updated_at'];
 
     // Dates
     protected $useTimestamps = false;
