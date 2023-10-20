@@ -270,6 +270,7 @@ class ManageZiyaratPoints extends BaseController
             $address        = $this->request->getVar('address');
             $lat         =  $this->request->getVar('lat');
             $long        =  $this->request->getVar('long');
+            $video       = $this->request->getVar('video');
                 
             if (isset($_FILES) && !empty($_FILES)) {
                 $file = $this->request->getFile('main_img');
@@ -285,15 +286,15 @@ class ManageZiyaratPoints extends BaseController
                 die();
             }
 
-            $videoFile = $this->request->getFile('video');
-            if ($videoFile) {
-                $videoPath = 'public/assets/uploads/ziayarat_points/video/';
-                $videoName = $videoFile->getRandomName();
-                $videoFile->move($videoPath, $videoName); 
-                $url = $videoPath . $videoName;               
-            }else{
-                $url = '';
-            }
+            // $videoFile = $this->request->getFile('video');
+            // if ($videoFile) {
+            //     $videoPath = 'public/assets/uploads/ziayarat_points/video/';
+            //     $videoName = $videoFile->getRandomName();
+            //     $videoFile->move($videoPath, $videoName); 
+            //     $url = $videoPath . $videoName;               
+            // }else{
+            //     $url = '';
+            // }
             
 
             $data = array(
@@ -308,7 +309,7 @@ class ManageZiyaratPoints extends BaseController
                 'lat'               =>    $lat,
                 'long'              =>    $long,
                 'main_img'          =>  $path . $newName,  
-                'video'             =>  $url ,              
+                'video'             =>  $video ? $video : "" ,              
                 'created_at'        => date('Y-m-d H:i:s'),
             );
 
@@ -495,6 +496,7 @@ class ManageZiyaratPoints extends BaseController
             $address        = $this->request->getVar('address');
             $lat         =  $this->request->getVar('lat');
             $long        =  $this->request->getVar('long');
+            $video       = $this->request->getVar('video');
             $images      = $this->request->getFileMultiple('image_array');
 
             $pointDetailsArray = $pointModel->where("id", $point_id)->where("status !=",'2')->first();
@@ -525,15 +527,15 @@ class ManageZiyaratPoints extends BaseController
                 $url = $pointDetails->main_img;
             }
 
-            $videoFile = $this->request->getFile('video');
-            if ($videoFile) {
-                $videoPath = 'public/assets/uploads/ziayarat_points/video/';
-                $videoName = $videoFile->getRandomName();
-                $videoFile->move($videoPath, $videoName);
-                $videoUrl = $videoPath. $videoName;                
-            } else {
-                $videoUrl = $pointDetails->video;
-            }
+            // $videoFile = $this->request->getFile('video');
+            // if ($videoFile) {
+            //     $videoPath = 'public/assets/uploads/ziayarat_points/video/';
+            //     $videoName = $videoFile->getRandomName();
+            //     $videoFile->move($videoPath, $videoName);
+            //     $videoUrl = $videoPath. $videoName;                
+            // } else {
+            //     $videoUrl = $pointDetails->video;
+            // }
 
             $data = [
                 "city_id" => $city_id ? $city_id : $pointDetails->city_id,
@@ -547,7 +549,7 @@ class ManageZiyaratPoints extends BaseController
                 "lat"  => $lat ? $lat : $pointDetails->lat,
                 "long" => $long ? $long : $pointDetails->long,
                 "main_img" =>  $url,
-                "video" =>  $videoUrl,
+                "video" =>  $video ? $video : $pointDetails->video,
                 'updated_at'    => date('Y-m-d H:i:s'),
             ];
 
