@@ -115,8 +115,12 @@ class PackageModels extends Model
 			$criterial .= " AND l.ideal_for  LIKE'%" . $trnx_filters['ideal_for'] . "%'";
 		}
 
-		$query = "SELECT l.*,CONCAT (p.firstname,' ',p.lastname) as provider_name FROM tbl_package AS l 
-		  LEFT JOIN tbl_provider AS p ON p.id = l.provider_id  WHERE l.status = 'active' AND  l.status_by_admin= 'active'";
+		// $query = "SELECT l.*,CONCAT (p.firstname,' ',p.lastname) as provider_name FROM tbl_package AS l 
+		//   LEFT JOIN tbl_provider AS p ON p.id = l.provider_id  WHERE l.status = 'active' AND  l.status_by_admin= 'active'";
+
+		$query = "SELECT l.*, CONCAT(p.firstname, ' ', p.lastname) as provider_name FROM tbl_package AS l 
+		LEFT JOIN tbl_provider AS p ON p.id = l.provider_id 
+		WHERE l.status = 'active' AND l.status_by_admin = 'active'";
 
 		// 	$query = "SELECT l.*,c.firstname AS country_name, FROM tbl_package AS l
 		//    LEFT JOIN tbl_provider AS c ON c.id = l.provider_id ";
