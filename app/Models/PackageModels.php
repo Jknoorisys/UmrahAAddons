@@ -95,9 +95,16 @@ class PackageModels extends Model
 		// echo json_encode($provider_id);die();
 		$criterial = '';
 		// echo json_encode($trnx_filters);die(); 
-		if (isset($trnx_filters['search_word']) && $trnx_filters['search_word'] != "") {
-			$criterial .= " AND l.package_title  LIKE'%" . $trnx_filters['search_word'] . "%'"."OR"." l.city_loaction  LIKE'%" . $trnx_filters['search_word'] . "%'";
+		// if (isset($trnx_filters['search_word']) && $trnx_filters['search_word'] != "") {
+		// 	$criterial .= " AND l.package_title  LIKE'%" . $trnx_filters['search_word'] . "%'"."OR"." l.city_loaction  LIKE'%" . $trnx_filters['search_word'] . "%'";
+		// }
+
+		if (!empty($trnx_filters['search_word'])) {
+			$searchWord = $trnx_filters['search_word'];
+			// Use parentheses to group the OR conditions correctly
+			$criterial .= " AND (l.package_title LIKE '%" . $searchWord . "%' OR l.city_loaction LIKE '%" . $searchWord . "%')";
 		}
+		
 		if (isset($trnx_filters['package_title']) && $trnx_filters['package_title'] != "") {
 			$criterial .= " AND l.package_title = '" . $trnx_filters['package_title'] . "'";
 		}
