@@ -71,16 +71,18 @@ class Services extends BaseService
         if (!empty($token)) {
 
             try {
-                if ($userRole == "user") {
+                if ($userRole == "user" || $userRole == "admin") {
                     // $validate = $UserModels->where("token", $token)->first();
                     $validate = 'Hi';
                 }else{
                     $decoded = JWT::decode($token, new Key(getenv('JWT_SECRET'), getenv('JWT_ALGO')));
                     $uID = $decoded->uid;
 
-                    if ($userRole == "admin") {
-                        $validate = $AdminModel->where("token", $token)->where("id", $this->encryption($uID,0))->first();
-                    } elseif ($userRole == 'provider') {
+                    // if ($userRole == "admin") {
+                    //     $validate = $AdminModel->where("token", $token)->where("id", $this->encryption($uID,0))->first();
+                    // } 
+
+                    if ($userRole == 'provider') {
                         $validate = $ProviderModel->where("token", $token)->where("id", $this->encryption($uID,0))->first();
                     } 
                     // elseif ($userRole == "user") {
