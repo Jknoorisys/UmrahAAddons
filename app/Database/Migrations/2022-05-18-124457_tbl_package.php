@@ -109,6 +109,11 @@ class TblPackage extends Migration
 				'type' => 'TEXT',
 				'constraint' => '10',
 			],
+			'is_featured' => [
+				'type' => 'ENUM',
+				'constraint' => ['yes','no'],
+				'default' => 'no',
+			],
 			'created_date' => [
 				'type' => 'VARCHAR',
 				'constraint' => '50',
