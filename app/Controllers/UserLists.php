@@ -549,7 +549,6 @@ class UserLists extends BaseController
             );
         }
     }
-
     
     // view full package- by Javeriya Kauser
     public function viewPackage(){
@@ -903,6 +902,249 @@ class UserLists extends BaseController
                 [
                     'errors'    =>  $e->getMessage(),
                     'message'   =>  Lang('Language.details_fetch_failed'),
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+    }
+
+    // Landing Page Banner List by Javeriya
+    public function listOfBanner()
+    {
+        $service           =  new Services();
+        $service->cors();
+
+        // $pageNo           =  $this->request->getVar('pageNo');
+
+        $search           =  $this->request->getVar('search');
+
+        $rules = [
+            // 'pageNo' => [
+            //     'rules'         =>  'required|greater_than[' . PAGE_LENGTH . ']|numeric',
+            //     'errors'        => [
+            //         'required'      =>  Lang('Language.required'),
+            //         'greater_than'  =>  Lang('Language.greater_than', [PAGE_LENGTH]),
+            //         'numeric'       =>  Lang('Language.numeric', [$pageNo]),
+            //     ]
+            // ],
+
+            'language' => [
+                'rules'         =>  'required|in_list[' . LANGUAGES . ']',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                    'in_list'       =>  Lang('Language.in_list', [LANGUAGES]),
+                ]
+            ],
+        ];
+
+        if(!$this->validate($rules)) {
+            return $service->fail(
+                [
+                    'errors'     =>  $this->validator->getErrors(),
+                    'message'   =>  lang('Language.invalid_inputs')
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+
+        try{
+
+            // $currentPage   = ( !empty( $pageNo ) ) ? $pageNo : 1;
+            // $offset        = ( $currentPage - 1 ) * PER_PAGE;
+            // $limit         =  PER_PAGE;
+
+            $db = db_connect();
+            $table = $db->table('tbl_landing_page_banners as banner')->join('tbl_package as package','package.id = banner.package_id')->where('banner.status', 'active');
+
+            if (isset($search) && !empty($search)) {
+                $table->orLike('banner.title', $search);
+                $table->orLike('banner.description', $search);            
+            }
+            
+            // Clone the builder to use for total count query
+            $totalBuilder = clone $table;
+
+            // Calculate the total count
+            $total = $totalBuilder->countAllResults(false);
+
+            $data = $table->orderBy('banner.id', 'DESC')
+                        ->select("banner.*, package.package_title")
+                        // ->limit($limit, $offset)
+                        ->get()
+                        ->getResult(); 
+                
+
+            return $service->success(
+                [
+                    'message'       =>  Lang('Language.list_success'),
+                    'data'          =>  [
+                        // 'total'     =>  $total,
+                        'data'      =>  $data,
+                    ]
+                ],
+                ResponseInterface::HTTP_OK,
+                $this->response
+            );
+
+        } catch (Exception $e) {
+            return $service->fail(
+                [
+                    'errors'    =>  "",
+                    'message'   =>  Lang('Language.fetch_list'),
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+    }
+
+    // Featured Ziyaarat Package List by Javeriya
+    public function featuredPackageList() {
+        $service = new Services();
+        $service->cors();
+
+        // $pageNo = $this->request->getVar('pageNo');
+
+        $rules = [
+            // 'pageNo' => [
+            //     'rules'  => 'required|greater_than[' . PAGE_LENGTH . ']|numeric',
+            //     'errors' => [
+            //         'required'     => Lang('Language.required'),
+            //         'greater_than' => Lang('Language.greater_than', [PAGE_LENGTH]),
+            //         'numeric'      => Lang('Language.numeric', [$pageNo]),
+            //     ]
+            // ],
+            'language' => [
+                'rules'  => 'required|in_list[' . LANGUAGES . ']',
+                'errors' => [
+                    'required' => Lang('Language.required'),
+                    'in_list'  => Lang('Language.in_list', [LANGUAGES]),
+                ]
+            ],
+        ];
+
+        if (!$this->validate($rules)) {
+            return $service->fail(
+                [
+                    'errors'  => $this->validator->getErrors(),
+                    'message' => lang('Language.invalid_inputs')
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+
+        try {
+            // $currentPage = (!empty($pageNo)) ? $pageNo : 1;
+            // $offset = ($currentPage - 1) * PER_PAGE;
+            // $limit = PER_PAGE;
+
+            $db = db_connect();
+            $table = $db->table('tbl_package as p')->where('p.status', 'active')->where('status_by_admin', 'active')->where('p.is_featured', 'yes');
+
+            $totalBuilder = clone $table;
+            $total = $totalBuilder->countAllResults(false);
+
+            $data = $table
+                ->select('p.*')
+                ->orderBy('p.id', 'DESC')
+                // ->limit($limit, $offset)
+                ->get()
+                ->getResult(); // Fetch the paginated results
+
+            return $service->success(
+                [
+                    'message' => Lang('Language.list_success'),
+                    'data'    => $data
+                ],
+                ResponseInterface::HTTP_OK,
+                $this->response
+            );
+        } catch (Exception $e) {
+            return $service->fail(
+                [
+                    'errors'  => $e->getMessage(),
+                    'message' => Lang('Language.fetch_list'),
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+    }
+
+    // Search Ziyarat Package by Javeriya
+    public function searchPackage() {
+        $service = new Services();
+        $service->cors();
+
+        $rules = [
+            'language' => [
+                'rules'  => 'required|in_list[' . LANGUAGES . ']',
+                'errors' => [
+                    'required' => Lang('Language.required'),
+                    'in_list'  => Lang('Language.in_list', [LANGUAGES]),
+                ]
+            ],
+            'search' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => Lang('Language.required'),
+                ]
+            ],
+        ];
+
+        if (!$this->validate($rules)) {
+            return $service->fail(
+                [
+                    'errors'  => $this->validator->getErrors(),
+                    'message' => lang('Language.invalid_inputs')
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+
+        try {
+            $search = $this->request->getVar('search');
+
+            $db = db_connect();
+            $table = $db->table('tbl_package as p')->where('p.status', 'active')->where('status_by_admin', 'active');
+
+            if (isset($search) && !empty($search)) {
+                $table->like('p.package_title', $search);
+                // $table->orLike('p.package_details', $search);
+                $table->orLike('p.city_loaction', $search);
+                $table->orLike('p.pickup_loaction', $search);
+                $table->orLike('p.drop_loaction', $search);
+            }
+
+            $totalBuilder = clone $table;
+            $total = $totalBuilder->countAllResults(false);
+
+            $data = $table
+                ->select('p.*')
+                ->orderBy('p.id', 'DESC')
+                ->get()
+                ->getResult(); // Fetch the paginated results
+
+            return $service->success(
+                [
+                    'message' => Lang('Language.list_success'),
+                    'data'    => [
+                        'total'    => $total,
+                        'packages' => $data,
+                    ]
+                ],
+                ResponseInterface::HTTP_OK,
+                $this->response
+            );
+        } catch (Exception $e) {
+            return $service->fail(
+                [
+                    'errors'  => $e->getMessage(),
+                    'message' => Lang('Language.fetch_list'),
                 ],
                 ResponseInterface::HTTP_BAD_REQUEST,
                 $this->response

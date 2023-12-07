@@ -987,6 +987,127 @@ class Package extends ResourceController
        echo "YES";
     }
 
+    // make package featured/unfeatured by Javeriya
+    public function makePackageFaetured()
+    {
+        $service   =  new Services();
+        $package     = new PackageModels();
+        $ProviderModel     = new ProviderModel();
+        $service->cors();
+        $package_id       =  $this->request->getVar('package_id');
+        $logged_user_id       =  $this->request->getVar('logged_user_id');
+        $logged_user_role       =  $this->request->getVar('logged_user_role');
+        $token       =  $this->request->getVar('authorization');
+        $is_featured       =  $this->request->getVar('is_featured');
+
+        $rules = [
+            'language' => [
+                'rules'         =>  'required|in_list[' . LANGUAGES . ']',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                    'in_list'       =>  Lang('Language.in_list', [LANGUAGES]),
+                ]
+            ],
+            'logged_user_id' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+            'logged_user_role' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+            'package_id' => [
+                'rules'         =>  'required',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+            'is_featured' => [
+                'rules'         =>  'required|in_list[yes,no]',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                    'in_list'       =>  Lang('Language.in_list', ['yes,no']),
+                ]
+            ],
+        ];
+
+        if(!$this->validate($rules)) {
+            return $service->fail(
+                [
+                    'errors'     =>  $this->validator->getErrors(),
+                    'message'   =>  lang('Language.invalid_inputs')
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+
+        $checkToken = $service->getAccessForSignedUser($token, $logged_user_role);
+
+        if($checkToken)
+        {
+            try {
+                    $provider_data = $ProviderModel->where("id", $logged_user_id)->where("status", 'active')->first();
+                    if (empty($provider_data)) {
+                        return $service->fail(
+                            [
+                                'errors'    =>  "",
+                                'message'   =>  Lang('Language.Provider Not Found'),
+                            ],
+                            ResponseInterface::HTTP_BAD_REQUEST,
+                            $this->response
+                        );
+                    }
+
+                 $isExist = $package->where(['id'=> $package_id])->first();
+                 if(!empty($isExist))
+                 {
+                    $update = $package->update($package_id, ['is_featured' => $is_featured]);
+                    return $service->success([
+                        'message'       =>  Lang('Language.Package Updated Successfully'),
+                        'data'          =>  ''
+                        ],
+                        ResponseInterface::HTTP_OK,
+                        $this->response
+                    );
+                 } else {
+                    return $service->fail(
+                        [
+                            'errors'    =>  "",
+                            'message'   =>  Lang('Language.Package Not Found'),
+                        ],
+                        ResponseInterface::HTTP_BAD_REQUEST,
+                        $this->response
+                    );
+                 }
+
+            } catch (Exception $e) {
+                return $service->fail(
+                    [
+                        'errors'    =>  "",
+                        'message'   =>  Lang('Language.update_failed'),
+                    ],
+                    ResponseInterface::HTTP_BAD_REQUEST,
+                    $this->response
+                );
+            }
+
+        } else {
+            return $service->fail(
+                [
+                    'errors'    =>  "",
+                    'message'   =>  Lang('Language.auth_failure'),
+                ],
+                ResponseInterface::HTTP_UNAUTHORIZED,
+                $this->response
+            );
+        }
+    }
+
 } // class end
 
 /* End of file Package.php */

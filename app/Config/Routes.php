@@ -56,6 +56,7 @@ $routes->post('api/active_inactive_user', 'Admin::activeInactiveUSer');//done
 $routes->post('api/all_login', 'Auth::allLogin');//done
 $routes->post('api/all_logout', 'Auth::allLogOut');//done
 $routes->post('api/add_package', 'Package::addPackage');//done
+$routes->post('api/make_package_featured', 'Package::makePackageFaetured');//done
 $routes->post('api/Package_List', 'ListFilter::packagelist'); // for admin done 
 $routes->post('api/active_inactive_package', 'Admin::activeInactivePackage'); // for admin done
 $routes->post('api/get_package_detail', 'Admin::getPackageDetail');  // for admin  done
@@ -299,6 +300,7 @@ $routes->group('full-package', function ($routes) {
 	$routes->post('view-enquiry', 'FullPackage::viewEnquiry');
 });
 
+// User Apis
 $routes->post('api/dua-list', 'UserLists::listOfDua');
 $routes->post('api/view-dua', 'UserLists::viewDua');
 $routes->post('api/visa-price', 'UserLists::listOfVisaPrice');
@@ -307,6 +309,9 @@ $routes->post('api/view-full-package', 'UserLists::viewPackage');
 $routes->post('api/city-list', 'UserLists::listOfCities');
 $routes->post('api/ziyarat-point-list', 'UserLists::listOfPoint');
 $routes->post('api/view-ziyarat-point', 'UserLists::viewpoint');
+$routes->post('api/banner-list', 'UserLists::listOfBanner');
+$routes->post('api/featured-packages', 'UserLists::featuredPackageList');
+$routes->post('api/search-package', 'UserLists::searchPackage');
 
 // Manage Cities By Javeriya kauser
 $routes->group('city', function ($routes) {
@@ -326,4 +331,14 @@ $routes->group('ziyarat-point', function ($routes) {
 	$routes->post('change-status', 'ManageZiyaratPoints::changePointStatus');
 	$routes->post('view', 'ManageZiyaratPoints::viewPoint');
 	$routes->post('update', 'ManageZiyaratPoints::editPoint');
+});
+
+// Manage Landing Page Banners By JAveriya Kauser
+$routes->group('banner', function ($routes) {
+	$routes->post('add', 'ManageLandingPageBanners::addBanner');
+	$routes->post('delete', 'ManageLandingPageBanners::deleteBanner');
+	$routes->post('list', 'ManageLandingPageBanners::bannerList');
+	$routes->post('change-status', 'ManageLandingPageBanners::changeBannerStatus');
+	$routes->post('view', 'ManageLandingPageBanners::viewBanner');
+	$routes->post('update', 'ManageLandingPageBanners::editBanner');
 });

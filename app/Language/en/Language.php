@@ -151,4 +151,10 @@ return [
 	'Ziyarat Point Not Found' => 'Ziyarat Point Not Found',
 	'Ziyarat Point status changed successfully' => 'Ziyarat Point status changed successfully',
 	'Unable to change Ziyarat Point status, please try again' => 'Unable to change Ziyarat Point status, please try again',
+
+	// Manage Landing Page Banners
+	'Landing Page Banner Not Found' => 'Landing Page Banner Not Found',
+	'Banner Not Found' => 'Banner Not Found',
+	'Banner status changed successfully' => 'Banner status changed successfully',
+	'Unable to change Banner status, please try again' => 'Unable to change Banner status, please try again',
 ];

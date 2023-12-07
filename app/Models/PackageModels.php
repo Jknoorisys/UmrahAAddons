@@ -9,7 +9,7 @@ class PackageModels extends Model
 	protected $table = 'tbl_package';
 	protected $primaryKey = 'id';
 	protected $useTimestamps = true;
-	protected $allowedFields = ['package_title', 'package_details', 'status_by_admin', 'provider_id', 'city_loaction', 'ideal_for', 'main_img', 'included', 'not_included', 'pickup_loaction', 'drop_loaction', 'status', 'accommodations', 'accommodations_title', 'accommodations_detail', 'return_policy', 'type_of_package', 'package_amount', 'reason', 'language','package_duration'];
+	protected $allowedFields = ['package_title', 'package_details', 'status_by_admin', 'provider_id', 'city_loaction', 'ideal_for', 'main_img', 'included', 'not_included', 'pickup_loaction', 'drop_loaction', 'status', 'accommodations', 'accommodations_title', 'accommodations_detail', 'return_policy', 'type_of_package', 'package_amount', 'reason', 'language','package_duration', 'is_featured', 'created_date', 'updated_date'];
 	protected $createdField  = 'created_date';
 	protected $updatedField  = 'updated_date';
 
