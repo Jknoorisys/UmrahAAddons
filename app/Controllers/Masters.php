@@ -447,7 +447,7 @@ class Masters extends ResourceController
        
         try {
             
-            $packages = $package->where(['status' => 'active', 'status_by_admin' => 'active'])->select('tbl_package.package_title')->orderBy('package_title')->get()->getResult();
+            $packages = $package->where(['status' => 'active', 'status_by_admin' => 'active'])->select('tbl_package.id, tbl_package.package_title')->orderBy('package_title')->get()->getResult();
             if(!empty($packages))
             {
                 return $service->success([
