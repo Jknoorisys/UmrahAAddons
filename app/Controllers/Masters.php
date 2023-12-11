@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\PackageModels;
 use CodeIgniter\API\ResponseTrait;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -407,6 +408,71 @@ class Masters extends ResourceController
                 [
                     'errors'    =>  "",
                     'message'   =>  Lang('Language.fetch_list'),
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+    }
+
+    
+
+    // ziyarat package master api
+    public function ziyaratPackageMaster()
+    {
+        $service   =  new Services();
+        $package     = new PackageModels();
+      
+        $rules = [
+            'language' => [
+                'rules'         =>  'required|in_list[' . LANGUAGES . ']',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                    'in_list'       =>  Lang('Language.in_list', [LANGUAGES]),
+                ]
+            ],
+        ];
+
+        if(!$this->validate($rules)) {
+            return $service->fail(
+                [
+                    'errors'     =>  $this->validator->getErrors(),
+                    'message'   =>  lang('Language.invalid_inputs')
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+
+       
+        try {
+            
+            $packages = $package->where(['status' => 'active', 'status_by_admin' => 'active'])->select('tbl_package.package_title')->orderBy('package_title')->get()->getResult();
+            if(!empty($packages))
+            {
+                return $service->success([
+                    'message'       =>  Lang('Language.list_success'),
+                    'data'          =>  $packages
+                    ],
+                    ResponseInterface::HTTP_OK,
+                    $this->response
+                );
+            } else {
+                return $service->fail(
+                    [
+                        'errors'    =>  "",
+                        'message'   =>  Lang('Language.list_failed'),
+                    ],
+                    ResponseInterface::HTTP_BAD_REQUEST,
+                    $this->response
+                );
+            }
+
+        } catch (Exception $e) {
+            return $service->fail(
+                [
+                    'errors'    =>  "",
+                    'message'   =>  Lang('Language.list_failed'),
                 ],
                 ResponseInterface::HTTP_BAD_REQUEST,
                 $this->response
