@@ -784,9 +784,9 @@ class UserLists extends BaseController
             }
             
             if ($language == 'en') {
-                $table->select('s.id,c.name as city_name, s.name_en as name, s.title_en as title, s.description_en as description, s.main_img, s.lat, s.long, s.video, s.status, s.created_at, s.updated_at');
+                $table->select('s.id,c.name as city_name, c.image as city_image, s.name_en as name, s.title_en as title, s.description_en as description, s.main_img, s.lat, s.long, s.video, s.status, s.created_at, s.updated_at');
             } else {
-                $table->select('s.id,c.name as city_name, s.name_ur as name, s.title_ur as title, s.description_ur as description, s.main_img, s.lat, s.long, s.video, s.status, s.created_at, s.updated_at');
+                $table->select('s.id,c.name as city_name, c.image as city_image, s.name_ur as name, s.title_ur as title, s.description_ur as description, s.main_img, s.lat, s.long, s.video, s.status, s.created_at, s.updated_at');
             }
             
             // Clone the builder to use for total count query
