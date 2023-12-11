@@ -1052,7 +1052,7 @@ class Package extends ResourceController
         {
             try {
                     $provider_data = $ProviderModel->where("id", $logged_user_id)->where("status", 'active')->first();
-                    if (empty($provider_data)) {
+                    if (empty($provider_data) && $logged_user_role == 'provider') {
                         return $service->fail(
                             [
                                 'errors'    =>  "",
