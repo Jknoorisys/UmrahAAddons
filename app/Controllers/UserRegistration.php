@@ -30,6 +30,7 @@ use App\Models\PackageInquiryModel;
 use App\Models\SabeelBookingModel;
 use App\Models\TransportModel;
 use App\Models\VisaEnquiry;
+use App\Models\ZiyaratPoints;
 use CodeIgniter\API\ResponseTrait;
 use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -251,6 +252,7 @@ class UserRegistration extends ResourceController
         $VehicleModels = new VehicleModels();
         $DayMappingModel = new DayMappingModel();
         $OtaMoodel = new OtaMoodel();
+        $ZiyaratPoints = new ZiyaratPoints();
 
         $ota_id = $this->request->getPost('ota_id');
 
@@ -273,6 +275,8 @@ class UserRegistration extends ResourceController
             die();
         }
 
+        $points = explode(',',$packagedata['ziyarat_points']);
+        $ziyarat_points = $ZiyaratPoints->whereIn('id',$points)->select('*')->findAll();
 
         $db = \Config\Database::connect();
         $builder1 = $db->table('tbl_package as l');
@@ -307,6 +311,7 @@ class UserRegistration extends ResourceController
                 'Image_data' => $image_data,
                 'Vehicle_data' => $Vehicle_data,
                 'Movment_data' => $Movment_data,
+                'ziyarat_points' => $ziyarat_points,
             ];
         } else {
             $response = [

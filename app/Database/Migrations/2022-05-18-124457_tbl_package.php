@@ -109,6 +109,9 @@ class TblPackage extends Migration
 				'type' => 'TEXT',
 				'constraint' => '10',
 			],
+			'ziyarat_points' => [
+				'type' => 'TEXT',
+			],
 			'is_featured' => [
 				'type' => 'ENUM',
 				'constraint' => ['yes','no'],

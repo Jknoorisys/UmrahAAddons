@@ -24,6 +24,7 @@ use App\Models\GuideDocModel;
 use App\Models\DayMappingModel;
 
 use App\Models\UserModels;
+use App\Models\ZiyaratPoints;
 use CodeIgniter\API\ResponseTrait;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -1378,6 +1379,7 @@ class Admin extends ResourceController
 		$ImagePackageModels = new ImagePackageModels();
 		$VehicleModels = new VehicleModels();
 		$DayMappingModel = new DayMappingModel();
+		$ZiyaratPoints = new ZiyaratPoints();
 
 		$logged_user_role = $this->request->getPost("logged_user_role");
 		$user_id = $this->request->getPost("logged_user_id");
@@ -1393,6 +1395,8 @@ class Admin extends ResourceController
 		$packagedata = $PackageModels->where("id", $package_id)->first();
 		if (!empty($userdata)) {
 			$image_data =  $ImagePackageModels->where("package_id", $package_id)->findAll();
+			$points = explode(',',$packagedata['ziyarat_points']);
+			$ziyarat_points = $ZiyaratPoints->whereIn('id',$points)->select('id, title_en, name_en')->findAll();
 
 			$db = \Config\Database::connect();
 
@@ -1401,6 +1405,7 @@ class Admin extends ResourceController
             $builder->select('pv.*,pax.name as pax_name,vech.name as vehicle_name');
             $builder->join('tbl_pax_master as pax', 'pax.id  = pv.no_of_pox_id');
             $builder->join('tbl_vehicle_master as vech', 'vech.id  = pv.vehicle_id');
+			$builder->join('tbl_ziyarat_points as point', 'point.id  = pv.vehicle_id');
             $builder->where('pv.package_id', $package_id);
             $builder->where('pv.status', 'active');
             $Vehicle_data = $builder->get()->getResult();
@@ -1420,6 +1425,7 @@ class Admin extends ResourceController
 				'Image_data' => $image_data,
 				'Vehicle_data' => $Vehicle_data,
 				'Movment_data' => $Movment_data,
+				'ziyarat_points' => $ziyarat_points,
 			];
 		} else {
 
