@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\PackageModels;
+use App\Models\ZiyaratPoints;
 use CodeIgniter\API\ResponseTrait;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -420,8 +421,6 @@ class Masters extends ResourceController
         }
     }
 
-    
-
     // ziyarat package master api
     public function ziyaratPackageMaster()
     {
@@ -458,6 +457,69 @@ class Masters extends ResourceController
                 return $service->success([
                     'message'       =>  Lang('Language.list_success'),
                     'data'          =>  $packages
+                    ],
+                    ResponseInterface::HTTP_OK,
+                    $this->response
+                );
+            } else {
+                return $service->fail(
+                    [
+                        'errors'    =>  "",
+                        'message'   =>  Lang('Language.list_failed'),
+                    ],
+                    ResponseInterface::HTTP_BAD_REQUEST,
+                    $this->response
+                );
+            }
+
+        } catch (Exception $e) {
+            return $service->fail(
+                [
+                    'errors'    =>  "",
+                    'message'   =>  Lang('Language.list_failed'),
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+    }
+
+    // ziyarat points master api
+    public function ziyaratPointsMaster()
+    {
+        $service   =  new Services();
+        $point     = new ZiyaratPoints();
+      
+        $rules = [
+            'language' => [
+                'rules'         =>  'required|in_list[' . LANGUAGES . ']',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                    'in_list'       =>  Lang('Language.in_list', [LANGUAGES]),
+                ]
+            ],
+        ];
+
+        if(!$this->validate($rules)) {
+            return $service->fail(
+                [
+                    'errors'     =>  $this->validator->getErrors(),
+                    'message'   =>  lang('Language.invalid_inputs')
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+
+       
+        try {
+            
+            $points = $point->where('status', '1')->select('id, title_en, name_en')->orderBy('name_en')->get()->getResult();
+            if(!empty($points))
+            {
+                return $service->success([
+                    'message'       =>  Lang('Language.list_success'),
+                    'data'          =>  $points
                     ],
                     ResponseInterface::HTTP_OK,
                     $this->response

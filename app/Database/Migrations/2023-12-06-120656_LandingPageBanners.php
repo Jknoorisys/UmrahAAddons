@@ -28,7 +28,7 @@ class LandingPageBanners extends Migration
 
             'title' => [
 				'type' => 'VARCHAR',
-				'constraint' => '20',
+				'constraint' => '255',
 			],
 
             'description' => [

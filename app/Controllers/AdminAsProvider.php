@@ -94,8 +94,6 @@ class AdminAsProvider extends BaseController
         $VehicleModels = new VehicleModels();
         $ImagePackageModels = new ImagePackageModels();
         $DayMappingModel = new DayMappingModel();
-
-
         $user_id = $this->request->getPost("provider_id");
 
         $pickup_loaction = $this->request->getPost("pickup_loaction");
@@ -142,6 +140,7 @@ class AdminAsProvider extends BaseController
             "package_details" => $this->request->getVar("package_details"),
             "ideal_for" => $this->request->getPost("ideal_for"),
             "package_duration" => (isset($_POST['package_duration'])) ? $this->request->getPost("package_duration") : "",
+            "ziyarat_points" => $this->request->getPost("ziyarat_points") ? $this->request->getPost("ziyarat_points") : "",
         ];
 
 
@@ -149,8 +148,6 @@ class AdminAsProvider extends BaseController
 
             $movment_json = $this->request->getPost("movment_json");
             $package_id = $PackageModels->insertID();
-            // echo json_encode($package_id);die();
-            // print_r($movment_json);die();
             $image_array = $this->request->getPost("image_array");
             $vehicle_json = $this->request->getPost("vehicle_json");
 
@@ -303,6 +300,7 @@ class AdminAsProvider extends BaseController
         $package_duration = $this->request->getPost("package_duration");
         $reason = $this->request->getPost("reason");
         $language = $this->request->getPost("language");
+        $ziyarat_points = $this->request->getPost("ziyarat_points");
 
         $db = db_connect();
         $package = $db->table('tbl_package')->where('id', $package_id)->get()->getRow();
@@ -352,6 +350,7 @@ class AdminAsProvider extends BaseController
             "package_duration" => $package_duration ? $package_duration : $package->package_duration,
             "reason" => $reason ? $reason : $package->reason,
             "language" => $language ? $language : $package->language,
+            "ziyarat_points" => $ziyarat_points ? $ziyarat_points : $package->ziyarat_points,
             "updated_date" => date('Y-m-d H:i:s')
         ];
 

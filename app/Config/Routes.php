@@ -58,6 +58,7 @@ $routes->post('api/all_logout', 'Auth::allLogOut');//done
 $routes->post('api/add_package', 'Package::addPackage');//done
 $routes->post('api/make_package_featured', 'Package::makePackageFaetured');//done
 $routes->post('api/get_packages_master', 'Masters::ziyaratPackageMaster');//done
+$routes->post('api/get_ziyarat_points_master', 'Masters::ziyaratPointsMaster');//done
 $routes->post('api/Package_List', 'ListFilter::packagelist'); // for admin done 
 $routes->post('api/active_inactive_package', 'Admin::activeInactivePackage'); // for admin done
 $routes->post('api/get_package_detail', 'Admin::getPackageDetail');  // for admin  done
