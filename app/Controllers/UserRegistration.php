@@ -276,7 +276,7 @@ class UserRegistration extends ResourceController
         }
 
         $points = explode(',',$packagedata['ziyarat_points']);
-        $ziyarat_points = $ZiyaratPoints->whereIn('id',$points)->select('*')->findAll();
+        $ziyarat_points = $ZiyaratPoints->whereIn('id',$points)->where('status', '1')->select('*')->findAll();
 
         $db = \Config\Database::connect();
         $builder1 = $db->table('tbl_package as l');
