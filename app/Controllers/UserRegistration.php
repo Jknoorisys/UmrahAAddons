@@ -276,7 +276,10 @@ class UserRegistration extends ResourceController
         }
 
         $points = explode(',',$packagedata['ziyarat_points']);
-        $ziyarat_points = $ZiyaratPoints->whereIn('id',$points)->where('status', '1')->select('*')->findAll();
+        $ziyarat_points = $ZiyaratPoints->whereIn('tbl_ziyarat_points.id',$points)
+                                ->join('tbl_city_master as c', 'c.id  = tbl_ziyarat_points.city_id')
+                                ->where('tbl_ziyarat_points.status', '1')
+                                ->select('tbl_ziyarat_points.*, c.name as city_name, c.image as city_image')->findAll();
 
         $db = \Config\Database::connect();
         $builder1 = $db->table('tbl_package as l');
