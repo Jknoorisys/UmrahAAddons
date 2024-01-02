@@ -16,6 +16,16 @@ class TblPackage extends Migration
 				'unsigned' => true,
 				'auto_increment' => true,
 			],
+			'package_type' => [
+				'type' => 'ENUM',
+				'constraint' => ['individual','group'],
+				'default' => 'group',
+				'null' => false,
+			],
+			'individual_price' => [
+				'type' => 'VARCHAR',
+				'constraint' => '255',
+			],
 			'package_title' => [
 				'type' => 'VARCHAR',
 				'constraint' => '255',

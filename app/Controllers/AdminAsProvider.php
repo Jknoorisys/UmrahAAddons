@@ -95,9 +95,62 @@ class AdminAsProvider extends BaseController
         $ImagePackageModels = new ImagePackageModels();
         $DayMappingModel = new DayMappingModel();
         $user_id = $this->request->getPost("provider_id");
+        $service   =  new Services();
+        $service->cors();
 
         $pickup_loaction = $this->request->getPost("pickup_loaction");
         $drop_loaction = $this->request->getPost("drop_loaction");
+        $rules = [
+            'package_type' => [
+                'rules'         =>  'required|in_list[individual,group]',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
+        ];
+
+        if(!$this->validate($rules)) {
+            return $service->fail(
+                [
+                    'errors'     =>  $this->validator->getErrors(),
+                    'message'   =>  lang('Language.invalid_inputs')
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+
+        $package_type = $this->request->getPost("package_type");
+        if ($package_type == "individual") {
+            $rules = [
+                'individual_price' => [
+                    'rules'         =>  'required',
+                    'errors'        => [
+                        'required'      =>  Lang('Language.required'),
+                    ]
+                ],
+            ];
+        } elseif ($package_type == "group") {
+            $rules = [
+                'vehicle_json' => [
+                    'rules'         =>  'required',
+                    'errors'        => [
+                        'required'      =>  Lang('Language.required'),
+                    ]
+                ],
+            ];
+        }
+
+        if(!$this->validate($rules)) {
+            return $service->fail(
+                [
+                    'errors'     =>  $this->validator->getErrors(),
+                    'message'   =>  lang('Language.invalid_inputs')
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
 
         // Email Validation
         $userdata = $ProviderModel->where('user_role', "provider")->where("id", $user_id)->where("status", "active")->first();
@@ -118,8 +171,11 @@ class AdminAsProvider extends BaseController
             echo json_encode(['status' => 'failed', 'messages' => lang('Language.Images required')]);
             die();
         }
+
         $data = [
             "provider_id" => $user_id,
+            "package_type" => $package_type,
+            "individual_price" => $this->request->getPost("individual_price") ? $this->request->getPost("individual_price") : "",
             "package_title" => $this->request->getPost("package_title"),
             "city_loaction" => $this->request->getPost("city_loaction"),
             "ideal_for" => $this->request->getPost("ideal_for"),
@@ -184,33 +240,33 @@ class AdminAsProvider extends BaseController
 
             // inserting vechiles
             // foreach ($vechiles['vechile'] as $vec => $values) {
-            foreach ($vechiles['vechiles_details'] as $kk => $vall) {
-                $no_of_pox_rec =  json_encode($vall['no_of_pox']);
-                $vehicle_type_rec = json_encode($vall['vehicle_type']);
-                $rate_rec = json_encode($vall['rate']);
-                $no_of_pox = trim($no_of_pox_rec, '"');
-                $vehicle_type = trim($vehicle_type_rec, '"');
-                $rate = trim($rate_rec, '"');
-
-                $vechiles_data = [
-                    'package_id' => $package_id,
-                    'no_of_pox_id' => $no_of_pox,
-                    'vehicle_id' => $vehicle_type,
-                    'rate' => $rate,
-                ];
-                $insert_vechile = $VehicleModels->insert($vechiles_data);
-
-                
+            if ($vechiles && $vehicle_json && $package_type == "group") {
+                foreach ($vechiles['vechiles_details'] as $kk => $vall) {
+                    $no_of_pox_rec =  json_encode($vall['no_of_pox']);
+                    $vehicle_type_rec = json_encode($vall['vehicle_type']);
+                    $rate_rec = json_encode($vall['rate']);
+                    $no_of_pox = trim($no_of_pox_rec, '"');
+                    $vehicle_type = trim($vehicle_type_rec, '"');
+                    $rate = trim($rate_rec, '"');
+    
+                    $vechiles_data = [
+                        'package_id' => $package_id,
+                        'no_of_pox_id' => $no_of_pox,
+                        'vehicle_id' => $vehicle_type,
+                        'rate' => $rate,
+                    ];
+                    $insert_vechile = $VehicleModels->insert($vechiles_data);
+                }
             }
              // fetching record of  Vechile  data
             $db = \Config\Database::connect();
-             $builder = $db->table('tbl_package_vehicle');
-             $builder->select('MIN(rate) AS SmallestPrice');
-             $builder->where('package_id', $package_id);
-             $Smallestamount = $builder->get()->getResult();
+            $builder = $db->table('tbl_package_vehicle');
+            $builder->select('MIN(rate) AS SmallestPrice');
+            $builder->where('package_id', $package_id);
+            $Smallestamount = $builder->get()->getResult();
 
 
-             $SmallestPrices = $Smallestamount[0]->SmallestPrice;
+            $SmallestPrices = $Smallestamount[0]->SmallestPrice;
             //  echo json_encode($SmallestPrices);die();
 
             
@@ -264,8 +320,46 @@ class AdminAsProvider extends BaseController
                 'errors' => [
                     'required' => lang('Language.required'),
                 ],
-            ]
+            ],
+            'package_type' => [
+                'rules'         =>  'required|in_list[individual,group]',
+                'errors'        => [
+                    'required'      =>  Lang('Language.required'),
+                ]
+            ],
         ];
+
+        if(!$this->validate($rules)) {
+            return $service->fail(
+                [
+                    'errors'     =>  $this->validator->getErrors(),
+                    'message'   =>  lang('Language.invalid_inputs')
+                ],
+                ResponseInterface::HTTP_BAD_REQUEST,
+                $this->response
+            );
+        }
+        
+        $package_type = $this->request->getPost("package_type");
+        if ($package_type == "individual") {
+            $rules = [
+                'individual_price' => [
+                    'rules'         =>  'required',
+                    'errors'        => [
+                        'required'      =>  Lang('Language.required'),
+                    ]
+                ],
+            ];
+        } elseif ($package_type == "group") {
+            $rules = [
+                'vehicle_json' => [
+                    'rules'         =>  'required',
+                    'errors'        => [
+                        'required'      =>  Lang('Language.required'),
+                    ]
+                ],
+            ];
+        }
 
         if(!$this->validate($rules)) {
             return $service->fail(
@@ -283,6 +377,7 @@ class AdminAsProvider extends BaseController
         $vechiles = json_decode($this->request->getPost("vehicle_json"), TRUE);
 
         $package_id = $this->request->getPost("package_id");
+        $individual_price = $this->request->getPost("individual_price");
         $package_title = $this->request->getPost("package_title");
         $package_details = $this->request->getPost("package_details");
         $city_loaction = $this->request->getPost("city_loaction");
@@ -330,8 +425,12 @@ class AdminAsProvider extends BaseController
                 $this->response
             );
         }
+
+        $price = $package_type == "individual" ? ($individual_price ? $individual_price : $package->individual_price) : '';
         
         $data = [
+            "package_type" => $package_type ? $package_type : $package->package_type,
+            "individual_price" => $price,
             "package_title" => $package_title ? $package_title : $package->package_title,
             "package_details" => $package_details ? $package_details : $package->package_details,
             "city_loaction" => $city_loaction ? $city_loaction : $package->city_loaction,
@@ -357,7 +456,7 @@ class AdminAsProvider extends BaseController
         $package_update = $db->table('tbl_package')->where('id', $package_id)->update($data);
         if ($package_update) {
 
-            if ($vechiles) {
+            if ($vechiles && $package_type == "group") {
                 $vechile_ids = [];
                 foreach ($vechiles as $vechile) {
                     if ($vechile['id'] != "0") {
@@ -391,6 +490,8 @@ class AdminAsProvider extends BaseController
                 if ($vechile_ids) {
                     $remove = $db->table('tbl_package_vehicle')->where('package_id', $package_id)->whereNotIn('id', $vechile_ids)->delete();
                 }
+            } elseif($package_type == "individual") {
+                $remove = $db->table('tbl_package_vehicle')->where('package_id', $package_id)->delete();
             }
 
             if ($movements) {
