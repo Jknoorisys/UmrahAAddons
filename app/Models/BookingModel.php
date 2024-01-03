@@ -70,13 +70,22 @@ class BookingModel extends Model
 			$criterial .= " AND l.action = '" . $trnx_filters['action'] . "'";
 		}
 
-		if($add_filter == 0)
-		{
-			$query = "SELECT l.*,CONCAT (p.firstname,' ',p.lastname) as provider_name, pa.package_title as package_name ,pax.name as pax_name ,vec.name as vec_name FROM tbl_booking AS l 
-			JOIN tbl_provider AS p ON p.id = l.provider_id  JOIN tbl_pax_master AS pax ON pax.id = l.no_of_pox  JOIN tbl_vehicle_master AS vec ON vec.id = l.cars  JOIN tbl_package AS pa ON pa.id = l.service_id  WHERE l.service_type = 'package'   AND  l.user_id = $logged_user_id";
-		}else{
-			$query = "SELECT l.*,CONCAT (p.firstname,' ',p.lastname) as provider_name, pa.package_title as package_name ,pax.name as pax_name ,vec.name as vec_name FROM tbl_booking AS l 
-			JOIN tbl_provider AS p ON p.id = l.provider_id  JOIN tbl_pax_master AS pax ON pax.id = l.no_of_pox  JOIN tbl_vehicle_master AS vec ON vec.id = l.cars  JOIN tbl_package AS pa ON pa.id = l.service_id  WHERE l.service_type = 'package'   AND  l.user_id = $logged_user_id AND pa.package_title LIKE '%$package_title%'";
+		if($add_filter == 0) {
+			$query = "SELECT l.*, CONCAT(p.firstname, ' ', p.lastname) as provider_name, pa.package_title as package_name, pax.name as pax_name, vec.name as vec_name
+					  FROM tbl_booking AS l
+					  JOIN tbl_provider AS p ON p.id = l.provider_id
+					  JOIN tbl_package AS pa ON pa.id = l.service_id
+					  LEFT JOIN tbl_pax_master AS pax ON pax.id = l.no_of_pox AND pa.package_type = 'group'
+					  LEFT JOIN tbl_vehicle_master AS vec ON vec.id = l.cars AND pa.package_type = 'group'
+					  WHERE l.service_type = 'package' AND l.user_id = $logged_user_id";
+		} else {
+			$query = "SELECT l.*, CONCAT(p.firstname, ' ', p.lastname) as provider_name, pa.package_title as package_name, pax.name as pax_name, vec.name as vec_name
+					  FROM tbl_booking AS l
+					  JOIN tbl_provider AS p ON p.id = l.provider_id
+					  JOIN tbl_package AS pa ON pa.id = l.service_id
+					  LEFT JOIN tbl_pax_master AS pax ON pax.id = l.no_of_pox AND pa.package_type = 'group'
+					  LEFT JOIN tbl_vehicle_master AS vec ON vec.id = l.cars AND pa.package_type = 'group'
+					  WHERE l.service_type = 'package' AND l.user_id = $logged_user_id AND pa.package_title LIKE '%$package_title%'";
 		}
 		// $query .= "WHERE 1";
 		$query .= $criterial;
