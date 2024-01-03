@@ -60,6 +60,9 @@ class BookingModel extends Model
 							LEFT JOIN tbl_pax_master AS pax ON pax.id = l.no_of_pox AND pa.package_type = 'group'
 							LEFT JOIN tbl_vehicle_master AS vec ON vec.id = l.cars AND pa.package_type = 'group'
 							WHERE l.service_type = 'package' AND l.provider_id = $logged_user_id";
+			$query = "SELECT l.*,c.firstname AS country_name, FROM tbl_package AS l
+		   LEFT JOIN tbl_provider AS c ON c.id = l.provider_id ";
+
 		// $query .= "WHERE 1";
 		$query .= $criterial;
 

@@ -306,8 +306,11 @@ class User extends ResourceController
             $db = \Config\Database::connect();
             $builder = $db->table('tbl_booking as b');
             $builder->select("b.*,pax.name as pax_name,vec.name as vec_name");
-            $builder->join('tbl_pax_master as pax', 'pax.id  = b.no_of_pox');
-            $builder->join('tbl_vehicle_master as vec', 'vec.id  = b.cars');
+            $builder->join('tbl_package as pa', 'pa.id  = b.service_id');
+			$builder->join('tbl_pax_master as pax', 'pax.id = b.no_of_pox', 'left')->where('pa.package_type', 'group');
+			$builder->join('tbl_vehicle_master as vec', 'vec.id = b.cars', 'left')->where('pa.package_type', 'group');
+            // $builder->join('tbl_pax_master as pax', 'pax.id  = b.no_of_pox');
+            // $builder->join('tbl_vehicle_master as vec', 'vec.id  = b.cars');
             $builder->where('b.id', $booking_id);
             $bookingdata = $builder->get()->getResult();
             $package_id = $bookingdatas['service_id'];
