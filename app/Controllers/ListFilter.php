@@ -651,8 +651,10 @@ class ListFilter extends ResourceController
 				$builder1->select("l.*,CONCAT(c.firstname,' ',c.lastname) as provider_name,pa.package_title as package_name,pax.name as pax_name,vec.name as vec_name ");
 				$builder1->join('tbl_provider as c', 'c.id  = l.provider_id');
 				$builder1->join('tbl_package as pa', 'pa.id  = l.service_id');
-				$builder1->join('tbl_pax_master as pax', 'pax.id  = l.no_of_pox');
-				$builder1->join('tbl_vehicle_master as vec', 'vec.id  = l.cars');
+				// $builder1->join('tbl_pax_master as pax', 'pax.id  = l.no_of_pox');
+				// $builder1->join('tbl_vehicle_master as vec', 'vec.id  = l.cars');
+				$builder1->join('tbl_pax_master as pax', 'pax.id = l.no_of_pox', 'left')->where('pa.package_type', 'group');
+				$builder1->join('tbl_vehicle_master as vec', 'vec.id = l.cars', 'left')->where('pa.package_type', 'group');
 				$builder1->where('l.user_id', $logged_user_id);
 				$builder1->where('l.service_type', $service_type);
 				$total_loan_record = $builder1->get()->getResult();
